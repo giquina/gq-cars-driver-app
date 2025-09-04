@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { RideRequest } from "@/types/index";
-import { 
-  Clock, 
-  MapPin,
+import { RideRequest } from "@/types/index";
   Phone,
-  X,
+  Clock, 
+} from "@
+  Phone,
+  on
   Star,
   CurrencyGbp
 } from "@phosphor-icons/react";
@@ -14,54 +14,54 @@ interface FullScreenRideRequestProps {
   request: RideRequest;
   onAccept: (requestId: string) => void;
   onDecline: (requestId: string) => void;
-}
+ 
 
-export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScreenRideRequestProps) {
-  const [timeLeft, setTimeLeft] = useState(15); // 15 seconds to respond
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          onDecline(request.id);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [request.id, onDecline]);
-
-  // Prevent all scrolling and touch events
   const handleTouchMove = (e: React.TouchEvent) => {
-    e.preventDefault();
   };
 
-  const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
+  };
+  return (
+      className="fixed inse
+      onWheel={handleWhe
+        touchAction: 'none',
+      }}
+      <di
+        onTouchMove={han
+        s
+          ove
+
+        <div className="px-4 py-3 bord
+            <Clock size={16} c
+
+          </div>
+  const handleTouchMove = (e: React.TouchEvent) => {
+          >
+  };
+
+        <div className="p-4 space-y-3">
+          <div classNam
   };
 
   return (
-    <div 
-      className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4 modal-no-scroll"
-      onTouchMove={handleTouchMove}
-      onWheel={handleWheel}
-      style={{
+         
+                <span className="text-sm text-gray-600">
+                </span>
+            </div>
+              
         touchAction: 'none',
-        overscrollBehavior: 'none'
+              <Phone size={14} />
       }}
-    >
-      <div 
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-sm animate-fade-in-scale ride-request-container"
-        onTouchMove={handleTouchMove}
-        onWheel={handleWheel}
-        style={{
-          touchAction: 'none',
-          overscrollBehavior: 'none'
-        }}
-      >
-        {/* Header with timer */}
+     
+           
+              <div className="w-3 h-3 bg-green-500 rounded-full mt-1 flex-shrink-0" />
+                <p className="text-xs
+              </div>
+
+            <div className="fl
+              <div className="flex-1
+          
+       
+
         <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Clock size={16} className="text-red-500" />
@@ -126,13 +126,13 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
           </div>
 
           {/* Trip details */}
-          <div className="bg-gray-50 rounded-lg p-3">
+
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <CurrencyGbp size={16} className="text-green-600" />
                 <span className="font-bold text-lg text-gray-900">
                   £{request.estimatedFare.toFixed(2)}
-                </span>
+
               </div>
               <div className="text-right">
                 <p className="text-sm text-gray-600">
@@ -140,15 +140,15 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
                 </p>
                 <p className="text-xs text-gray-500">{request.paymentMethod}</p>
               </div>
-            </div>
+
           </div>
 
           {/* Special requests */}
-          {request.specialRequests && (
+
             <div className="bg-blue-50 rounded-lg p-3">
               <p className="text-sm text-blue-800">{request.specialRequests}</p>
             </div>
-          )}
+
         </div>
 
         {/* Action buttons */}
@@ -158,18 +158,17 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
               onClick={() => onDecline(request.id)}
               variant="outline" 
               className="flex-1 h-12 font-semibold"
-            >
+
               Decline
-            </Button>
+
             <Button 
-              onClick={() => onAccept(request.id)}
+
               className="flex-1 h-12 bg-green-600 hover:bg-green-700 font-semibold"
-            >
+
               Accept
-            </Button>
+
           </div>
-        </div>
+
       </div>
-    </div>
+
   );
-}

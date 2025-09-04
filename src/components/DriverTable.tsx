@@ -25,7 +25,7 @@ import {
   Star,
   CaretDown
 } from "@phosphor-icons/react";
-import { Driver } from "@/types";
+import { Driver } from "@/types/index";
 
 interface DriverTableProps {
   drivers: Driver[];

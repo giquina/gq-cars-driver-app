@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { RideRequest } from "@/types";
+import { RideRequest } from "@/types/index";
 import { MapPin, Clock, Star, Timer, User, Navigation, HandSwipeLeft, HandSwipeRight } from "@phosphor-icons/react";
 import { useState, useEffect, useRef } from "react";
 

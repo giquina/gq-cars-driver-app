@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Driver } from "@/types";
+import { Driver } from "@/types/index";
 import { Circle, Car, CurrencyGbp, Star, TrendUp, Power, MapPin } from "@phosphor-icons/react";
 
 interface DriverStatusProps {

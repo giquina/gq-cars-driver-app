@@ -17,7 +17,7 @@ import { NotificationManager } from "@/components/NotificationManager";
 import { QuickSettings } from "@/components/QuickSettings";
 import { PassengerRating } from "@/components/PassengerRating";
 import { GPSTracking } from "@/components/GPSTracking";
-import { Driver, RideRequest, ActiveTrip, TripHistory } from "@/types";
+import { Driver, RideRequest, ActiveTrip, TripHistory } from "@/types/index";
 import { 
   House, 
   Buildings, 
@@ -119,12 +119,25 @@ function AppContent() {
   useEffect(() => {
     if (currentRequest) {
       document.body.classList.add('no-scroll');
+      // Also prevent touch scrolling on mobile
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
     } else {
       document.body.classList.remove('no-scroll');
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
     }
 
     return () => {
       document.body.classList.remove('no-scroll');
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
     };
   }, [currentRequest]);
 

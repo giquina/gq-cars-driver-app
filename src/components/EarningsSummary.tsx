@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Driver } from "@/types";
+import { Driver } from "@/types/index";
 import { CurrencyGbp, TrendingUp, Clock, Calendar, Target, Star, Trophy, CaretLeft, CaretRight } from "@phosphor-icons/react";
 
 interface EarningsSummaryProps {

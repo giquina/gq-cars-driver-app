@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { TripHistory } from "@/types";
+import { TripHistory } from "@/types/index";
 import { MapPin, Clock, CurrencyGbp, Star, User, Heart } from "@phosphor-icons/react";
 
 interface TripHistoryListProps {

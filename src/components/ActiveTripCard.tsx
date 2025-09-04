@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ActiveTrip } from "@/types";
+import { ActiveTrip } from "@/types/index";
 import { MapPin, Clock, Phone, User, Navigation, CheckCircle, CarProfile } from "@phosphor-icons/react";
 
 interface ActiveTripCardProps {

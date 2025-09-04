@@ -104,61 +104,6 @@
     animation: float 3s ease-in-out infinite;
   }
 
-  /* Swipe gesture feedback */
-  .swipe-accept {
-    background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.2));
-    border-color: rgba(34, 197, 94, 0.3);
-  }
-
-  .swipe-decline {
-    background: linear-gradient(90deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1), transparent);
-    border-color: rgba(239, 68, 68, 0.3);
-  }
-
-  /* Enhanced swipe colors for better feedback */
-  .bg-green-150 {
-    background-color: rgba(34, 197, 94, 0.15);
-  }
-  
-  .border-green-350 {
-    border-color: rgba(34, 197, 94, 0.35);
-  }
-  
-  .bg-red-150 {
-    background-color: rgba(239, 68, 68, 0.15);
-  }
-  
-  .border-red-350 {
-    border-color: rgba(239, 68, 68, 0.35);
-  }
-
-  /* Prevent text selection during swipe */
-  .no-select {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  /* Custom scrollbar */
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: hsl(var(--muted));
-    border-radius: 3px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground));
-    border-radius: 3px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary));
-  }
-
   /* Full screen ride request specific styles */
   .ride-request-overlay {
     backdrop-filter: blur(4px);
@@ -171,8 +116,17 @@
 
   /* Ensure no overflow scrolling needed */
   .no-scroll {
-    overflow: hidden;
-    height: 100vh;
+    overflow: hidden !important;
+    height: 100vh !important;
+    position: fixed !important;
+    width: 100% !important;
+  }
+  
+  /* Prevent any scrolling on modal elements */
+  .modal-no-scroll {
+    overflow: hidden !important;
+    touch-action: none !important;
+    -webkit-overflow-scrolling: auto !important;
   }
 }
 

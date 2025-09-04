@@ -12,6 +12,7 @@ import { RideRequestCard } from "@/components/RideRequestCard";
 import { ActiveTripCard } from "@/components/ActiveTripCard";
 import { TripHistoryList } from "@/components/TripHistoryList";
 import { EarningsSummary } from "@/components/EarningsSummary";
+import { BackgroundMap } from "@/components/BackgroundMap";
 import { MapView } from "@/components/MapView";
 import { DriverProfile } from "@/components/DriverProfile";
 import { NotificationManager } from "@/components/NotificationManager";
@@ -301,10 +302,10 @@ function AppContent() {
         </div>
         
         <div className="flex items-center gap-3">
-          {/* Earnings indicator */}
-          <div className="flex items-center gap-1 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
+          {/* Earnings indicator with white background */}
+          <div className="flex items-center gap-1 bg-white dark:bg-gray-800 px-3 py-1.5 rounded-full shadow-sm border border-gray-200 dark:border-gray-700">
             <Eye size={12} className="text-green-600 dark:text-green-400" />
-            <span className="text-sm font-semibold text-green-700 dark:text-green-300">
+            <span className="text-sm font-bold text-green-700 dark:text-green-300">
               £{driver.earnings.today.toFixed(2)}
             </span>
           </div>
@@ -561,24 +562,26 @@ function AppContent() {
       default: // home
         return (
           <div className="h-full flex flex-col overflow-hidden">
-            {/* Quick stats bar */}
-            <div className="flex items-center justify-around py-3 bg-background border-b border-border">
-              <div className="text-center">
-                <div className="text-lg font-bold text-green-600">£{driver.earnings.today.toFixed(2)}</div>
-                <div className="text-xs text-muted-foreground">Today</div>
-              </div>
-              <div className="text-center">
-                <div className="text-lg font-bold text-foreground">{driver.trips.completed}</div>
-                <div className="text-xs text-muted-foreground">Trips</div>
-              </div>
-              <div className="text-center">
-                <div className="text-lg font-bold text-yellow-600">{driver.rating}</div>
-                <div className="text-xs text-muted-foreground">Rating</div>
+            {/* Quick stats bar - single line layout */}
+            <div className="px-4 py-3 bg-white dark:bg-gray-900 border-b border-border shadow-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1">
+                  <span className="text-xs text-muted-foreground font-medium">Today:</span>
+                  <span className="text-lg font-bold text-green-600">£{driver.earnings.today.toFixed(2)}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-xs text-muted-foreground font-medium">Trips:</span>
+                  <span className="text-lg font-bold text-foreground">{driver.trips.completed}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-xs text-muted-foreground font-medium">Rating:</span>
+                  <span className="text-lg font-bold text-yellow-600">{driver.rating}</span>
+                </div>
               </div>
             </div>
 
             {/* Status section */}
-            <div className="px-4 py-3 bg-background border-b border-border">
+            <div className="px-4 py-3 bg-white dark:bg-gray-900 border-b border-border shadow-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={`w-4 h-4 rounded-full ${driver.isOnline ? 'bg-green-500' : 'bg-gray-400'}`}>
@@ -642,21 +645,34 @@ function AppContent() {
                   </div>
                 </div>
               ) : driver.isOnline ? (
-                <div className="h-full flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/10 dark:to-blue-900/10">
-                  <div className="text-center px-8">
-                    <div className="relative mb-6">
-                      <Clock size={48} className="mx-auto text-green-600 animate-pulse" />
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-ping" />
-                    </div>
-                    <h2 className="text-2xl font-bold mb-3 text-foreground">
-                      Looking for rides...
-                    </h2>
-                    <p className="text-muted-foreground mb-6">
-                      You're online and ready to drive
-                    </p>
-                    <div className="inline-flex items-center gap-2 px-6 py-3 bg-green-100 dark:bg-green-900/30 rounded-full border border-green-200 dark:border-green-800">
-                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                      <span className="text-green-700 dark:text-green-300 font-bold">AVAILABLE</span>
+                // Looking for rides with Google Maps background
+                <div className="h-full relative">
+                  {/* Google Maps style background */}
+                  <BackgroundMap
+                    currentLocation={{
+                      lat: driver.location?.lat || 51.5074,
+                      lng: driver.location?.lng || -0.1278,
+                    }}
+                    className="absolute inset-0"
+                  />
+                  
+                  {/* Overlay content */}
+                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                    <div className="text-center px-8 bg-white/95 dark:bg-gray-900/95 rounded-2xl p-6 mx-4 backdrop-blur-sm shadow-xl border border-white/20">
+                      <div className="relative mb-6">
+                        <Clock size={48} className="mx-auto text-green-600 animate-pulse" />
+                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-ping" />
+                      </div>
+                      <h2 className="text-2xl font-bold mb-3 text-foreground">
+                        Looking for rides...
+                      </h2>
+                      <p className="text-muted-foreground mb-6">
+                        You're online and ready to drive
+                      </p>
+                      <div className="inline-flex items-center gap-2 px-6 py-3 bg-green-100 dark:bg-green-900/30 rounded-full border border-green-200 dark:border-green-800">
+                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                        <span className="text-green-700 dark:text-green-300 font-bold">AVAILABLE</span>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -322,8 +322,8 @@ function AppContent() {
 
   // Professional bottom navigation (Freenow style)
   const ProfessionalNavigation = () => (
-    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg z-50">
-      <div className="flex items-center justify-around py-2 px-4 max-w-md mx-auto">
+    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg z-40">
+      <div className="flex items-center justify-around py-2 px-4">
         {/* Home */}
         <button
           onClick={() => setCurrentView('home')}
@@ -626,12 +626,20 @@ function AppContent() {
                   </div>
                 </div>
               ) : currentRequest ? (
-                <div className="h-full">
-                  <RideRequestCard
-                    request={currentRequest}
-                    onAccept={handleAcceptRequest}
-                    onDecline={handleDeclineRequest}
-                  />
+                // Show ride request in the background while modal shows
+                <div className="h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/10 dark:to-purple-900/10">
+                  <div className="text-center px-8">
+                    <div className="relative mb-6">
+                      <Bell size={48} className="mx-auto text-blue-600 animate-bounce" />
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-ping" />
+                    </div>
+                    <h2 className="text-2xl font-bold mb-3 text-foreground">
+                      New Ride Request
+                    </h2>
+                    <p className="text-muted-foreground mb-6">
+                      Check the request details above
+                    </p>
+                  </div>
                 </div>
               ) : driver.isOnline ? (
                 <div className="h-full flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/10 dark:to-blue-900/10">
@@ -708,7 +716,7 @@ function AppContent() {
   };
 
   return (
-    <div className="h-screen bg-background relative flex flex-col overflow-hidden">
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
       {!isSignedIn ? (
         <WelcomeScreen 
           driver={driver}
@@ -718,13 +726,26 @@ function AppContent() {
       ) : (
         <>      
           <ProfessionalHeader />
-          <div className="flex-1 max-w-md mx-auto relative z-10 flex flex-col overflow-hidden">
+          <div className="flex-1 w-full flex flex-col overflow-hidden">
             <div className="flex-1 pb-20 overflow-hidden">
               {renderCurrentView()}
             </div>
           </div>
           
           <ProfessionalNavigation />
+          
+          {/* Ride Request Modal - positioned absolutely on top */}
+          {currentRequest && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <div className="w-full max-w-sm">
+                <RideRequestCard
+                  request={currentRequest}
+                  onAccept={handleAcceptRequest}
+                  onDecline={handleDeclineRequest}
+                />
+              </div>
+            </div>
+          )}
         </>
       )}
       

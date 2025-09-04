@@ -560,30 +560,33 @@ function AppContent() {
       
       default: // home
         return (
-          <div className="h-full flex flex-col p-3 max-h-full overflow-hidden">
-            {/* Top row: Stats + Driver Status combined */}
-            <div className="flex-shrink-0 space-y-2 mb-3">
-              {/* Stats row - more compact */}
-              <div className="grid grid-cols-3 gap-2">
-                <div className="bg-card rounded-lg p-2 border text-center">
-                  <div className="text-sm font-bold text-green-600">£{driver.earnings.today.toFixed(2)}</div>
-                  <div className="text-xs text-muted-foreground">Today</div>
-                </div>
-                <div className="bg-card rounded-lg p-2 border text-center">
-                  <div className="text-sm font-bold text-foreground">{driver.trips.completed}</div>
-                  <div className="text-xs text-muted-foreground">Trips</div>
-                </div>
-                <div className="bg-card rounded-lg p-2 border text-center">
-                  <div className="text-sm font-bold text-yellow-600">{driver.rating}</div>
-                  <div className="text-xs text-muted-foreground">Rating</div>
-                </div>
+          <div className="h-full flex flex-col overflow-hidden">
+            {/* Quick stats bar */}
+            <div className="flex items-center justify-around py-3 bg-background border-b border-border">
+              <div className="text-center">
+                <div className="text-lg font-bold text-green-600">£{driver.earnings.today.toFixed(2)}</div>
+                <div className="text-xs text-muted-foreground">Today</div>
               </div>
+              <div className="text-center">
+                <div className="text-lg font-bold text-foreground">{driver.trips.completed}</div>
+                <div className="text-xs text-muted-foreground">Trips</div>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-bold text-yellow-600">{driver.rating}</div>
+                <div className="text-xs text-muted-foreground">Rating</div>
+              </div>
+            </div>
 
-              {/* Inline status toggle */}
-              <div className="flex items-center justify-between bg-card rounded-lg p-3 border">
+            {/* Status section */}
+            <div className="px-4 py-3 bg-background border-b border-border">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={`w-3 h-3 rounded-full ${driver.isOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
-                  <span className="font-medium text-sm">
+                  <div className={`w-4 h-4 rounded-full ${driver.isOnline ? 'bg-green-500' : 'bg-gray-400'}`}>
+                    {driver.isOnline && (
+                      <div className="w-4 h-4 bg-green-500 rounded-full animate-ping" />
+                    )}
+                  </div>
+                  <span className="font-semibold text-foreground">
                     {driver.isOnline ? 'Online' : 'Offline'}
                   </span>
                 </div>
@@ -591,19 +594,19 @@ function AppContent() {
                   onClick={handleToggleOnline}
                   size="sm"
                   variant={driver.isOnline ? "destructive" : "default"}
-                  className="h-8 px-4 text-xs font-semibold"
+                  className="h-9 px-6 font-semibold"
                 >
                   {driver.isOnline ? 'Go Offline' : 'Go Online'}
                 </Button>
               </div>
             </div>
 
-            {/* Main content area - takes remaining space */}
-            <div className="flex-1 min-h-0 flex flex-col">
+            {/* Main content area - full height */}
+            <div className="flex-1 min-h-0">
               {activeTrip ? (
-                <div className="h-full flex flex-col space-y-2">
-                  {/* Compact map for active trip */}
-                  <div className="h-32 flex-shrink-0">
+                <div className="h-full flex flex-col">
+                  {/* Map takes half the screen for active trips */}
+                  <div className="h-1/2 relative">
                     <MapView
                       pickup={activeTrip.request.pickup}
                       destination={activeTrip.request.destination}
@@ -613,8 +616,8 @@ function AppContent() {
                       showRealTimeNavigation={true}
                     />
                   </div>
-                  {/* Trip card takes remaining space */}
-                  <div className="flex-1 min-h-0">
+                  {/* Trip details in bottom half */}
+                  <div className="h-1/2 flex flex-col">
                     <ActiveTripCard
                       trip={activeTrip}
                       onUpdateStatus={handleUpdateTripStatus}
@@ -631,60 +634,65 @@ function AppContent() {
                   />
                 </div>
               ) : driver.isOnline ? (
-                <div className="h-full flex items-center justify-center">
-                  <div className="text-center py-8 bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg border border-dashed border-green-200 dark:border-green-800 w-full">
-                    <div className="relative mb-3">
-                      <Clock size={32} className="mx-auto text-green-600 animate-pulse" />
-                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-green-500 rounded-full animate-ping" />
+                <div className="h-full flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/10 dark:to-blue-900/10">
+                  <div className="text-center px-8">
+                    <div className="relative mb-6">
+                      <Clock size={48} className="mx-auto text-green-600 animate-pulse" />
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-ping" />
                     </div>
-                    <h3 className="font-bold text-lg mb-2 text-foreground">
+                    <h2 className="text-2xl font-bold mb-3 text-foreground">
                       Looking for rides...
-                    </h3>
-                    <p className="text-sm text-muted-foreground mb-3">
+                    </h2>
+                    <p className="text-muted-foreground mb-6">
                       You're online and ready to drive
                     </p>
-                    <div className="flex justify-center">
-                      <div className="flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 rounded-full border border-green-200 dark:border-green-800">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                        <span className="text-sm text-green-700 dark:text-green-300 font-semibold">AVAILABLE</span>
-                      </div>
+                    <div className="inline-flex items-center gap-2 px-6 py-3 bg-green-100 dark:bg-green-900/30 rounded-full border border-green-200 dark:border-green-800">
+                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                      <span className="text-green-700 dark:text-green-300 font-bold">AVAILABLE</span>
                     </div>
                   </div>
                 </div>
               ) : (
-                <div className="h-full flex flex-col">
-                  {/* Offline status - centered */}
+                <div className="h-full flex flex-col bg-background">
+                  {/* Main offline message */}
                   <div className="flex-1 flex items-center justify-center">
-                    <div className="text-center py-8 bg-card rounded-lg border w-full">
-                      <Car size={32} className="mx-auto text-muted-foreground mb-3" />
-                      <h3 className="font-semibold text-lg mb-2 text-foreground">
+                    <div className="text-center px-8">
+                      <Car size={48} className="mx-auto text-muted-foreground mb-6" />
+                      <h2 className="text-2xl font-bold mb-3 text-foreground">
                         Ready to Start?
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
+                      </h2>
+                      <p className="text-muted-foreground mb-6">
                         Go online to start receiving ride requests
                       </p>
+                      <Button
+                        onClick={handleToggleOnline}
+                        size="lg"
+                        className="bg-red-500 hover:bg-red-600 text-white font-bold px-8 py-3"
+                      >
+                        Go Online
+                      </Button>
                     </div>
                   </div>
                   
-                  {/* Recent trips - compact at bottom if available */}
+                  {/* Recent trips section at bottom */}
                   {tripHistory.length > 0 && (
-                    <div className="flex-shrink-0 mt-3">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold text-sm text-foreground">Recent Trips</h3>
-                        <span className="text-xs text-muted-foreground">
+                    <div className="px-4 py-4 border-t border-border bg-card">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-semibold text-foreground">Recent Trips</h3>
+                        <span className="text-sm text-muted-foreground">
                           {tripHistory.length} total
                         </span>
                       </div>
-                      <div className="bg-card rounded-lg p-2 border">
-                        {tripHistory.slice(0, 1).map((trip) => (
-                          <div key={trip.id} className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        {tripHistory.slice(0, 2).map((trip) => (
+                          <div key={trip.id} className="flex justify-between items-center py-2">
                             <div>
-                              <div className="text-sm font-medium text-foreground">{trip.passenger.name}</div>
-                              <div className="text-xs text-muted-foreground">{trip.destination}</div>
+                              <div className="font-medium text-foreground">{trip.passenger.name}</div>
+                              <div className="text-sm text-muted-foreground">{trip.destination}</div>
                             </div>
                             <div className="text-right">
-                              <div className="text-sm font-semibold text-green-600">£{trip.fare.toFixed(2)}</div>
-                              <div className="text-xs text-muted-foreground">{trip.distance.toFixed(1)}mi</div>
+                              <div className="font-semibold text-green-600">£{trip.fare.toFixed(2)}</div>
+                              <div className="text-sm text-muted-foreground">{trip.distance.toFixed(1)}mi</div>
                             </div>
                           </div>
                         ))}
@@ -700,7 +708,7 @@ function AppContent() {
   };
 
   return (
-    <div className="h-screen bg-gray-50 dark:bg-gray-900 relative flex flex-col overflow-hidden">
+    <div className="h-screen bg-background relative flex flex-col overflow-hidden">
       {!isSignedIn ? (
         <WelcomeScreen 
           driver={driver}

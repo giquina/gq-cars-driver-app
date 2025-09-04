@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { WelcomeScreen } from "@/components/WelcomeScreen";
 import { DriverStatus } from "@/components/DriverStatus";
-import { RideRequestCard } from "@/components/RideRequestCard";
+import { FullScreenRideRequest } from "@/components/FullScreenRideRequest";
 import { ActiveTripCard } from "@/components/ActiveTripCard";
 import { TripHistoryList } from "@/components/TripHistoryList";
 import { EarningsSummary } from "@/components/EarningsSummary";
@@ -29,7 +29,6 @@ import {
   CurrencyGbp, 
   History, 
   User, 
-  Bell, 
   Map,
   Gear,
   Star,
@@ -607,21 +606,8 @@ function AppContent() {
                   </div>
                 </div>
               ) : currentRequest ? (
-                // Show ride request in the background while modal shows
-                <div className="h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
-                  <div className="text-center px-8">
-                    <div className="relative mb-6">
-                      <Bell size={48} className="mx-auto text-blue-600 animate-bounce" />
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-ping" />
-                    </div>
-                    <h2 className="text-2xl font-bold mb-3 text-gray-900">
-                      New Ride Request
-                    </h2>
-                    <p className="text-gray-600 mb-6">
-                      Check the request details above
-                    </p>
-                  </div>
-                </div>
+                // Hidden background - full screen notification covers this
+                <div className="h-full" />
               ) : driver.isOnline ? (
                 // Looking for rides with Google Maps background
                 <div className="h-full relative">
@@ -728,17 +714,13 @@ function AppContent() {
           
           <ProfessionalNavigation />
           
-          {/* Ride Request Modal - positioned absolutely on top */}
+          {/* Full-Screen Ride Request - covers entire screen */}
           {currentRequest && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in-scale">
-              <div className="w-full max-w-xs mx-auto max-h-[80vh] overflow-hidden">
-                <RideRequestCard
-                  request={currentRequest}
-                  onAccept={handleAcceptRequest}
-                  onDecline={handleDeclineRequest}
-                />
-              </div>
-            </div>
+            <FullScreenRideRequest
+              request={currentRequest}
+              onAccept={handleAcceptRequest}
+              onDecline={handleDeclineRequest}
+            />
           )}
         </>
       )}

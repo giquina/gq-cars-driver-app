@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { RideRequest } from "@/types/index";
 import { 
-  Phone, 
   Clock, 
+  Star, 
+  Phone, 
   X,
-  Star,
   CurrencyGbp,
   MapPin,
   Navigation
@@ -44,9 +44,9 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-fade-in-scale">
-        {/* Header with countdown */}
+    <div className="fixed inset-0 z-50 bg-gray-100 flex items-center justify-center p-4 modal-no-scroll">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm max-h-[95vh] overflow-hidden animate-fade-in-scale">
+        {/* Header */}
         <div className="bg-red-500 px-4 py-3 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -90,7 +90,7 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
                 </span>
               </div>
             </div>
-            <Button
+            <Button 
               variant="outline"
               size="sm"
               className="h-10 w-10 p-0 border-gray-300"
@@ -100,11 +100,11 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
           </div>
         </div>
 
-        {/* Route Information */}
+        {/* Route Info */}
         <div className="p-4 space-y-4">
-          {/* Pickup Location */}
+          {/* Pickup */}
           <div className="flex items-start gap-3">
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center mt-1">
               <div className="w-4 h-4 bg-green-500 rounded-full" />
               <div className="w-0.5 h-6 bg-gray-300 mt-1" />
             </div>
@@ -120,7 +120,7 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
 
           {/* Destination */}
           <div className="flex items-start gap-3">
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center mt-1">
               <div className="w-4 h-4 bg-red-500 rounded-full" />
             </div>
             <div className="flex-1">

@@ -1,5 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 
 const earningsData = [
   { month: 'Jan', earnings: 45000, trips: 1200 },
@@ -11,9 +16,9 @@ const earningsData = [
 ];
 
 const statusData = [
-  { name: 'Active', value: 78, color: 'oklch(0.45 0.15 230)' },
-  { name: 'Inactive', value: 15, color: 'oklch(0.7 0.02 230)' },
-  { name: 'Suspended', value: 7, color: 'oklch(0.577 0.245 27.325)' },
+  { name: 'Active', value: 78, fill: 'var(--color-active)' },
+  { name: 'Inactive', value: 15, fill: 'var(--color-inactive)' },
+  { name: 'Suspended', value: 7, fill: 'var(--color-suspended)' },
 ];
 
 const topDriversData = [
@@ -24,6 +29,35 @@ const topDriversData = [
   { name: 'Mike Johnson', earnings: 6500, trips: 185 },
 ];
 
+const earningsChartConfig = {
+  earnings: {
+    label: "Earnings",
+    color: "hsl(var(--chart-1))",
+  },
+};
+
+const statusChartConfig = {
+  active: {
+    label: "Active",
+    color: "oklch(0.45 0.15 230)",
+  },
+  inactive: {
+    label: "Inactive", 
+    color: "oklch(0.7 0.02 230)",
+  },
+  suspended: {
+    label: "Suspended",
+    color: "oklch(0.577 0.245 27.325)",
+  },
+};
+
+const topDriversChartConfig = {
+  earnings: {
+    label: "Earnings",
+    color: "oklch(0.65 0.15 45)",
+  },
+};
+
 export function EarningsChart() {
   return (
     <Card>
@@ -31,27 +65,40 @@ export function EarningsChart() {
         <CardTitle>Monthly Earnings & Trips</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
+        <ChartContainer config={earningsChartConfig}>
           <LineChart data={earningsData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.9 0.01 230)" />
-            <XAxis dataKey="month" stroke="oklch(0.7 0.02 230)" />
-            <YAxis stroke="oklch(0.7 0.02 230)" />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'oklch(1 0 0)', 
-                border: '1px solid oklch(0.9 0.01 230)',
-                borderRadius: '8px'
-              }}
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis 
+              dataKey="month"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
             />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => `$${value.toLocaleString()}`}
+            />
+            <ChartTooltip content={<ChartTooltipContent />} />
             <Line 
               type="monotone" 
               dataKey="earnings" 
-              stroke="oklch(0.45 0.15 230)" 
+              stroke="var(--color-earnings)"
               strokeWidth={3}
-              dot={{ fill: 'oklch(0.45 0.15 230)', strokeWidth: 2, r: 4 }}
+              dot={{
+                fill: "var(--color-earnings)",
+                strokeWidth: 2,
+                r: 6,
+              }}
+              activeDot={{
+                r: 8,
+                stroke: "var(--color-earnings)",
+                strokeWidth: 2,
+              }}
             />
           </LineChart>
-        </ResponsiveContainer>
+        </ChartContainer>
       </CardContent>
     </Card>
   );
@@ -64,7 +111,7 @@ export function DriverStatusChart() {
         <CardTitle>Driver Status Distribution</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
+        <ChartContainer config={statusChartConfig}>
           <PieChart>
             <Pie
               data={statusData}
@@ -76,18 +123,18 @@ export function DriverStatusChart() {
               dataKey="value"
             >
               {statusData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
+                <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
             </Pie>
-            <Tooltip />
+            <ChartTooltip content={<ChartTooltipContent />} />
           </PieChart>
-        </ResponsiveContainer>
+        </ChartContainer>
         <div className="flex justify-center gap-4 mt-4">
           {statusData.map((entry, index) => (
             <div key={index} className="flex items-center gap-2">
               <div 
                 className="w-3 h-3 rounded-full" 
-                style={{ backgroundColor: entry.color }}
+                style={{ backgroundColor: entry.fill }}
               />
               <span className="text-sm text-muted-foreground">
                 {entry.name} ({entry.value}%)
@@ -107,25 +154,25 @@ export function TopDriversChart() {
         <CardTitle>Top Performing Drivers</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
+        <ChartContainer config={topDriversChartConfig}>
           <BarChart data={topDriversData} layout="horizontal">
-            <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.9 0.01 230)" />
-            <XAxis type="number" stroke="oklch(0.7 0.02 230)" />
-            <YAxis dataKey="name" type="category" stroke="oklch(0.7 0.02 230)" width={80} />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'oklch(1 0 0)', 
-                border: '1px solid oklch(0.9 0.01 230)',
-                borderRadius: '8px'
-              }}
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis type="number" tickLine={false} axisLine={false} tickMargin={8} />
+            <YAxis 
+              dataKey="name" 
+              type="category" 
+              tickLine={false} 
+              axisLine={false} 
+              width={80} 
             />
+            <ChartTooltip content={<ChartTooltipContent />} />
             <Bar 
               dataKey="earnings" 
-              fill="oklch(0.65 0.15 45)" 
+              fill="var(--color-earnings)"
               radius={[0, 4, 4, 0]}
             />
           </BarChart>
-        </ResponsiveContainer>
+        </ChartContainer>
       </CardContent>
     </Card>
   );

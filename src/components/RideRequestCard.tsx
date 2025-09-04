@@ -257,17 +257,17 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
   };
 
   return (
-    <div className="relative w-full max-w-sm mx-auto px-4">
+    <div className="relative w-full max-w-sm mx-auto px-3">
       {/* Swipe instruction overlay - compact */}
-      <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-10">
-        <div className="flex items-center gap-2 bg-black/80 text-white px-3 py-1.5 rounded-full text-xs font-medium shadow-lg">
+      <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-10">
+        <div className="flex items-center gap-2 bg-black/80 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
           <div className="flex items-center gap-1">
-            <HandSwipeLeft size={14} />
+            <HandSwipeLeft size={12} />
             <span>Decline</span>
           </div>
           <div className="w-px h-3 bg-white/30" />
           <div className="flex items-center gap-1">
-            <HandSwipeRight size={14} />
+            <HandSwipeRight size={12} />
             <span>Accept</span>
           </div>
         </div>
@@ -275,7 +275,7 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
 
       <Card 
         ref={cardRef}
-        className={`w-full max-h-[85vh] overflow-hidden shadow-2xl border-2 animate-fade-in-scale transition-all duration-200 relative no-select ${getSwipeBackground()}`}
+        className={`w-full max-h-[75vh] overflow-hidden shadow-2xl border-2 animate-fade-in-scale transition-all duration-200 relative no-select ${getSwipeBackground()}`}
         style={{
           transform: `translateX(${swipeOffset}px) ${isDragging ? 'scale(1.02)' : 'scale(1)'}`,
           cursor: isDragging ? 'grabbing' : 'grab',
@@ -293,83 +293,91 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
         {getSwipeIndicator()}
         
         {/* Compact Header with Timer */}
-        <CardHeader className="pb-2 pt-4 px-4">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-base font-bold text-gray-900">New Ride Request</h3>
+        <CardHeader className="pb-1 pt-3 px-3">
+          <div className="flex items-center justify-between mb-1">
+            <h3 className="text-sm font-bold text-gray-900">New Ride Request</h3>
             <div className="flex items-center gap-1 bg-orange-100 px-2 py-1 rounded-full">
-              <Timer size={12} className="text-orange-600" />
+              <Timer size={10} className="text-orange-600" />
               <span className="text-orange-700 font-bold text-xs">{timeLeft}s</span>
             </div>
           </div>
-          <Progress value={progressPercentage} className="h-1.5" />
+          <Progress value={progressPercentage} className="h-1" />
         </CardHeader>
         
-        <CardContent className="px-4 pb-4 space-y-3">
+        <CardContent className="px-3 pb-3 space-y-2">
           {/* BIG EARNINGS DISPLAY - Most Important */}
-          <div className="text-center py-2">
-            <div className="text-2xl font-bold text-green-600 mb-1">
+          <div className="text-center py-1">
+            <div className="text-xl font-bold text-green-600 mb-0.5">
               £{request.estimatedFare.toFixed(2)}
             </div>
             <div className="text-xs text-gray-600 font-medium">You earn</div>
           </div>
 
-          {/* Single Line: All Decision Metrics */}
-          <div className="flex items-center justify-center gap-4 px-3 py-2 bg-gray-50 rounded-lg border border-gray-200">
-            <div className="flex items-center gap-1">
-              <span className="text-sm">👤</span>
-              <span className="text-sm font-bold text-gray-900">{request.passenger.rating.toFixed(1)}★</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-sm">📍</span>
-              <span className="text-sm font-bold text-blue-900">{pickupDistance}mi</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-sm">🚗</span>
-              <span className="text-sm font-bold text-purple-900">{request.estimatedDistance.toFixed(1)}mi</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-sm">⏱️</span>
-              <span className="text-sm font-bold text-gray-900">{request.estimatedDuration}min</span>
+          {/* Single Line: All Decision Metrics - Properly Contained */}
+          <div className="w-full max-w-full overflow-hidden">
+            <div className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center gap-0.5 min-w-0">
+                <span className="text-xs">👤</span>
+                <span className="text-xs font-bold text-gray-900 whitespace-nowrap">{request.passenger.rating.toFixed(1)}★</span>
+              </div>
+              <div className="flex items-center gap-0.5 min-w-0">
+                <span className="text-xs">📍</span>
+                <span className="text-xs font-bold text-blue-900 whitespace-nowrap">{pickupDistance}mi</span>
+              </div>
+              <div className="flex items-center gap-0.5 min-w-0">
+                <span className="text-xs">🚗</span>
+                <span className="text-xs font-bold text-purple-900 whitespace-nowrap">{request.estimatedDistance.toFixed(1)}mi</span>
+              </div>
+              <div className="flex items-center gap-0.5 min-w-0">
+                <span className="text-xs">⏱️</span>
+                <span className="text-xs font-bold text-gray-900 whitespace-nowrap">{request.estimatedDuration}min</span>
+              </div>
             </div>
           </div>
 
           {/* Trip Timeline - Compact */}
           <div className="grid grid-cols-2 gap-2">
             {/* Time/Distance to Pickup */}
-            <div className="px-3 py-2 bg-blue-50 rounded-lg border border-blue-200">
-              <div className="text-xs text-blue-700 font-medium uppercase tracking-wide mb-1">To Pickup</div>
-              <div className="text-sm font-bold text-blue-900">{pickupDistance}mi · {Math.ceil(parseFloat(pickupDistance) * 2.5)}min</div>
+            <div className="px-2 py-1.5 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="text-xs text-blue-700 font-medium uppercase tracking-wide mb-0.5">To Pickup</div>
+              <div className="text-xs font-bold text-blue-900">{pickupDistance}mi · {Math.ceil(parseFloat(pickupDistance) * 2.5)}min</div>
             </div>
 
             {/* Trip Duration/Distance */}
-            <div className="px-3 py-2 bg-purple-50 rounded-lg border border-purple-200">
-              <div className="text-xs text-purple-700 font-medium uppercase tracking-wide mb-1">Trip Length</div>
-              <div className="text-sm font-bold text-purple-900">{request.estimatedDistance.toFixed(1)}mi · {request.estimatedDuration}min</div>
+            <div className="px-2 py-1.5 bg-purple-50 rounded-lg border border-purple-200">
+              <div className="text-xs text-purple-700 font-medium uppercase tracking-wide mb-0.5">Trip Length</div>
+              <div className="text-xs font-bold text-purple-900">{request.estimatedDistance.toFixed(1)}mi · {request.estimatedDuration}min</div>
             </div>
           </div>
 
-          {/* Route - Compact Single Line */}
-          <div className="px-3 py-2 bg-gray-50 rounded-lg border border-gray-200">
-            <div className="text-xs text-gray-600 font-medium uppercase tracking-wide mb-1">Route</div>
-            <div className="text-sm font-semibold text-gray-900 leading-tight">
-              {/* Show only neighborhood/area names for mobile */}
-              {request.pickup.address.split(',')[0]} → {request.destination.address.split(',')[0]}
+          {/* Route - Compact Single Line with Full Address Visibility */}
+          <div className="w-full max-w-full overflow-hidden">
+            <div className="px-2 py-1.5 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="text-xs text-gray-600 font-medium uppercase tracking-wide mb-0.5">Route</div>
+              <div className="space-y-0.5">
+                <div className="text-xs font-semibold text-gray-900 leading-tight truncate">
+                  📍 {request.pickup.address}
+                </div>
+                <div className="text-xs font-semibold text-gray-900 leading-tight truncate">
+                  🎯 {request.destination.address}
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Large Action Buttons */}
-          <div className="grid grid-cols-2 gap-3 pt-2">
+          <div className="grid grid-cols-2 gap-3 pt-1">
             <Button 
               variant="outline" 
               onClick={() => onDecline(request.id)}
-              className="h-10 border-2 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 font-bold text-sm"
+              className="h-9 border-2 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 font-bold text-sm"
               disabled={isDragging}
             >
               Decline
             </Button>
             <Button 
               onClick={() => onAccept(request.id)}
-              className="h-10 bg-green-600 hover:bg-green-700 text-white font-bold text-sm shadow-md"
+              className="h-9 bg-green-600 hover:bg-green-700 text-white font-bold text-sm shadow-md"
               disabled={isDragging}
             >
               Accept ✅

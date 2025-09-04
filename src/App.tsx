@@ -5,18 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { WelcomeScreen } from "@/components/WelcomeScreen";
-import { DriverStatus } from "@/components/DriverStatus";
 import { FullScreenRideRequest } from "@/components/FullScreenRideRequest";
 import { ActiveTripCard } from "@/components/ActiveTripCard";
-import { TripHistoryList } from "@/components/TripHistoryList";
 import { EarningsSummary } from "@/components/EarningsSummary";
 import { BackgroundMap } from "@/components/BackgroundMap";
 import { MapView } from "@/components/MapView";
-import { DriverProfile } from "@/components/DriverProfile";
-import { NotificationManager } from "@/components/NotificationManager";
-import { QuickSettings } from "@/components/QuickSettings";
 import { PassengerRating } from "@/components/PassengerRating";
-import { GPSTracking } from "@/components/GPSTracking";
 import { Driver, RideRequest, ActiveTrip, TripHistory } from "@/types/index";
 import { 
   House, 
@@ -26,13 +20,7 @@ import {
   List,
   Car, 
   Clock, 
-  CurrencyGbp, 
-  History, 
   User, 
-  Map,
-  Gear,
-  Star,
-  Circle,
   Eye
 } from "@phosphor-icons/react";
 
@@ -115,31 +103,12 @@ function AppContent() {
     return () => clearInterval(interval);
   }, [driver.isOnline, currentRequest, activeTrip]);
 
-  // Prevent body scrolling when ride request is open
+  // Simple scroll prevention for ride requests
   useEffect(() => {
     if (currentRequest) {
-      // Store original values
-      const originalOverflow = document.body.style.overflow;
-      const originalPosition = document.body.style.position;
-      const originalWidth = document.body.style.width;
-      const originalHeight = document.body.style.height;
-      
-      // Prevent scrolling
       document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.height = '100%';
-      document.body.style.top = '0';
-      document.body.style.left = '0';
-      
-      // Cleanup function
       return () => {
-        document.body.style.overflow = originalOverflow;
-        document.body.style.position = originalPosition;
-        document.body.style.width = originalWidth;
-        document.body.style.height = originalHeight;
-        document.body.style.top = '';
-        document.body.style.left = '';
+        document.body.style.overflow = '';
       };
     }
   }, [currentRequest]);

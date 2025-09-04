@@ -108,26 +108,6 @@
   .ride-request-overlay {
     backdrop-filter: blur(4px);
   }
-
-  .ride-request-container {
-    max-height: 95vh;
-    max-width: min(95vw, 400px);
-  }
-
-  /* Ensure no overflow scrolling needed */
-  .no-scroll {
-    overflow: hidden !important;
-    height: 100vh !important;
-    position: fixed !important;
-    width: 100% !important;
-  }
-  
-  /* Prevent any scrolling on modal elements */
-  .modal-no-scroll {
-    overflow: hidden !important;
-    touch-action: none !important;
-    -webkit-overflow-scrolling: auto !important;
-  }
 }
 
 :root {

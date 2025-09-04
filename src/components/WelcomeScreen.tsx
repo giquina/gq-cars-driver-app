@@ -22,7 +22,7 @@ export function WelcomeScreen({ driver, onSignIn, onSwitchAccount }: WelcomeScre
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       {/* Status bar spacer */}
       <div className="h-12" />
       
@@ -33,10 +33,10 @@ export function WelcomeScreen({ driver, onSignIn, onSwitchAccount }: WelcomeScre
             <Car size={40} className="text-white" weight="bold" />
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
           GQ Cars
         </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">
+        <p className="text-lg text-gray-600 font-medium">
           Professional Driver
         </p>
       </div>
@@ -45,17 +45,17 @@ export function WelcomeScreen({ driver, onSignIn, onSwitchAccount }: WelcomeScre
       <div className="flex-1 flex flex-col items-center justify-center px-8">
         {/* Driver Avatar - circular and prominent */}
         <div className="relative mb-8">
-          <div className="w-36 h-36 rounded-full bg-gray-200 dark:bg-gray-700 border-4 border-gray-100 dark:border-gray-600 flex items-center justify-center overflow-hidden shadow-lg">
-            <User size={60} className="text-gray-500 dark:text-gray-400" weight="duotone" />
+          <div className="w-36 h-36 rounded-full bg-gray-200 border-4 border-gray-100 flex items-center justify-center overflow-hidden shadow-lg">
+            <User size={60} className="text-gray-500" weight="duotone" />
           </div>
         </div>
 
         {/* Personalized Greeting */}
         <div className="text-center mb-16">
-          <h2 className="text-2xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+          <h2 className="text-2xl font-semibold text-gray-600 mb-2">
             Hello,
           </h2>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-4xl font-bold text-gray-900">
             {driver.name}
           </h1>
         </div>
@@ -83,7 +83,7 @@ export function WelcomeScreen({ driver, onSignIn, onSwitchAccount }: WelcomeScre
         <Button
           variant="ghost"
           onClick={onSwitchAccount}
-          className="w-full h-12 text-base font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+          className="w-full h-12 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50"
         >
           Sign in to a different account
         </Button>
@@ -98,7 +98,7 @@ export function WelcomeScreen({ driver, onSignIn, onSwitchAccount }: WelcomeScre
 
       {/* iPhone-style Home Indicator */}
       <div className="h-8 flex justify-center items-end pb-2">
-        <div className="w-32 h-1 bg-gray-300 dark:bg-gray-600 rounded-full" />
+        <div className="w-32 h-1 bg-gray-300 rounded-full" />
       </div>
     </div>
   );

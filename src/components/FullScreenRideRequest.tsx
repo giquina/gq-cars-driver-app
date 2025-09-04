@@ -1,98 +1,73 @@
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { RideRequest } from "@/types/index";
-import { 
   Clock, 
-  Star, 
   MapPin,
-  CurrencyGbp,
   Phone,
-  X
-} from "@phosphor-icons/react";
-
-interface FullScreenRideRequestProps {
-  request: RideRequest;
-  onAccept: (requestId: string) => void;
-  onDecline: (requestId: string) => void;
+} from "
+interface
+  onAccept: (r
 }
+exp
 
-export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScreenRideRequestProps) {
-  const [timeLeft, setTimeLeft] = useState(15);
 
-  useEffect(() => {
-    if (timeLeft <= 0) {
-      onDecline(request.id);
       return;
-    }
 
-    const timer = setInterval(() => {
       setTimeLeft(prev => prev - 1);
-    }, 1000);
 
-    return () => clearInterval(timer);
-  }, [timeLeft, onDecline, request.id]);
+ 
 
-  // Prevent any scrolling on the modal
-  const handleTouchMove = (e: React.TouchEvent) => {
     e.preventDefault();
-    e.stopPropagation();
   };
 
-  const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
+    e.stopPropagati
 
-  return (
     <div 
-      className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 modal-no-scroll"
-      onTouchMove={handleTouchMove}
-      onWheel={handleWheel}
-      style={{ touchAction: 'none', overflow: 'hidden' }}
-    >
-      {/* Modal container - compact design fitting in viewport */}
-      <div 
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-auto animate-fade-in-scale modal-no-scroll"
-        onTouchMove={handleTouchMove}
-        onWheel={handleWheel}
-        style={{ 
-          touchAction: 'none', 
-          overflow: 'hidden',
-          maxHeight: '90vh' // Ensure it fits in viewport
-        }}
-      >
-        {/* Header with timer */}
-        <div className="px-4 py-3 border-b border-gray-200">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Clock size={14} className="text-red-500" />
-              <span className="font-semibold text-red-500">
-                {timeLeft}s
-              </span>
-            </div>
-            <button 
-              onClick={() => onDecline(request.id)}
-              className="p-1 hover:bg-gray-100 rounded-full"
-            >
-              <X size={14} className="text-gray-400" />
-            </button>
-          </div>
-        </div>
+      onTouch
+     
 
-        {/* Main content */}
-        <div className="p-4 space-y-3">
-          {/* Passenger info */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-sm font-semibold text-gray-600">
-                {request.passenger.name.charAt(0)}
+        className="bg-white rounded-2
+        onWheel={handleWheel}
+          tou
+
+      >
+        <div className="px-4 py-3 border
+
+          
               </span>
+            <button 
+              className="p-1 hover:bg-gray-100 rounded-full"
+              <X size={14} classN
+          </div>
+
+        <div className="p-4 space-y-3">
+          <div className="flex items-center gap-3">
+              <span className="text-sm font-semibold text-g
+              </span>
+            <div clas
             </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 text-sm">{request.passenger.name}</h3>
+                <spa
+                </span>
+            </div>
+             
+              className="h-7 w-7 p-0"
+              <Phone 
+          </div>
+          {/* 
+
+              <div className
+                <p className="text-xs t
+              </div>
+
+            <div className="flex items-start gap-2">
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-gra
+            </div>
+
+            <div className="flex-1">
+              <h3 className="font-semibold text-gray-900">{request.passenger.name}</h3>
               <div className="flex items-center gap-1">
-                <Star size={11} className="text-yellow-500 fill-current" />
-                <span className="text-xs text-gray-600">
+                <Star size={12} className="text-yellow-500 fill-current" />
+                <span className="text-sm text-gray-600">
                   {request.passenger.rating.toFixed(1)} • {request.passenger.tripCount} trips
                 </span>
               </div>
@@ -100,29 +75,29 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
             <Button
               variant="outline"
               size="sm"
-              className="h-7 w-7 p-0"
+              className="h-8 w-8 p-0"
             >
-              <Phone size={12} />
+              <Phone size={14} />
             </Button>
           </div>
 
           {/* Route info */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             {/* Pickup */}
-            <div className="flex items-start gap-2">
-              <div className="w-2.5 h-2.5 bg-green-500 rounded-full mt-1 flex-shrink-0" />
+            <div className="flex items-start gap-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full mt-1 flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-xs text-gray-600 uppercase tracking-wide">Pickup</p>
-                <p className="font-medium text-gray-900 text-xs leading-tight">{request.pickup.address}</p>
+                <p className="font-medium text-gray-900 text-sm">{request.pickup.address}</p>
               </div>
             </div>
 
             {/* Destination */}
-            <div className="flex items-start gap-2">
-              <div className="w-2.5 h-2.5 bg-red-500 rounded-full mt-1 flex-shrink-0" />
+            <div className="flex items-start gap-3">
+              <div className="w-3 h-3 bg-red-500 rounded-full mt-1 flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-xs text-gray-600 uppercase tracking-wide">Destination</p>
-                <p className="font-medium text-gray-900 text-xs leading-tight">{request.destination.address}</p>
+                <p className="font-medium text-gray-900 text-sm">{request.destination.address}</p>
               </div>
             </div>
           </div>
@@ -131,13 +106,13 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
           <div className="bg-gray-50 rounded-lg p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
-                <CurrencyGbp size={14} className="text-green-600" />
+                <CurrencyGbp size={16} className="text-green-600" />
                 <span className="font-bold text-lg text-gray-900">
                   £{request.estimatedFare.toFixed(2)}
                 </span>
               </div>
               <div className="text-right">
-                <p className="text-xs text-gray-600">
+                <p className="text-sm text-gray-600">
                   {request.estimatedDistance.toFixed(1)}mi • {request.estimatedDuration}min
                 </p>
                 <p className="text-xs text-gray-500">{request.paymentMethod}</p>
@@ -147,31 +122,31 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
 
           {/* Special requests */}
           {request.specialRequests && (
-            <div className="bg-blue-50 rounded-lg p-2">
-              <p className="text-xs text-blue-800">{request.specialRequests}</p>
+            <div className="bg-blue-50 rounded-lg p-3">
+              <p className="text-sm text-blue-800">{request.specialRequests}</p>
             </div>
           )}
         </div>
 
-        {/* Action buttons */}
-        <div className="px-4 pb-4">
-          <div className="flex gap-3">
+
+        <div className="px-6 pb-6">
+
             <Button 
-              onClick={() => onDecline(request.id)}
+
               variant="outline" 
-              className="flex-1 h-10 font-semibold"
+
             >
-              Decline
+
             </Button>
-            <Button 
+
               onClick={() => onAccept(request.id)}
-              className="flex-1 h-10 bg-green-600 hover:bg-green-700 font-semibold"
+              className="flex-1 h-12 bg-green-600 hover:bg-green-700 font-semibold"
             >
-              Accept
+
             </Button>
-          </div>
+
         </div>
-      </div>
+
     </div>
-  );
+
 }

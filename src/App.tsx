@@ -300,12 +300,10 @@ function AppContent() {
         </Button>
         
         {/* Daily Earnings */}
-        <div className="text-right">
-          <div className="text-sm font-bold text-success flex items-center gap-0.5">
-            <CurrencyGbp size={12} />
-            {driver.earnings.today.toFixed(2)}
-          </div>
-          <p className="text-[9px] text-muted-foreground">Today</p>
+        <div className="flex items-center gap-1">
+          <CurrencyGbp size={12} className="text-success" />
+          <span className="text-sm font-bold text-success">£{driver.earnings.today.toFixed(2)}</span>
+          <span className="text-[9px] text-muted-foreground">today</span>
         </div>
       </div>
     </div>

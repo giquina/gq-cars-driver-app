@@ -47,26 +47,20 @@ export function DriverStatus({ driver, onToggleOnline }: DriverStatusProps) {
         </div>
 
         <div className="grid grid-cols-3 gap-1 mb-1.5">
-          <div className="text-center p-1 bg-success/10 rounded border border-success/20">
-            <div className="flex items-center justify-center mb-0.5">
-              <CurrencyGbp size={8} className="text-success mr-0.5" />
-              <div className="text-[10px] font-bold text-success">£{driver.earnings.today.toFixed(2)}</div>
-            </div>
-            <div className="text-[7px] text-muted-foreground">Today</div>
+          <div className="flex items-center justify-center p-1.5 bg-success/10 rounded border border-success/20">
+            <CurrencyGbp size={8} className="text-success mr-1" />
+            <span className="text-[9px] font-bold text-success">£{driver.earnings.today.toFixed(2)}</span>
+            <span className="text-[8px] text-muted-foreground ml-1">today</span>
           </div>
-          <div className="text-center p-1 bg-primary/10 rounded border border-primary/20">
-            <div className="flex items-center justify-center mb-0.5">
-              <TrendUp size={8} className="text-primary mr-0.5" />
-              <div className="text-[10px] font-bold text-primary">{driver.trips.completed}</div>
-            </div>
-            <div className="text-[7px] text-muted-foreground">Trips</div>
+          <div className="flex items-center justify-center p-1.5 bg-primary/10 rounded border border-primary/20">
+            <TrendUp size={8} className="text-primary mr-1" />
+            <span className="text-[9px] font-bold text-primary">{driver.trips.completed}</span>
+            <span className="text-[8px] text-muted-foreground ml-1">trips</span>
           </div>
-          <div className="text-center p-1 bg-yellow-500/10 rounded border border-yellow-400/20">
-            <div className="flex items-center justify-center mb-0.5">
-              <Star size={8} className="text-yellow-600 mr-0.5" weight="fill" />
-              <div className="text-[10px] font-bold text-yellow-600">{driver.rating.toFixed(1)}</div>
-            </div>
-            <div className="text-[7px] text-muted-foreground">Rating</div>
+          <div className="flex items-center justify-center p-1.5 bg-yellow-500/10 rounded border border-yellow-400/20">
+            <Star size={8} className="text-yellow-600 mr-1" weight="fill" />
+            <span className="text-[9px] font-bold text-yellow-600">{driver.rating.toFixed(1)}</span>
+            <span className="text-[8px] text-muted-foreground ml-1">rating</span>
           </div>
         </div>
 

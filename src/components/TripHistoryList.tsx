@@ -47,13 +47,13 @@ export function TripHistoryList({ trips }: TripHistoryListProps) {
         {trips.map((trip, index) => (
           <div 
             key={trip.id} 
-            className="border rounded-lg p-1.5 space-y-1.5 bg-card hover:shadow-md transition-all animate-slide-in-up"
+            className="border rounded-lg p-1.5 bg-card hover:shadow-md transition-all animate-slide-in-up"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-1.5">
-                <Avatar className="w-6 h-6">
-                  <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-[8px] font-semibold">
+                <Avatar className="w-5 h-5">
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-[7px] font-semibold">
                     {trip.passenger.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
@@ -62,67 +62,42 @@ export function TripHistoryList({ trips }: TripHistoryListProps) {
                   <div className="text-[7px] text-muted-foreground">{formatDate(trip.completedAt)}</div>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="font-bold text-[10px] text-success">£{trip.fare.toFixed(2)}</div>
-                {trip.tip && (
-                  <div className="text-[7px] text-muted-foreground flex items-center gap-0.5 justify-end">
-                    <Heart size={6} className="text-red-500" weight="fill" />
-                    +£{trip.tip.toFixed(2)}
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-0.5">
+                  <CurrencyGbp size={8} className="text-success" />
+                  <span className="font-bold text-[9px] text-success">{trip.fare.toFixed(2)}</span>
+                  {trip.tip && (
+                    <>
+                      <span className="text-[8px] text-muted-foreground">+</span>
+                      <span className="text-[8px] text-success">{trip.tip.toFixed(2)}</span>
+                    </>
+                  )}
+                </div>
+                {trip.rating && (
+                  <div className="flex items-center gap-0.5">
+                    <Star size={6} weight="fill" className="text-yellow-500" />
+                    <span className="text-[7px] text-yellow-600">{trip.rating.toFixed(1)}</span>
                   </div>
                 )}
               </div>
             </div>
             
-            <div className="space-y-1">
-              <div className="flex items-start gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-success mt-0.5"></div>
-                <div className="flex-1">
-                  <div className="text-[7px] text-muted-foreground mb-0.5">From</div>
-                  <span className="text-[9px] font-medium">{trip.pickup}</span>
-                </div>
-              </div>
-              <div className="ml-0.5 border-l border-dashed border-muted-foreground/30 h-1.5"></div>
-              <div className="flex items-start gap-1.5">
-                <MapPin size={6} className="text-destructive mt-0.5" weight="fill" />
-                <div className="flex-1">
-                  <div className="text-[7px] text-muted-foreground mb-0.5">To</div>
-                  <span className="text-[9px] font-medium">{trip.destination}</span>
-                </div>
-              </div>
+            {/* Simplified route display */}
+            <div className="text-[8px] text-muted-foreground">
+              <span className="font-medium">{trip.pickup}</span>
+              <span className="mx-1">→</span>
+              <span className="font-medium">{trip.destination}</span>
             </div>
             
-            <div className="flex items-center justify-between pt-1 border-t border-muted">
-              <div className="flex items-center gap-2 text-[8px] text-muted-foreground">
-                <span className="flex items-center gap-0.5">
-                  <Clock size={8} />
-                  {trip.duration}m
-                </span>
-                <span>{trip.distance.toFixed(1)} mi</span>
-              </div>
-              
-              <div className="flex items-center gap-1">
-                {trip.passengerRating && (
-                  <Badge variant="outline" className="flex items-center gap-0.5 px-1 py-0.5 text-[7px]">
-                    <User size={6} />
-                    <Star size={6} weight="fill" className="text-yellow-500" />
-                    {trip.passengerRating}
-                  </Badge>
-                )}
-                {trip.rating && (
-                  <Badge variant="secondary" className="flex items-center gap-0.5 px-1 py-0.5 text-[7px]">
-                    <Star size={6} weight="fill" className="text-yellow-500" />
-                    {trip.rating.toFixed(1)}
-                  </Badge>
-                )}
-              </div>
+            <div className="flex items-center justify-between text-[7px] text-muted-foreground mt-1">
+              <span>{trip.duration}m • {trip.distance.toFixed(1)} mi</span>
+              {trip.passengerRating && (
+                <div className="flex items-center gap-0.5">
+                  <User size={6} />
+                  <span>rated you {trip.passengerRating}</span>
+                </div>
+              )}
             </div>
-
-            {trip.passengerFeedback && (
-              <div className="p-1.5 bg-muted/50 rounded border-l-2 border-accent">
-                <div className="text-[7px] text-accent font-semibold mb-0.5">Your feedback:</div>
-                <div className="text-[8px] italic">"{trip.passengerFeedback}"</div>
-              </div>
-            )}
           </div>
         ))}
       </CardContent>

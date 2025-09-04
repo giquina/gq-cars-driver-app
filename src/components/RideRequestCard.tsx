@@ -317,84 +317,58 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
         <Progress value={progressPercentage} className="h-1 mt-1" />
       </CardHeader>
       
-      <CardContent className="px-4 pb-4 space-y-3">
+      <CardContent className="px-4 pb-4 space-y-4">
         {/* BIG EARNINGS DISPLAY - Most Important */}
-        <div className="text-center py-1">
-          <div className="text-3xl font-bold text-green-600 mb-1">
+        <div className="text-center py-2">
+          <div className="text-4xl font-bold text-green-600 mb-1">
             £{request.estimatedFare.toFixed(2)}
           </div>
           <div className="text-sm text-gray-600 font-medium">You earn</div>
         </div>
 
-        {/* CONSOLIDATED INFO LINE - All Key Metrics in One Place */}
-        <div className="flex items-center justify-center gap-4 py-3 bg-gray-50 rounded-lg px-3">
+        {/* SINGLE CONSOLIDATED INFO LINE - All Key Metrics Together */}
+        <div className="flex items-center justify-center gap-3 py-3 bg-white rounded-lg border border-gray-200 shadow-sm">
           <div className="flex items-center gap-1">
-            <User size={14} className="text-yellow-600" />
-            <span className="text-base font-bold text-yellow-600">{request.passenger.rating.toFixed(1)}★</span>
+            <span className="text-base">👤</span>
+            <span className="text-base font-bold text-gray-900">{request.passenger.rating.toFixed(1)}★</span>
           </div>
-          <div className="w-px h-4 bg-gray-300" />
+          
           <div className="flex items-center gap-1">
-            <MapPin size={14} className="text-blue-600" />
-            <span className="text-base font-bold text-blue-700">{pickupDistance}mi</span>
+            <span className="text-base">📍</span>
+            <span className="text-base font-bold text-gray-900">{pickupDistance}mi</span>
           </div>
-          <div className="w-px h-4 bg-gray-300" />
+          
           <div className="flex items-center gap-1">
-            <Navigation size={14} className="text-purple-600" />
+            <span className="text-base">🚗</span>
             <span className="text-base font-bold text-gray-900">{request.estimatedDistance.toFixed(1)}mi</span>
           </div>
-          <div className="w-px h-4 bg-gray-300" />
+          
           <div className="flex items-center gap-1">
-            <Clock size={14} className="text-green-600" />
+            <span className="text-base">⏱️</span>
             <span className="text-base font-bold text-gray-900">{request.estimatedDuration}min</span>
           </div>
         </div>
 
-        {/* Simple Area Route */}
-        <div className="text-center py-2">
+        {/* Simple Area Route - Right Below Info Line */}
+        <div className="text-center">
           <div className="text-base font-semibold text-gray-900">
             {getAreaName(request.pickup.address)} → {getAreaName(request.destination.address)}
           </div>
         </div>
 
-        {/* Payment & Notes (Only if NOT default card) - Condensed */}
-        {(request.paymentMethod !== 'card' || (request.specialRequests && request.specialRequests.length < 30)) && (
-          <div className="flex items-center justify-center gap-4 text-sm">
-            {request.paymentMethod !== 'card' && (
-              <div className="flex items-center gap-1">
-                <span className="text-base">
-                  {request.paymentMethod === 'cash' ? '💰' : '📱'}
-                </span>
-                <span className="font-medium text-gray-900">
-                  {request.paymentMethod === 'cash' ? 'Cash' : 'Digital'}
-                </span>
-              </div>
-            )}
-            
-            {request.specialRequests && request.specialRequests.length < 30 && (
-              <>
-                {request.paymentMethod !== 'card' && <div className="w-px h-3 bg-gray-300" />}
-                <div className="flex items-center gap-1">
-                  <span className="text-base">📝</span>
-                  <span className="text-gray-900 font-medium">"{request.specialRequests}"</span>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* Large Action Buttons - Compact */}
-        <div className="grid grid-cols-2 gap-3 pt-1">
+        {/* Large Action Buttons - Clean Design */}
+        <div className="grid grid-cols-2 gap-4 pt-2">
           <Button 
             variant="outline" 
             onClick={() => onDecline(request.id)}
-            className="h-11 border-2 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 font-bold"
+            className="h-12 border-2 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 font-bold text-base"
             disabled={isDragging}
           >
             Decline
           </Button>
           <Button 
             onClick={() => onAccept(request.id)}
-            className="h-11 bg-green-600 hover:bg-green-700 text-white font-bold shadow-md"
+            className="h-12 bg-green-600 hover:bg-green-700 text-white font-bold text-base shadow-md"
             disabled={isDragging}
           >
             Accept ✅

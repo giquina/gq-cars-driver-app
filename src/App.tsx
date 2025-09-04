@@ -16,6 +16,7 @@ import { EmergencyAssistance } from "@/components/EmergencyAssistance";
 import { QuickSettings } from "@/components/QuickSettings";
 import { AIAssistant } from "@/components/AIAssistant";
 import { PassengerRating } from "@/components/PassengerRating";
+import { GPSTracking } from "@/components/GPSTracking";
 import { Driver, RideRequest, ActiveTrip, TripHistory } from "@/types";
 import { 
   Car, 
@@ -207,8 +208,16 @@ function App() {
         ? activeTrip.request.pickup 
         : activeTrip.request.destination;
       
-      // Simulate opening navigation app
-      toast.info(`Opening navigation to ${destination.address}`);
+      // Open external navigation app
+      const url = `https://www.google.com/maps/dir/${driver.location?.lat || 40.7128},${driver.location?.lng || -74.0060}/${destination.lat},${destination.lng}`;
+      
+      try {
+        window.open(url, '_system');
+        toast.success(`Opening navigation to ${destination.address}`);
+      } catch (error) {
+        window.open(url, '_blank');
+        toast.info(`Opening navigation to ${destination.address}`);
+      }
     }
   };
 
@@ -373,6 +382,8 @@ function App() {
                 destination={activeTrip.request.destination}
                 currentStatus={activeTrip.status}
                 onNavigate={handleNavigate}
+                showGPSTracking={true}
+                showRealTimeNavigation={true}
               />
             )}
 

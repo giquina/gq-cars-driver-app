@@ -11,6 +11,10 @@ export interface Driver {
   location?: {
     lat: number;
     lng: number;
+    accuracy?: number;
+    heading?: number;
+    speed?: number;
+    timestamp?: number;
   };
   earnings: {
     today: number;

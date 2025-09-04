@@ -75,4 +75,6 @@ export interface TripHistory {
   completedAt: string;
   rating?: number;
   tip?: number;
+  passengerRating?: number;
+  passengerFeedback?: string;
 }

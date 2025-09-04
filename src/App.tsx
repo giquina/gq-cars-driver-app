@@ -14,6 +14,8 @@ import { DriverProfile } from "@/components/DriverProfile";
 import { NotificationManager } from "@/components/NotificationManager";
 import { EmergencyAssistance } from "@/components/EmergencyAssistance";
 import { QuickSettings } from "@/components/QuickSettings";
+import { AIAssistant } from "@/components/AIAssistant";
+import { PassengerRating } from "@/components/PassengerRating";
 import { Driver, RideRequest, ActiveTrip, TripHistory } from "@/types";
 import { 
   Car, 
@@ -25,7 +27,9 @@ import {
   ShieldWarning,
   Map,
   List,
-  Gear
+  Gear,
+  Robot,
+  Star
 } from "@phosphor-icons/react";
 
 function App() {
@@ -60,7 +64,8 @@ function App() {
   // Current session state (doesn't persist)
   const [currentRequest, setCurrentRequest] = useState<RideRequest | null>(null);
   const [activeTrip, setActiveTrip] = useState<ActiveTrip | null>(null);
-  const [currentView, setCurrentView] = useState<'main' | 'profile' | 'notifications' | 'emergency' | 'settings'>('main');
+  const [currentView, setCurrentView] = useState<'main' | 'profile' | 'notifications' | 'emergency' | 'settings' | 'ai-assistant' | 'passenger-rating'>('main');
+  const [completedTripForRating, setCompletedTripForRating] = useState<ActiveTrip | null>(null);
 
   // Generate mock ride requests when driver is online
   useEffect(() => {
@@ -188,7 +193,11 @@ function App() {
       },
     }));
 
+    // Set up for passenger rating
+    setCompletedTripForRating(activeTrip);
     setActiveTrip(null);
+    setCurrentView('passenger-rating');
+    
     toast.success(`Trip completed! Earned $${(completedTrip.fare + (completedTrip.tip || 0)).toFixed(2)}`);
   };
 
@@ -207,20 +216,60 @@ function App() {
     toast.info("Profile editing would open here");
   };
 
+  const handleSubmitPassengerRating = (rating: number, feedback?: string, tip?: number) => {
+    if (!completedTripForRating) return;
+    
+    // Update trip history with rating
+    setTripHistory(currentHistory => 
+      currentHistory.map(trip => 
+        trip.id === completedTripForRating.id 
+          ? { ...trip, passengerRating: rating, passengerFeedback: feedback, tip: tip || trip.tip }
+          : trip
+      )
+    );
+    
+    // Update earnings if tip was added
+    if (tip) {
+      setDriver(currentDriver => ({
+        ...currentDriver,
+        earnings: {
+          ...currentDriver.earnings,
+          today: currentDriver.earnings.today + tip,
+          thisWeek: currentDriver.earnings.thisWeek + tip,
+          thisMonth: currentDriver.earnings.thisMonth + tip,
+        },
+      }));
+    }
+    
+    setCompletedTripForRating(null);
+    setCurrentView('main');
+  };
+
   // Navigation header component
   const NavigationHeader = () => (
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex items-center justify-between mb-6 p-4 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-xl border">
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-primary rounded-lg">
-          <Car size={24} className="text-primary-foreground" />
+        <div className="p-3 bg-gradient-to-br from-primary to-accent rounded-xl shadow-lg">
+          <Car size={28} className="text-primary-foreground" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">GQ Cars Driver</h1>
-          <p className="text-sm text-muted-foreground">Drive with confidence</p>
+          <p className="text-sm text-muted-foreground">Drive with confidence & intelligence</p>
         </div>
       </div>
       
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
+        <Button
+          variant={currentView === 'ai-assistant' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setCurrentView(currentView === 'ai-assistant' ? 'main' : 'ai-assistant')}
+          className="relative"
+        >
+          <Robot size={16} />
+          {currentView === 'ai-assistant' && (
+            <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+          )}
+        </Button>
         <Button
           variant={currentView === 'settings' ? 'default' : 'outline'}
           size="sm"
@@ -286,9 +335,35 @@ function App() {
           />
         );
       
+      case 'ai-assistant':
+        return (
+          <AIAssistant 
+            driverLocation={driver.location}
+            isOnline={driver.isOnline}
+            onClose={() => setCurrentView('main')}
+          />
+        );
+      
+      case 'passenger-rating':
+        return completedTripForRating ? (
+          <PassengerRating 
+            passenger={completedTripForRating.request.passenger}
+            tripDetails={{
+              fare: completedTripForRating.request.estimatedFare,
+              distance: completedTripForRating.request.estimatedDistance,
+              duration: completedTripForRating.request.estimatedDuration,
+            }}
+            onSubmitRating={handleSubmitPassengerRating}
+            onClose={() => {
+              setCompletedTripForRating(null);
+              setCurrentView('main');
+            }}
+          />
+        ) : null;
+      
       default:
         return (
-          <>
+          <div className="space-y-6">
             <DriverStatus driver={driver} onToggleOnline={handleToggleOnline} />
 
             {/* Map View for Active Trips */}
@@ -315,22 +390,31 @@ function App() {
                 onDecline={handleDeclineRequest}
               />
             ) : driver.isOnline ? (
-              <div className="text-center py-12 bg-muted/30 rounded-lg mb-6">
-                <Clock size={48} className="mx-auto text-muted-foreground mb-3" />
-                <h3 className="font-semibold mb-2">Looking for rides...</h3>
-                <p className="text-sm text-muted-foreground">
+              <div className="text-center py-16 bg-gradient-to-br from-muted/20 via-accent/5 to-muted/20 rounded-xl border-2 border-dashed border-muted-foreground/20 mb-6">
+                <div className="relative">
+                  <Clock size={64} className="mx-auto text-muted-foreground mb-4 animate-pulse" />
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-green-500 rounded-full animate-ping" />
+                </div>
+                <h3 className="font-semibold text-lg mb-2">Searching for rides...</h3>
+                <p className="text-sm text-muted-foreground mb-4">
                   You're online and ready to receive requests
                 </p>
+                <div className="flex justify-center">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    <span className="text-sm text-green-700 font-medium">Live</span>
+                  </div>
+                </div>
               </div>
             ) : null}
 
             <Tabs defaultValue="earnings" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="earnings" className="flex items-center gap-2">
+              <TabsList className="grid w-full grid-cols-2 bg-muted/50">
+                <TabsTrigger value="earnings" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                   <DollarSign size={16} />
                   Earnings
                 </TabsTrigger>
-                <TabsTrigger value="history" className="flex items-center gap-2">
+                <TabsTrigger value="history" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                   <History size={16} />
                   History
                 </TabsTrigger>
@@ -344,18 +428,27 @@ function App() {
                 <TripHistoryList trips={tripHistory} />
               </TabsContent>
             </Tabs>
-          </>
+          </div>
         );
     }
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/10 to-background">
       <div className="container mx-auto px-4 py-6 max-w-md">
         <NavigationHeader />
         {renderCurrentView()}
       </div>
-      <Toaster />
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: 'hsl(var(--card))',
+            color: 'hsl(var(--card-foreground))',
+            border: '1px solid hsl(var(--border))',
+          },
+        }}
+      />
     </div>
   );
 }

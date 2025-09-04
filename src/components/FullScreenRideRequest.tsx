@@ -1,68 +1,91 @@
 import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import { RideRequest } from "@/types/index";
+import { 
   Clock, 
   MapPin,
   Phone,
-} from "
-interface
-  onAccept: (r
+  X,
+  Star,
+  CurrencyGbp
+} from "@phosphor-icons/react";
+
+interface FullScreenRideRequestProps {
+  request: RideRequest;
+  onAccept: (requestId: string) => void;
+  onDecline: (requestId: string) => void;
 }
-exp
 
+export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScreenRideRequestProps) {
+  const [timeLeft, setTimeLeft] = useState(15); // 15 seconds to respond
 
-      return;
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          onDecline(request.id);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
 
-      setTimeLeft(prev => prev - 1);
+    return () => clearInterval(timer);
+  }, [request.id, onDecline]);
 
- 
-
+  // Prevent all scrolling and touch events
+  const handleTouchMove = (e: React.TouchEvent) => {
     e.preventDefault();
   };
 
-    e.stopPropagati
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+  };
 
+  return (
     <div 
-      onTouch
-     
-
-        className="bg-white rounded-2
+      className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4 modal-no-scroll"
+      onTouchMove={handleTouchMove}
+      onWheel={handleWheel}
+      style={{
+        touchAction: 'none',
+        overscrollBehavior: 'none'
+      }}
+    >
+      <div 
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-sm animate-fade-in-scale ride-request-container"
+        onTouchMove={handleTouchMove}
         onWheel={handleWheel}
-          tou
-
+        style={{
+          touchAction: 'none',
+          overscrollBehavior: 'none'
+        }}
       >
-        <div className="px-4 py-3 border
-
-          
-              </span>
-            <button 
-              className="p-1 hover:bg-gray-100 rounded-full"
-              <X size={14} classN
+        {/* Header with timer */}
+        <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Clock size={16} className="text-red-500" />
+            <span className="text-sm font-semibold text-gray-900">
+              New Request - {timeLeft}s
+            </span>
           </div>
+          <button 
+            onClick={() => onDecline(request.id)}
+            className="p-1 hover:bg-gray-100 rounded-full"
+          >
+            <X size={14} className="text-gray-500" />
+          </button>
+        </div>
 
+        {/* Content */}
         <div className="p-4 space-y-3">
+          {/* Passenger info */}
           <div className="flex items-center gap-3">
-              <span className="text-sm font-semibold text-g
+            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+              <span className="text-sm font-semibold text-gray-700">
+                {request.passenger.name.charAt(0)}
               </span>
-            <div clas
             </div>
-                <spa
-                </span>
-            </div>
-             
-              className="h-7 w-7 p-0"
-              <Phone 
-          </div>
-          {/* 
-
-              <div className
-                <p className="text-xs t
-              </div>
-
-            <div className="flex items-start gap-2">
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-gra
-            </div>
-
             <div className="flex-1">
               <h3 className="font-semibold text-gray-900">{request.passenger.name}</h3>
               <div className="flex items-center gap-1">
@@ -128,25 +151,25 @@ exp
           )}
         </div>
 
-
-        <div className="px-6 pb-6">
-
+        {/* Action buttons */}
+        <div className="px-4 pb-4">
+          <div className="flex gap-3">
             <Button 
-
+              onClick={() => onDecline(request.id)}
               variant="outline" 
-
+              className="flex-1 h-12 font-semibold"
             >
-
+              Decline
             </Button>
-
+            <Button 
               onClick={() => onAccept(request.id)}
               className="flex-1 h-12 bg-green-600 hover:bg-green-700 font-semibold"
             >
-
+              Accept
             </Button>
-
+          </div>
         </div>
-
+      </div>
     </div>
-
+  );
 }

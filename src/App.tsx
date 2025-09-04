@@ -255,119 +255,120 @@ function App() {
     setCurrentView('main');
   };
 
-  // Navigation header component
-  const NavigationHeader = () => (
-    <div className="mb-6">
-      {/* Main Header */}
-      <div className="flex items-center justify-between p-6 bg-gradient-to-br from-card via-card/98 to-primary/5 rounded-3xl border border-border shadow-lg backdrop-blur-sm mb-4">
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center shadow-lg">
-              <Car size={28} className="text-primary-foreground" weight="bold" />
-            </div>
-            <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-3 border-white shadow-lg flex items-center justify-center ${
-              driver.isOnline ? 'bg-success' : 'bg-muted-foreground'
-            }`}>
-              {driver.isOnline && (
-                <div className="absolute inset-0 bg-success rounded-full animate-ping opacity-75" />
-              )}
-              <Circle size={8} weight="fill" className="text-white z-10" />
-            </div>
+  // Main header component (simplified)
+  const MainHeader = () => (
+    <div className="flex items-center justify-between p-6 bg-gradient-to-br from-card via-card/98 to-primary/5 rounded-3xl border border-border shadow-lg backdrop-blur-sm mb-6">
+      <div className="flex items-center gap-4">
+        <div className="relative">
+          <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center shadow-lg">
+            <Car size={28} className="text-primary-foreground" weight="bold" />
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">
-              GQ Cars Driver
-            </h1>
-            <p className="text-sm text-muted-foreground font-medium">Professional Driver Portal</p>
+          <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-3 border-white shadow-lg flex items-center justify-center ${
+            driver.isOnline ? 'bg-success' : 'bg-muted-foreground'
+          }`}>
+            {driver.isOnline && (
+              <div className="absolute inset-0 bg-success rounded-full animate-ping opacity-75" />
+            )}
+            <Circle size={8} weight="fill" className="text-white z-10" />
           </div>
         </div>
-        
-        {/* Quick Stats */}
-        <div className="text-right">
-          <div className="text-2xl font-bold text-success flex items-center gap-1">
-            <CurrencyGbp size={20} weight="bold" />
-            {driver.earnings.today.toFixed(2)}
-          </div>
-          <p className="text-xs text-muted-foreground">Today's earnings</p>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">
+            GQ Cars Driver
+          </h1>
+          <p className="text-sm text-muted-foreground font-medium">Professional Driver Portal</p>
         </div>
       </div>
+      
+      {/* Quick Stats */}
+      <div className="text-right">
+        <div className="text-2xl font-bold text-success flex items-center gap-1">
+          <CurrencyGbp size={20} weight="bold" />
+          {driver.earnings.today.toFixed(2)}
+        </div>
+        <p className="text-xs text-muted-foreground">Today's earnings</p>
+      </div>
+    </div>
+  );
 
-      {/* Navigation Buttons */}
-      <div className="grid grid-cols-5 gap-3">
-        <Button
-          variant={currentView === 'ai-assistant' ? 'default' : 'outline'}
-          size="lg"
-          onClick={() => setCurrentView(currentView === 'ai-assistant' ? 'main' : 'ai-assistant')}
-          className={`relative h-16 rounded-xl border-2 transition-all duration-300 ${
-            currentView === 'ai-assistant' 
-              ? 'bg-primary text-primary-foreground border-primary/30 shadow-lg' 
-              : 'border-border hover:border-primary/40 hover:bg-primary/5'
-          } flex flex-col items-center justify-center gap-1`}
-        >
-          <Robot size={24} weight="bold" />
-          <span className="text-xs font-semibold">AI Help</span>
-          {currentView === 'ai-assistant' && (
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-white">
-              <div className="absolute inset-0 bg-success rounded-full animate-ping opacity-75" />
-            </div>
-          )}
-        </Button>
-        
-        <Button
-          variant={currentView === 'settings' ? 'default' : 'outline'}
-          size="lg"
-          onClick={() => setCurrentView(currentView === 'settings' ? 'main' : 'settings')}
-          className={`relative h-16 rounded-xl border-2 transition-all duration-300 ${
-            currentView === 'settings' 
-              ? 'bg-primary text-primary-foreground border-primary/30 shadow-lg' 
-              : 'border-border hover:border-primary/40 hover:bg-primary/5'
-          } flex flex-col items-center justify-center gap-1`}
-        >
-          <Gear size={24} weight="bold" />
-          <span className="text-xs font-semibold">Settings</span>
-        </Button>
-        
-        <Button
-          variant={currentView === 'notifications' ? 'default' : 'outline'}
-          size="lg"
-          onClick={() => setCurrentView(currentView === 'notifications' ? 'main' : 'notifications')}
-          className={`relative h-16 rounded-xl border-2 transition-all duration-300 ${
-            currentView === 'notifications' 
-              ? 'bg-primary text-primary-foreground border-primary/30 shadow-lg' 
-              : 'border-border hover:border-primary/40 hover:bg-primary/5'
-          } flex flex-col items-center justify-center gap-1`}
-        >
-          <Bell size={24} weight="bold" />
-          <span className="text-xs font-semibold">Alerts</span>
-        </Button>
-        
-        <Button
-          variant={currentView === 'emergency' ? 'destructive' : 'outline'}
-          size="lg"
-          onClick={() => setCurrentView(currentView === 'emergency' ? 'main' : 'emergency')}
-          className={`relative h-16 rounded-xl border-2 transition-all duration-300 ${
-            currentView === 'emergency' 
-              ? 'bg-destructive text-destructive-foreground border-destructive/30 shadow-lg' 
-              : 'border-destructive/30 hover:border-destructive/50 hover:bg-destructive/5 text-destructive'
-          } flex flex-col items-center justify-center gap-1`}
-        >
-          <ShieldWarning size={24} weight="bold" />
-          <span className="text-xs font-semibold">Emergency</span>
-        </Button>
-        
-        <Button
-          variant={currentView === 'profile' ? 'default' : 'outline'}
-          size="lg"
-          onClick={() => setCurrentView(currentView === 'profile' ? 'main' : 'profile')}
-          className={`relative h-16 rounded-xl border-2 transition-all duration-300 ${
-            currentView === 'profile' 
-              ? 'bg-primary text-primary-foreground border-primary/30 shadow-lg' 
-              : 'border-border hover:border-primary/40 hover:bg-primary/5'
-          } flex flex-col items-center justify-center gap-1`}
-        >
-          <User size={24} weight="bold" />
-          <span className="text-xs font-semibold">Profile</span>
-        </Button>
+  // Bottom navigation component
+  const BottomNavigation = () => (
+    <div className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border shadow-2xl z-50">
+      <div className="container mx-auto px-4 max-w-md">
+        <div className="flex items-center justify-around py-3">
+          {/* AI Assistant */}
+          <button
+            onClick={() => setCurrentView(currentView === 'ai-assistant' ? 'main' : 'ai-assistant')}
+            className={`relative flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 min-w-[60px] ${
+              currentView === 'ai-assistant'
+                ? 'bg-primary text-primary-foreground shadow-lg scale-110'
+                : 'text-muted-foreground hover:text-primary hover:bg-primary/10'
+            }`}
+          >
+            <Robot size={24} weight="bold" className="mb-1" />
+            <span className="text-[10px] font-semibold leading-none">AI</span>
+            {currentView === 'ai-assistant' && (
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-success rounded-full border-2 border-white">
+                <div className="absolute inset-0 bg-success rounded-full animate-ping opacity-75" />
+              </div>
+            )}
+          </button>
+
+          {/* Settings */}
+          <button
+            onClick={() => setCurrentView(currentView === 'settings' ? 'main' : 'settings')}
+            className={`relative flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 min-w-[60px] ${
+              currentView === 'settings'
+                ? 'bg-primary text-primary-foreground shadow-lg scale-110'
+                : 'text-muted-foreground hover:text-primary hover:bg-primary/10'
+            }`}
+          >
+            <Gear size={24} weight="bold" className="mb-1" />
+            <span className="text-[10px] font-semibold leading-none">Settings</span>
+          </button>
+
+          {/* Emergency - Center position with special styling */}
+          <button
+            onClick={() => setCurrentView(currentView === 'emergency' ? 'main' : 'emergency')}
+            className={`relative flex flex-col items-center justify-center p-4 rounded-full transition-all duration-300 min-w-[70px] min-h-[70px] ${
+              currentView === 'emergency'
+                ? 'bg-destructive text-destructive-foreground shadow-2xl scale-110'
+                : 'bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground border-2 border-destructive/30 hover:border-destructive shadow-lg'
+            }`}
+          >
+            <ShieldWarning size={28} weight="bold" className="mb-1" />
+            <span className="text-[9px] font-bold leading-none">SOS</span>
+            {currentView !== 'emergency' && (
+              <div className="absolute inset-0 rounded-full border-2 border-destructive/20 animate-pulse" />
+            )}
+          </button>
+
+          {/* Notifications */}
+          <button
+            onClick={() => setCurrentView(currentView === 'notifications' ? 'main' : 'notifications')}
+            className={`relative flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 min-w-[60px] ${
+              currentView === 'notifications'
+                ? 'bg-primary text-primary-foreground shadow-lg scale-110'
+                : 'text-muted-foreground hover:text-primary hover:bg-primary/10'
+            }`}
+          >
+            <Bell size={24} weight="bold" className="mb-1" />
+            <span className="text-[10px] font-semibold leading-none">Alerts</span>
+          </button>
+
+          {/* Profile */}
+          <button
+            onClick={() => setCurrentView(currentView === 'profile' ? 'main' : 'profile')}
+            className={`relative flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 min-w-[60px] ${
+              currentView === 'profile'
+                ? 'bg-primary text-primary-foreground shadow-lg scale-110'
+                : 'text-muted-foreground hover:text-primary hover:bg-primary/10'
+            }`}
+          >
+            <User size={24} weight="bold" className="mb-1" />
+            <span className="text-[10px] font-semibold leading-none">Profile</span>
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -516,14 +517,17 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 relative">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 relative pb-24">
       {/* Subtle background pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_75%,_theme(colors.primary/5),_transparent_50%),radial-gradient(circle_at_75%_25%,_theme(colors.accent/5),_transparent_50%)]" />
       
       <div className="container mx-auto px-4 py-6 max-w-md relative z-10">
-        <NavigationHeader />
+        <MainHeader />
         {renderCurrentView()}
       </div>
+      
+      <BottomNavigation />
+      
       <Toaster 
         position="top-center"
         toastOptions={{

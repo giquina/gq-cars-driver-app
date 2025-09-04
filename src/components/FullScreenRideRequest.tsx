@@ -1,12 +1,15 @@
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Timer, HandSwipeLeft, HandSwipeRight } from
+import { Progress } from "@/components/ui/progress";
+import { Timer, HandSwipeLeft, HandSwipeRight } from "@phosphor-icons/react";
 import { RideRequest } from "@/types";
-interface FullScreenRideRequestProps {
-  request: RideRequest;
-interface FullScreenRideRequestProps {
-  request: RideRequest;
 
-  const [timeLeft, setTimeLeft] = useStat
+interface FullScreenRideRequestProps {
+  request: RideRequest;
+  onAccept: (requestId: string) => void;
+  onDecline: (requestId: string) => void;
+}
+
 export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScreenRideRequestProps) {
   const [timeLeft, setTimeLeft] = useState(30); // 30 seconds
   const [isDragging, setIsDragging] = useState(false);
@@ -111,8 +114,8 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
         <div className="text-center mb-8">
           <div className="text-4xl font-bold text-green-600 mb-2">
             £{request.estimatedFare.toFixed(2)}
-        <div className="text-center 
-            £{request.estimateray-600">You earn</p>
+          </div>
+          <p className="text-gray-600">You earn</p>
         </div>
 
         {/* Trip metrics in single line */}

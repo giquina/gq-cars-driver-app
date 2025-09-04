@@ -257,17 +257,17 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
   };
 
   return (
-    <div className="relative w-full max-w-sm mx-auto px-3">
+    <div className="relative w-full max-w-sm mx-auto px-4">
       {/* Swipe instruction overlay - compact */}
-      <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-10">
-        <div className="flex items-center gap-3 bg-black/80 text-white px-4 py-2 rounded-full text-xs font-medium shadow-lg">
-          <div className="flex items-center gap-1.5">
-            <HandSwipeLeft size={16} />
+      <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-10">
+        <div className="flex items-center gap-2 bg-black/80 text-white px-3 py-1.5 rounded-full text-xs font-medium shadow-lg">
+          <div className="flex items-center gap-1">
+            <HandSwipeLeft size={14} />
             <span>Decline</span>
           </div>
-          <div className="w-px h-4 bg-white/30" />
-          <div className="flex items-center gap-1.5">
-            <HandSwipeRight size={16} />
+          <div className="w-px h-3 bg-white/30" />
+          <div className="flex items-center gap-1">
+            <HandSwipeRight size={14} />
             <span>Accept</span>
           </div>
         </div>
@@ -275,7 +275,7 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
 
       <Card 
         ref={cardRef}
-        className={`w-full shadow-2xl border-2 animate-fade-in-scale transition-all duration-200 relative overflow-hidden no-select ${getSwipeBackground()}`}
+        className={`w-full max-h-[85vh] overflow-hidden shadow-2xl border-2 animate-fade-in-scale transition-all duration-200 relative no-select ${getSwipeBackground()}`}
         style={{
           transform: `translateX(${swipeOffset}px) ${isDragging ? 'scale(1.02)' : 'scale(1)'}`,
           cursor: isDragging ? 'grabbing' : 'grab',
@@ -292,96 +292,84 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
         {/* Swipe indicator */}
         {getSwipeIndicator()}
         
-        {/* Minimal Header with Timer - Better Spacing */}
-        <CardHeader className="pb-3 pt-6 px-6">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-bold text-gray-900">New Ride Request</h3>
-            <div className="flex items-center gap-2 bg-orange-100 px-3 py-2 rounded-full">
-              <Timer size={14} className="text-orange-600" />
-              <span className="text-orange-700 font-bold text-sm">{timeLeft}s</span>
+        {/* Compact Header with Timer */}
+        <CardHeader className="pb-2 pt-4 px-4">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-base font-bold text-gray-900">New Ride Request</h3>
+            <div className="flex items-center gap-1 bg-orange-100 px-2 py-1 rounded-full">
+              <Timer size={12} className="text-orange-600" />
+              <span className="text-orange-700 font-bold text-xs">{timeLeft}s</span>
             </div>
           </div>
-          <Progress value={progressPercentage} className="h-2" />
+          <Progress value={progressPercentage} className="h-1.5" />
         </CardHeader>
         
-        <CardContent className="px-6 pb-6 space-y-6">
+        <CardContent className="px-4 pb-4 space-y-3">
           {/* BIG EARNINGS DISPLAY - Most Important */}
-          <div className="text-center py-4">
-            <div className="text-3xl font-bold text-green-600 mb-2">
+          <div className="text-center py-2">
+            <div className="text-2xl font-bold text-green-600 mb-1">
               £{request.estimatedFare.toFixed(2)}
             </div>
-            <div className="text-sm text-gray-600 font-medium">You earn</div>
+            <div className="text-xs text-gray-600 font-medium">You earn</div>
           </div>
 
-          {/* KEY METRICS - Properly Spaced */}
-          <div className="space-y-3">
-            {/* Customer Rating */}
-            <div className="flex items-center justify-center gap-2 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
-              <span className="text-lg">👤</span>
-              <span className="text-base font-bold text-gray-900">{request.passenger.rating.toFixed(1)}★</span>
-              <span className="text-sm text-gray-600">Customer Rating</span>
+          {/* Single Line: All Decision Metrics */}
+          <div className="flex items-center justify-center gap-4 px-3 py-2 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="flex items-center gap-1">
+              <span className="text-sm">👤</span>
+              <span className="text-sm font-bold text-gray-900">{request.passenger.rating.toFixed(1)}★</span>
             </div>
-
-            {/* TWO KEY TIMELINES - What Drivers Need */}
-            <div className="grid grid-cols-2 gap-3">
-              {/* Time/Distance to Pickup */}
-              <div className="px-4 py-3 bg-blue-50 rounded-lg border border-blue-200">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-lg">📍</span>
-                  <span className="text-xs text-blue-700 font-medium uppercase tracking-wide">To Pickup</span>
-                </div>
-                <div className="text-lg font-bold text-blue-900">{pickupDistance}mi</div>
-                <div className="text-sm text-blue-700">{Math.ceil(parseFloat(pickupDistance) * 2.5)} min drive</div>
-              </div>
-
-              {/* Trip Duration/Distance */}
-              <div className="px-4 py-3 bg-purple-50 rounded-lg border border-purple-200">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-lg">🚗</span>
-                  <span className="text-xs text-purple-700 font-medium uppercase tracking-wide">Trip Length</span>
-                </div>
-                <div className="text-lg font-bold text-purple-900">{request.estimatedDistance.toFixed(1)}mi</div>
-                <div className="text-sm text-purple-700">{request.estimatedDuration} min journey</div>
-              </div>
+            <div className="flex items-center gap-1">
+              <span className="text-sm">📍</span>
+              <span className="text-sm font-bold text-blue-900">{pickupDistance}mi</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-sm">🚗</span>
+              <span className="text-sm font-bold text-purple-900">{request.estimatedDistance.toFixed(1)}mi</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-sm">⏱️</span>
+              <span className="text-sm font-bold text-gray-900">{request.estimatedDuration}min</span>
             </div>
           </div>
 
-          {/* FULL LOCATION NAMES - No Truncation */}
-          <div className="space-y-3">
-            <div className="px-4 py-3 bg-green-50 rounded-lg border border-green-200">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">📍</span>
-                <span className="text-xs text-green-700 font-medium uppercase tracking-wide">Pickup Location</span>
-              </div>
-              <div className="text-sm font-semibold text-green-900 leading-relaxed">
-                {request.pickup.address}
-              </div>
+          {/* Trip Timeline - Compact */}
+          <div className="grid grid-cols-2 gap-2">
+            {/* Time/Distance to Pickup */}
+            <div className="px-3 py-2 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="text-xs text-blue-700 font-medium uppercase tracking-wide mb-1">To Pickup</div>
+              <div className="text-sm font-bold text-blue-900">{pickupDistance}mi · {Math.ceil(parseFloat(pickupDistance) * 2.5)}min</div>
             </div>
 
-            <div className="px-4 py-3 bg-orange-50 rounded-lg border border-orange-200">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">🎯</span>
-                <span className="text-xs text-orange-700 font-medium uppercase tracking-wide">Destination</span>
-              </div>
-              <div className="text-sm font-semibold text-orange-900 leading-relaxed">
-                {request.destination.address}
-              </div>
+            {/* Trip Duration/Distance */}
+            <div className="px-3 py-2 bg-purple-50 rounded-lg border border-purple-200">
+              <div className="text-xs text-purple-700 font-medium uppercase tracking-wide mb-1">Trip Length</div>
+              <div className="text-sm font-bold text-purple-900">{request.estimatedDistance.toFixed(1)}mi · {request.estimatedDuration}min</div>
             </div>
           </div>
 
-          {/* Large Action Buttons - Better Spacing */}
-          <div className="grid grid-cols-2 gap-4 pt-4">
+          {/* Route - Compact Single Line */}
+          <div className="px-3 py-2 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="text-xs text-gray-600 font-medium uppercase tracking-wide mb-1">Route</div>
+            <div className="text-sm font-semibold text-gray-900 leading-tight">
+              {/* Show only neighborhood/area names for mobile */}
+              {request.pickup.address.split(',')[0]} → {request.destination.address.split(',')[0]}
+            </div>
+          </div>
+
+          {/* Large Action Buttons */}
+          <div className="grid grid-cols-2 gap-3 pt-2">
             <Button 
               variant="outline" 
               onClick={() => onDecline(request.id)}
-              className="h-12 border-2 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 font-bold text-base"
+              className="h-10 border-2 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 font-bold text-sm"
               disabled={isDragging}
             >
               Decline
             </Button>
             <Button 
               onClick={() => onAccept(request.id)}
-              className="h-12 bg-green-600 hover:bg-green-700 text-white font-bold text-base shadow-md"
+              className="h-10 bg-green-600 hover:bg-green-700 text-white font-bold text-sm shadow-md"
               disabled={isDragging}
             >
               Accept ✅

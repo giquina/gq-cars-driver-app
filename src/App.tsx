@@ -730,8 +730,8 @@ function AppContent() {
           
           {/* Ride Request Modal - positioned absolutely on top */}
           {currentRequest && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-6 animate-fade-in-scale">
-              <div className="w-full max-w-sm mx-auto">
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-3 animate-fade-in-scale">
+              <div className="w-full max-w-sm mx-auto max-h-[90vh] overflow-hidden">
                 <RideRequestCard
                   request={currentRequest}
                   onAccept={handleAcceptRequest}

@@ -11,15 +11,17 @@ import {
   CreditCard, 
   Star,
   Edit,
-  ShieldCheck
+  ShieldCheck,
+  SignOut
 } from "@phosphor-icons/react";
 
 interface DriverProfileProps {
   driver: Driver;
   onEditProfile: () => void;
+  onSignOut?: () => void;
 }
 
-export function DriverProfile({ driver, onEditProfile }: DriverProfileProps) {
+export function DriverProfile({ driver, onEditProfile, onSignOut }: DriverProfileProps) {
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
@@ -125,6 +127,20 @@ export function DriverProfile({ driver, onEditProfile }: DriverProfileProps) {
             </div>
           </div>
         </div>
+
+        {/* Sign Out Button */}
+        {onSignOut && (
+          <div className="pt-2 border-t border-border">
+            <Button 
+              variant="outline" 
+              onClick={onSignOut}
+              className="w-full h-8 text-xs text-destructive hover:text-destructive-foreground hover:bg-destructive"
+            >
+              <SignOut size={12} className="mr-1.5" />
+              Sign Out
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

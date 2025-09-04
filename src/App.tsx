@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { WelcomeScreen } from "@/components/WelcomeScreen";
 import { DriverStatus } from "@/components/DriverStatus";
 import { RideRequestCard } from "@/components/RideRequestCard";
 import { ActiveTripCard } from "@/components/ActiveTripCard";
@@ -36,19 +37,23 @@ import {
 
 function AppContent() {
   const { theme, autoMode, toggleTheme } = useTheme();
+  
+  // Authentication state
+  const [isSignedIn, setIsSignedIn] = useKV<boolean>("user-signed-in", false);
+  
   // Driver data persisted across sessions
   const [driver, setDriver] = useKV<Driver>("driver-profile", {
     id: "driver-001",
     name: "John Smith",
     email: "john.smith@gqcars.com",
-    phone: "+1 (555) 123-4567",
+    phone: "+44 7700 900123",
     licenseNumber: "DL123456789",
     vehicleModel: "Toyota Camry 2022",
-    vehiclePlate: "ABC-1234",
+    vehiclePlate: "GQ22 ABC",
     isOnline: false,
     location: {
-      lat: 40.7128,
-      lng: -74.0060,
+      lat: 51.5074,
+      lng: -0.1278,
     },
     earnings: {
       today: 0,
@@ -81,19 +86,19 @@ function AppContent() {
           passenger: {
             id: `pass-${Date.now()}`,
             name: ["Sarah Johnson", "Mike Chen", "Emma Davis", "James Wilson"][Math.floor(Math.random() * 4)],
-            phone: "+1 (555) " + Math.floor(100 + Math.random() * 900) + "-" + Math.floor(1000 + Math.random() * 9000),
+            phone: "+44 7" + Math.floor(100 + Math.random() * 900) + " " + Math.floor(100000 + Math.random() * 900000),
             rating: 4.2 + Math.random() * 0.8,
             tripCount: Math.floor(5 + Math.random() * 50),
           },
           pickup: {
-            address: ["123 Main St, Downtown", "456 Oak Ave, Midtown", "789 Pine Rd, Uptown"][Math.floor(Math.random() * 3)],
-            lat: 40.7128 + (Math.random() - 0.5) * 0.1,
-            lng: -74.0060 + (Math.random() - 0.5) * 0.1,
+            address: ["123 Oxford Street, Central London", "456 King's Road, Chelsea", "789 Camden High Street, Camden"][Math.floor(Math.random() * 3)],
+            lat: 51.5074 + (Math.random() - 0.5) * 0.1,
+            lng: -0.1278 + (Math.random() - 0.5) * 0.1,
           },
           destination: {
-            address: ["Airport Terminal 1", "Central Mall", "Business District", "University Campus"][Math.floor(Math.random() * 4)],
-            lat: 40.7128 + (Math.random() - 0.5) * 0.1,
-            lng: -74.0060 + (Math.random() - 0.5) * 0.1,
+            address: ["Heathrow Airport", "Canary Wharf", "Westminster", "Greenwich"][Math.floor(Math.random() * 4)],
+            lat: 51.5074 + (Math.random() - 0.5) * 0.1,
+            lng: -0.1278 + (Math.random() - 0.5) * 0.1,
           },
           estimatedFare: 6.80 + Math.random() * 20, // GBP prices
           estimatedDistance: 2.1 + Math.random() * 8,
@@ -111,7 +116,26 @@ function AppContent() {
     return () => clearInterval(interval);
   }, [driver.isOnline, currentRequest, activeTrip]);
 
-  const handleToggleOnline = () => {
+  const handleSignIn = () => {
+    setIsSignedIn(true);
+    toast.success(`Welcome back, ${driver.name}!`);
+  };
+
+  const handleSwitchAccount = () => {
+    toast.info("Account switching would open here");
+  };
+
+  const handleSignOut = () => {
+    setIsSignedIn(false);
+    setDriver(currentDriver => ({
+      ...currentDriver,
+      isOnline: false
+    }));
+    setCurrentRequest(null);
+    setActiveTrip(null);
+    setCurrentView('main');
+    toast.success("Signed out successfully");
+  };
     setDriver(currentDriver => ({
       ...currentDriver,
       isOnline: !currentDriver.isOnline
@@ -211,7 +235,7 @@ function AppContent() {
         : activeTrip.request.destination;
       
       // Open external navigation app
-      const url = `https://www.google.com/maps/dir/${driver.location?.lat || 40.7128},${driver.location?.lng || -74.0060}/${destination.lat},${destination.lng}`;
+      const url = `https://www.google.com/maps/dir/${driver.location?.lat || 51.5074},${driver.location?.lng || -0.1278}/${destination.lat},${destination.lng}`;
       
       try {
         window.open(url, '_system');
@@ -223,11 +247,11 @@ function AppContent() {
     }
   };
 
-  const handleEditProfile = () => {
+  const handleToggleOnline = () => {
     toast.info("Profile editing would open here");
   };
 
-  const handleSubmitPassengerRating = (rating: number, feedback?: string, tip?: number) => {
+  const handleEditProfile = () => {
     if (!completedTripForRating) return;
     
     // Update trip history with rating
@@ -256,7 +280,7 @@ function AppContent() {
     setCurrentView('main');
   };
 
-  // Main header component (more compact)
+  const handleSubmitPassengerRating = (rating: number, feedback?: string, tip?: number) => {
   const MainHeader = () => (
     <div className="flex items-center justify-between p-2 bg-card rounded-lg border border-border shadow-sm mb-2">
       <div className="flex items-center gap-2">
@@ -378,6 +402,7 @@ function AppContent() {
           <DriverProfile 
             driver={driver} 
             onEditProfile={handleEditProfile}
+            onSignOut={handleSignOut}
           />
         );
       
@@ -495,13 +520,23 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 relative pb-10">      
-      <div className="container mx-auto px-2 py-2 max-w-md relative z-10">
-        <MainHeader />
-        {renderCurrentView()}
-      </div>
-      
-      <BottomNavigation />
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 relative pb-10">
+      {!isSignedIn ? (
+        <WelcomeScreen 
+          driver={driver}
+          onSignIn={handleSignIn}
+          onSwitchAccount={handleSwitchAccount}
+        />
+      ) : (
+        <>      
+          <div className="container mx-auto px-2 py-2 max-w-md relative z-10">
+            <MainHeader />
+            {renderCurrentView()}
+          </div>
+          
+          <BottomNavigation />
+        </>
+      )}
       
       <Toaster 
         position="top-center"

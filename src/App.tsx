@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import { useKV } from '@github/spark/hooks';
-import { useTheme } from '@/hooks/useTheme';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-import { ThemeProvider } from "@/components/ThemeProvider";
 import { WelcomeScreen } from "@/components/WelcomeScreen";
 import { DriverStatus } from "@/components/DriverStatus";
 import { RideRequestCard } from "@/components/RideRequestCard";
@@ -36,14 +34,10 @@ import {
   Gear,
   Star,
   Circle,
-  Moon,
-  Sun,
   Eye
 } from "@phosphor-icons/react";
 
 function AppContent() {
-  const { theme, autoMode, toggleTheme } = useTheme();
-  
   // Authentication state
   const [isSignedIn, setIsSignedIn] = useKV<boolean>("user-signed-in", false);
   
@@ -289,23 +283,23 @@ function AppContent() {
   };
   // Professional header component
   const ProfessionalHeader = () => (
-    <div className="bg-card border-b border-border px-4 py-3">
+    <div className="bg-white border-b border-gray-200 px-4 py-3 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center">
             <Car size={20} className="text-white" weight="bold" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-foreground">GQ Cars</h1>
-            <p className="text-xs text-muted-foreground">Professional Driver</p>
+            <h1 className="text-lg font-bold text-gray-900">GQ Cars</h1>
+            <p className="text-xs text-gray-600">Professional Driver</p>
           </div>
         </div>
         
         <div className="flex items-center gap-3">
           {/* Earnings indicator with white background */}
-          <div className="flex items-center gap-1 bg-white dark:bg-gray-800 px-3 py-1.5 rounded-full shadow-sm border border-gray-200 dark:border-gray-700">
-            <Eye size={12} className="text-green-600 dark:text-green-400" />
-            <span className="text-sm font-bold text-green-700 dark:text-green-300">
+          <div className="flex items-center gap-1 bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-200">
+            <Eye size={12} className="text-green-600" />
+            <span className="text-sm font-bold text-green-700">
               £{driver.earnings.today.toFixed(2)}
             </span>
           </div>
@@ -323,7 +317,7 @@ function AppContent() {
 
   // Professional bottom navigation (Freenow style)
   const ProfessionalNavigation = () => (
-    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg z-40">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
       <div className="flex items-center justify-around py-2 px-4">
         {/* Home */}
         <button
@@ -331,7 +325,7 @@ function AppContent() {
           className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
             currentView === 'home'
               ? 'text-red-500'
-              : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+              : 'text-gray-400 hover:text-gray-600'
           }`}
         >
           <House size={20} weight="bold" />
@@ -344,7 +338,7 @@ function AppContent() {
           className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
             currentView === 'earnings'
               ? 'text-red-500'
-              : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+              : 'text-gray-400 hover:text-gray-600'
           }`}
         >
           <Buildings size={20} weight="bold" />
@@ -357,7 +351,7 @@ function AppContent() {
           className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
             currentView === 'schedule'
               ? 'text-red-500'
-              : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+              : 'text-gray-400 hover:text-gray-600'
           }`}
         >
           <Calendar size={20} weight="bold" />
@@ -370,7 +364,7 @@ function AppContent() {
           className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
             currentView === 'achievements'
               ? 'text-red-500'
-              : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+              : 'text-gray-400 hover:text-gray-600'
           }`}
         >
           <Trophy size={20} weight="bold" />
@@ -383,7 +377,7 @@ function AppContent() {
           className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
             currentView === 'menu'
               ? 'text-red-500'
-              : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+              : 'text-gray-400 hover:text-gray-600'
           }`}
         >
           <List size={20} weight="bold" />
@@ -400,27 +394,11 @@ function AppContent() {
         return (
           <div className="p-3 space-y-3 h-full flex flex-col">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-foreground">Earnings</h2>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  toggleTheme();
-                  const newMode = theme === 'light' ? 'night' : 'day';
-                  toast.success(`${newMode === 'night' ? 'Night' : 'Day'} mode`);
-                }}
-                className="h-8 w-8 p-0 rounded-full"
-              >
-                {theme === 'dark' ? (
-                  <Sun size={14} className="text-amber-500" />
-                ) : (
-                  <Moon size={14} className="text-blue-500" />
-                )}
-              </Button>
+              <h2 className="text-lg font-bold text-gray-900">Earnings</h2>
             </div>
             
             <Tabs defaultValue="performance" className="flex-1 flex flex-col">
-              <TabsList className="grid w-full grid-cols-2 bg-gray-100 dark:bg-gray-800">
+              <TabsList className="grid w-full grid-cols-2 bg-gray-100">
                 <TabsTrigger value="performance" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">
                   Performance
                 </TabsTrigger>
@@ -434,10 +412,10 @@ function AppContent() {
               </TabsContent>
               
               <TabsContent value="balance" className="flex-1 mt-3">
-                <div className="bg-card rounded-lg p-4 border">
-                  <h3 className="font-semibold mb-2">Account Balance</h3>
+                <div className="bg-white rounded-lg p-4 border border-gray-200">
+                  <h3 className="font-semibold mb-2 text-gray-900">Account Balance</h3>
                   <div className="text-2xl font-bold text-green-600">£{driver.earnings.thisWeek.toFixed(2)}</div>
-                  <p className="text-sm text-muted-foreground">Available for withdrawal</p>
+                  <p className="text-sm text-gray-600">Available for withdrawal</p>
                 </div>
               </TabsContent>
             </Tabs>
@@ -447,10 +425,10 @@ function AppContent() {
       case 'schedule':
         return (
           <div className="p-3 space-y-3 h-full">
-            <h2 className="text-lg font-bold text-foreground">Schedule</h2>
-            <div className="bg-card rounded-lg p-4 border">
-              <h3 className="font-semibold mb-2">Today's Schedule</h3>
-              <p className="text-muted-foreground">No scheduled rides</p>
+            <h2 className="text-lg font-bold text-gray-900">Schedule</h2>
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <h3 className="font-semibold mb-2 text-gray-900">Today's Schedule</h3>
+              <p className="text-gray-600">No scheduled rides</p>
             </div>
           </div>
         );
@@ -458,12 +436,12 @@ function AppContent() {
       case 'achievements':
         return (
           <div className="p-3 space-y-3 h-full">
-            <h2 className="text-lg font-bold text-foreground">Achievements</h2>
-            <div className="bg-card rounded-lg p-4 border">
-              <h3 className="font-semibold mb-2">Your Progress</h3>
+            <h2 className="text-lg font-bold text-gray-900">Achievements</h2>
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <h3 className="font-semibold mb-2 text-gray-900">Your Progress</h3>
               <div className="flex items-center gap-2">
                 <Trophy size={20} className="text-yellow-500" />
-                <span>Driver Rating: {driver.rating}/5.0</span>
+                <span className="text-gray-900">Driver Rating: {driver.rating}/5.0</span>
               </div>
             </div>
           </div>
@@ -473,11 +451,11 @@ function AppContent() {
         return (
           <div className="p-3 space-y-3 h-full overflow-hidden">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
                 <User size={24} className="text-gray-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-base">{driver.name}</h3>
+                <h3 className="font-semibold text-base text-gray-900">{driver.name}</h3>
                 <button className="text-red-500 text-sm font-medium">View profile</button>
               </div>
             </div>
@@ -485,52 +463,52 @@ function AppContent() {
             <div className="space-y-2 flex-1 overflow-y-auto">
               <button 
                 onClick={() => setCurrentView('earnings')}
-                className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="flex items-center justify-between w-full p-3 bg-white rounded-lg border border-gray-200 hover:bg-gray-50"
               >
                 <div className="flex items-center gap-3">
                   <Buildings size={18} className="text-gray-500" />
-                  <span className="text-sm">Earnings</span>
+                  <span className="text-sm text-gray-900">Earnings</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>
               
               <button 
                 onClick={() => setCurrentView('achievements')}
-                className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="flex items-center justify-between w-full p-3 bg-white rounded-lg border border-gray-200 hover:bg-gray-50"
               >
                 <div className="flex items-center gap-3">
                   <Trophy size={18} className="text-gray-500" />
-                  <span className="text-sm">Quests</span>
+                  <span className="text-sm text-gray-900">Quests</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>
               
-              <button className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800">
+              <button className="flex items-center justify-between w-full p-3 bg-white rounded-lg border border-gray-200 hover:bg-gray-50">
                 <div className="flex items-center gap-3">
                   <User size={18} className="text-gray-500" />
-                  <span className="text-sm">Account</span>
+                  <span className="text-sm text-gray-900">Account</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>
               
-              <button className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800">
+              <button className="flex items-center justify-between w-full p-3 bg-white rounded-lg border border-gray-200 hover:bg-gray-50">
                 <div className="flex items-center gap-3">
                   <span className="text-base">❓</span>
-                  <span className="text-sm">Help</span>
+                  <span className="text-sm text-gray-900">Help</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>
               
-              <button className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800">
+              <button className="flex items-center justify-between w-full p-3 bg-white rounded-lg border border-gray-200 hover:bg-gray-50">
                 <div className="flex items-center gap-3">
                   <span className="text-base">🎓</span>
-                  <span className="text-sm">Learning Centre</span>
+                  <span className="text-sm text-gray-900">Learning Centre</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>
             </div>
             
-            <div className="pt-3 border-t">
+            <div className="pt-3 border-t border-gray-200">
               <button className="text-gray-500 font-medium text-sm">Settings</button>
               <button 
                 onClick={handleSignOut}
@@ -562,26 +540,26 @@ function AppContent() {
       default: // home
         return (
           <div className="h-full flex flex-col overflow-hidden">
-            {/* Quick stats bar - single line layout */}
-            <div className="px-4 py-3 bg-white dark:bg-gray-900 border-b border-border shadow-sm">
+            {/* Quick stats bar - single line layout with white background */}
+            <div className="px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1">
-                  <span className="text-xs text-muted-foreground font-medium">Today:</span>
+                  <span className="text-xs text-gray-600 font-medium">Today:</span>
                   <span className="text-lg font-bold text-green-600">£{driver.earnings.today.toFixed(2)}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="text-xs text-muted-foreground font-medium">Trips:</span>
-                  <span className="text-lg font-bold text-foreground">{driver.trips.completed}</span>
+                  <span className="text-xs text-gray-600 font-medium">Trips:</span>
+                  <span className="text-lg font-bold text-gray-900">{driver.trips.completed}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="text-xs text-muted-foreground font-medium">Rating:</span>
+                  <span className="text-xs text-gray-600 font-medium">Rating:</span>
                   <span className="text-lg font-bold text-yellow-600">{driver.rating}</span>
                 </div>
               </div>
             </div>
 
-            {/* Status section */}
-            <div className="px-4 py-3 bg-white dark:bg-gray-900 border-b border-border shadow-sm">
+            {/* Status section with white background */}
+            <div className="px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={`w-4 h-4 rounded-full ${driver.isOnline ? 'bg-green-500' : 'bg-gray-400'}`}>
@@ -589,7 +567,7 @@ function AppContent() {
                       <div className="w-4 h-4 bg-green-500 rounded-full animate-ping" />
                     )}
                   </div>
-                  <span className="font-semibold text-foreground">
+                  <span className="font-semibold text-gray-900">
                     {driver.isOnline ? 'Online' : 'Offline'}
                   </span>
                 </div>
@@ -630,16 +608,16 @@ function AppContent() {
                 </div>
               ) : currentRequest ? (
                 // Show ride request in the background while modal shows
-                <div className="h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/10 dark:to-purple-900/10">
+                <div className="h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
                   <div className="text-center px-8">
                     <div className="relative mb-6">
                       <Bell size={48} className="mx-auto text-blue-600 animate-bounce" />
                       <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-ping" />
                     </div>
-                    <h2 className="text-2xl font-bold mb-3 text-foreground">
+                    <h2 className="text-2xl font-bold mb-3 text-gray-900">
                       New Ride Request
                     </h2>
-                    <p className="text-muted-foreground mb-6">
+                    <p className="text-gray-600 mb-6">
                       Check the request details above
                     </p>
                   </div>
@@ -656,36 +634,36 @@ function AppContent() {
                     className="absolute inset-0"
                   />
                   
-                  {/* Overlay content */}
+                  {/* Overlay content with white background for better visibility */}
                   <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                    <div className="text-center px-8 bg-white/95 dark:bg-gray-900/95 rounded-2xl p-6 mx-4 backdrop-blur-sm shadow-xl border border-white/20">
+                    <div className="text-center px-8 bg-white rounded-2xl p-6 mx-4 shadow-xl border border-gray-200">
                       <div className="relative mb-6">
                         <Clock size={48} className="mx-auto text-green-600 animate-pulse" />
                         <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-ping" />
                       </div>
-                      <h2 className="text-2xl font-bold mb-3 text-foreground">
+                      <h2 className="text-2xl font-bold mb-3 text-gray-900">
                         Looking for rides...
                       </h2>
-                      <p className="text-muted-foreground mb-6">
+                      <p className="text-gray-600 mb-6">
                         You're online and ready to drive
                       </p>
-                      <div className="inline-flex items-center gap-2 px-6 py-3 bg-green-100 dark:bg-green-900/30 rounded-full border border-green-200 dark:border-green-800">
+                      <div className="inline-flex items-center gap-2 px-6 py-3 bg-green-100 rounded-full border border-green-200">
                         <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                        <span className="text-green-700 dark:text-green-300 font-bold">AVAILABLE</span>
+                        <span className="text-green-700 font-bold">AVAILABLE</span>
                       </div>
                     </div>
                   </div>
                 </div>
               ) : (
-                <div className="h-full flex flex-col bg-background">
+                <div className="h-full flex flex-col bg-white">
                   {/* Main offline message */}
                   <div className="flex-1 flex items-center justify-center">
                     <div className="text-center px-8">
-                      <Car size={48} className="mx-auto text-muted-foreground mb-6" />
-                      <h2 className="text-2xl font-bold mb-3 text-foreground">
+                      <Car size={48} className="mx-auto text-gray-400 mb-6" />
+                      <h2 className="text-2xl font-bold mb-3 text-gray-900">
                         Ready to Start?
                       </h2>
-                      <p className="text-muted-foreground mb-6">
+                      <p className="text-gray-600 mb-6">
                         Go online to start receiving ride requests
                       </p>
                       <Button
@@ -700,10 +678,10 @@ function AppContent() {
                   
                   {/* Recent trips section at bottom */}
                   {tripHistory.length > 0 && (
-                    <div className="px-4 py-4 border-t border-border bg-card">
+                    <div className="px-4 py-4 border-t border-gray-200 bg-white">
                       <div className="flex items-center justify-between mb-3">
-                        <h3 className="font-semibold text-foreground">Recent Trips</h3>
-                        <span className="text-sm text-muted-foreground">
+                        <h3 className="font-semibold text-gray-900">Recent Trips</h3>
+                        <span className="text-sm text-gray-600">
                           {tripHistory.length} total
                         </span>
                       </div>
@@ -711,12 +689,12 @@ function AppContent() {
                         {tripHistory.slice(0, 2).map((trip) => (
                           <div key={trip.id} className="flex justify-between items-center py-2">
                             <div>
-                              <div className="font-medium text-foreground">{trip.passenger.name}</div>
-                              <div className="text-sm text-muted-foreground">{trip.destination}</div>
+                              <div className="font-medium text-gray-900">{trip.passenger.name}</div>
+                              <div className="text-sm text-gray-600">{trip.destination}</div>
                             </div>
                             <div className="text-right">
                               <div className="font-semibold text-green-600">£{trip.fare.toFixed(2)}</div>
-                              <div className="text-sm text-muted-foreground">{trip.distance.toFixed(1)}mi</div>
+                              <div className="text-sm text-gray-600">{trip.distance.toFixed(1)}mi</div>
                             </div>
                           </div>
                         ))}
@@ -732,7 +710,7 @@ function AppContent() {
   };
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden">
+    <div className="h-screen bg-white flex flex-col overflow-hidden">
       {!isSignedIn ? (
         <WelcomeScreen 
           driver={driver}
@@ -769,9 +747,9 @@ function AppContent() {
         position="top-center"
         toastOptions={{
           style: {
-            background: 'hsl(var(--card))',
-            color: 'hsl(var(--card-foreground))',
-            border: '1px solid hsl(var(--border))',
+            background: 'white',
+            color: '#1a1a1a',
+            border: '1px solid #e0e0e0',
             borderRadius: '8px',
             fontSize: '14px',
             fontWeight: '500',
@@ -785,11 +763,7 @@ function AppContent() {
 }
 
 function App() {
-  return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
-  );
+  return <AppContent />;
 }
 
 export default App;

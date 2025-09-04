@@ -14,9 +14,9 @@ import { PassengerRating } from "@/components/PassengerRating";
 import { Driver, RideRequest, ActiveTrip, TripHistory } from "@/types/index";
 import { 
   House, 
-  Buildings, 
-  Calendar, 
-  Trophy, 
+  CurrencyPound, 
+  ClockCounterClockwise, 
+  Star, 
   List,
   Car, 
   Clock, 
@@ -312,7 +312,7 @@ function AppContent() {
     </div>
   );
 
-  // Professional bottom navigation (Freenow style)
+  // Professional bottom navigation (Freenow style) - beginner-friendly labels
   const ProfessionalNavigation = () => (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
       <div className="flex items-center justify-around py-2 px-4">
@@ -329,7 +329,7 @@ function AppContent() {
           <span className="text-xs font-medium mt-1">Home</span>
         </button>
 
-        {/* Earnings */}
+        {/* Money/Earnings - more beginner-friendly */}
         <button
           onClick={() => setCurrentView('earnings')}
           className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
@@ -338,11 +338,11 @@ function AppContent() {
               : 'text-gray-400 hover:text-gray-600'
           }`}
         >
-          <Buildings size={20} weight="bold" />
-          <span className="text-xs font-medium mt-1">Earnings</span>
+          <CurrencyPound size={20} weight="bold" />
+          <span className="text-xs font-medium mt-1">Money</span>
         </button>
 
-        {/* Schedule */}
+        {/* History - more beginner-friendly than Schedule */}
         <button
           onClick={() => setCurrentView('schedule')}
           className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
@@ -351,11 +351,11 @@ function AppContent() {
               : 'text-gray-400 hover:text-gray-600'
           }`}
         >
-          <Calendar size={20} weight="bold" />
-          <span className="text-xs font-medium mt-1">Schedule</span>
+          <ClockCounterClockwise size={20} weight="bold" />
+          <span className="text-xs font-medium mt-1">History</span>
         </button>
 
-        {/* Achievements */}
+        {/* Rating - more beginner-friendly than Trophy */}
         <button
           onClick={() => setCurrentView('achievements')}
           className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
@@ -364,8 +364,8 @@ function AppContent() {
               : 'text-gray-400 hover:text-gray-600'
           }`}
         >
-          <Trophy size={20} weight="bold" />
-          <span className="text-xs font-medium mt-1">Trophy</span>
+          <Star size={20} weight="bold" />
+          <span className="text-xs font-medium mt-1">Rating</span>
         </button>
 
         {/* Menu */}
@@ -391,7 +391,7 @@ function AppContent() {
         return (
           <div className="p-3 space-y-3 h-full flex flex-col">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-900">Earnings</h2>
+              <h2 className="text-lg font-bold text-gray-900">Money & Earnings</h2>
             </div>
             
             <Tabs defaultValue="performance" className="flex-1 flex flex-col">
@@ -422,10 +422,10 @@ function AppContent() {
       case 'schedule':
         return (
           <div className="p-3 space-y-3 h-full">
-            <h2 className="text-lg font-bold text-gray-900">Schedule</h2>
+            <h2 className="text-lg font-bold text-gray-900">Trip History</h2>
             <div className="bg-white rounded-lg p-4 border border-gray-200">
-              <h3 className="font-semibold mb-2 text-gray-900">Today's Schedule</h3>
-              <p className="text-gray-600">No scheduled rides</p>
+              <h3 className="font-semibold mb-2 text-gray-900">Recent Trips</h3>
+              <p className="text-gray-600">No recent trips to show</p>
             </div>
           </div>
         );
@@ -433,12 +433,15 @@ function AppContent() {
       case 'achievements':
         return (
           <div className="p-3 space-y-3 h-full">
-            <h2 className="text-lg font-bold text-gray-900">Achievements</h2>
+            <h2 className="text-lg font-bold text-gray-900">Your Rating</h2>
             <div className="bg-white rounded-lg p-4 border border-gray-200">
-              <h3 className="font-semibold mb-2 text-gray-900">Your Progress</h3>
+              <h3 className="font-semibold mb-2 text-gray-900">Performance</h3>
               <div className="flex items-center gap-2">
-                <Trophy size={20} className="text-yellow-500" />
+                <Star size={20} className="text-yellow-500" />
                 <span className="text-gray-900">Driver Rating: {driver.rating}/5.0</span>
+              </div>
+              <div className="mt-3 text-sm text-gray-600">
+                Based on {driver.trips.completed} completed trips
               </div>
             </div>
           </div>
@@ -463,8 +466,8 @@ function AppContent() {
                 className="flex items-center justify-between w-full p-3 bg-white rounded-lg border border-gray-200 hover:bg-gray-50"
               >
                 <div className="flex items-center gap-3">
-                  <Buildings size={18} className="text-gray-500" />
-                  <span className="text-sm text-gray-900">Earnings</span>
+                  <CurrencyPound size={18} className="text-gray-500" />
+                  <span className="text-sm text-gray-900">Money & Earnings</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>
@@ -474,8 +477,8 @@ function AppContent() {
                 className="flex items-center justify-between w-full p-3 bg-white rounded-lg border border-gray-200 hover:bg-gray-50"
               >
                 <div className="flex items-center gap-3">
-                  <Trophy size={18} className="text-gray-500" />
-                  <span className="text-sm text-gray-900">Quests</span>
+                  <Star size={18} className="text-gray-500" />
+                  <span className="text-sm text-gray-900">My Rating</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>

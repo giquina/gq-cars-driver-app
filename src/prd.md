@@ -1,126 +1,163 @@
-# GQ Cars Professional Driver App - PRD
+# ARMORA DRIVER APP - Product Requirements Document
 
 ## Core Purpose & Success
-- **Mission Statement**: A mobile app that provides professional drivers with a clean, intuitive interface to manage rides, track earnings, and maintain their business operations with the polish and reliability of industry leaders like Freenow.
-- **Success Indicators**: Drivers can complete core tasks in under 3 taps, feel confident using the app professionally, and have clear visibility into their earnings and performance.
-- **Experience Qualities**: Professional, Intuitive, Trustworthy
+
+**Mission Statement**: Empower professional drivers to efficiently accept and complete both ride and escort services while maintaining the highest standards of safety and professionalism.
+
+**Success Indicators**: 
+- Driver response time to requests under 10 seconds
+- 95%+ successful job completion rate
+- 4.8+ average driver satisfaction rating
+- Seamless coordination between ride and escort services
+
+**Experience Qualities**: Professional, Trustworthy, Efficient
 
 ## Project Classification & Approach
-- **Complexity Level**: Light Application (multiple features with basic state)
-- **Primary User Activity**: Acting (accepting rides, managing work status, tracking performance)
+
+**Complexity Level**: Complex Application (advanced functionality, multiple service types, real-time coordination)
+
+**Primary User Activity**: Acting (responding to requests) and Interacting (coordinating with passengers/clients)
 
 ## Thought Process for Feature Selection
-- **Core Problem Analysis**: Professional drivers need a reliable, easy-to-use interface that doesn't distract from driving while providing essential business management tools.
-- **User Context**: Used throughout work shifts, often while driving, needs to be accessible with one hand and in various lighting conditions.
-- **Critical Path**: Sign in → Go online → Accept rides → Track earnings → Go offline
-- **Key Moments**: Welcome greeting, ride acceptance decision, earnings visibility, status changes
 
-### Essential Features
+**Core Problem Analysis**: Professional drivers need a unified platform to efficiently handle both traditional ride services and specialized security escort services, with different qualification requirements and protocols for each service type.
 
-### Authentication & Welcome
-- Clean welcome screen with personalized greeting
-- Profile photo display for user recognition
-- Clear sign-in options including account switching
+**User Context**: Drivers will use this app while actively working, often in vehicles, requiring one-handed operation and quick decision-making capabilities.
 
-### Navigation System
-- Bottom tab navigation with 5 core sections
-- Home, Earnings, Schedule, Achievements, Menu
-- Red accent color for active states matching Freenow aesthetic
+**Critical Path**: Online → Receive Request → Quick Assessment → Accept/Decline → Navigate → Complete Service → Get Paid
 
-### Ride Request Management with Swipe Gestures
-- **Optimized Ride Request Popup**: Streamlined design showing only essential decision-making information
-- **Large Earnings Display**: £XX.XX prominently displayed as the most important factor
-- **Quick Decision Info**: Customer rating, pickup distance, trip distance/duration on single scannable lines
-- **Smart Swipe Gestures**: 
-  - Swipe right to accept rides (natural positive motion)
-  - Swipe left to decline rides (natural dismissive motion)
-  - Progressive visual feedback with color changes during swipe
-  - Haptic feedback at decision thresholds (mobile devices)
-  - Resistance feedback when approaching commit zones
-- **Dual Input Support**: Touch gestures for mobile, mouse drag for desktop testing
-- **Safety Features**: 26-second auto-decline timer, prominent countdown display
-- **Professional Layout**: Area-to-area routing (avoiding full addresses), payment method only shown if non-standard
+**Key Moments**: 
+1. Request notification (must be scannable in under 5 seconds)
+2. Service execution (different protocols for ride vs escort)
+3. Completion confirmation (affects driver rating and earnings)
 
-### Earnings Dashboard
-- Primary feature with Performance/Balance tabs
-- Date range selector with week navigation
-- Large, prominent earnings display
-- Weekly calendar view with visual indicators
+## Essential Features
 
-### Vehicle Management
-- Vehicle selection and switching
-- License plate display
-- Last used vehicle prominence
-- Clear confirmation flow
+### **Driver Authentication & Qualification System**
+- **Functionality**: Multi-tier driver verification supporting Standard, Executive, Security Escort, and Luxury Specialist levels
+- **Purpose**: Ensures only qualified drivers receive appropriate service requests
+- **Success Criteria**: Automatic job filtering based on driver qualifications
 
-### Profile & Settings
-- User profile access
-- Menu system with categorized options
-- Account management and sign out
+### **Dual-Service Request System**
+- **Functionality**: Unified interface handling both ride jobs (A→B transport) and escort jobs (following client's vehicle)
+- **Purpose**: Maximize driver earning opportunities while maintaining service specialization
+- **Success Criteria**: Clear visual distinction between request types, appropriate information display for each
+
+### **Real-Time Navigation & Tracking**
+- **Functionality**: GPS navigation for rides, multi-vehicle coordination for escorts
+- **Purpose**: Efficient route guidance and client safety monitoring
+- **Success Criteria**: Real-time location sharing, formation following alerts for escort services
+
+### **Earnings & Payment Tracking**
+- **Functionality**: Separate tracking for ride vs escort earnings, automatic fare calculation
+- **Purpose**: Transparent payment system building driver trust
+- **Success Criteria**: Real-time earnings updates, accurate fare breakdowns
+
+### **Safety & Security Protocols**
+- **Functionality**: Emergency assistance, incident reporting, client verification
+- **Purpose**: Maintain safety standards for both service types
+- **Success Criteria**: Quick access to emergency features, comprehensive incident logging
 
 ## Design Direction
 
 ### Visual Tone & Identity
-- **Emotional Response**: Professional confidence, clarity, trustworthiness
-- **Design Personality**: Clean, business-appropriate, modern without being flashy
-- **Visual Metaphors**: Professional dashboard, financial statements, business tools
-- **Simplicity Spectrum**: Minimal interface with maximum clarity
+**Emotional Response**: Confidence, professionalism, and reliability
+**Design Personality**: Clean, serious, and trustworthy - reflecting security industry standards
+**Visual Metaphors**: Shield (security), Navigation (precision), Connectivity (coordination)
+**Simplicity Spectrum**: Minimal interface - functionality over decoration
 
 ### Color Strategy
-- **Color Scheme Type**: Analogous with strategic accent
-- **Primary Color**: Bright red/pink (#E91E63) - energetic, attention-grabbing for CTAs
-- **Secondary Colors**: Clean whites and light grays for backgrounds and containers
-- **Accent Color**: Green for positive actions (online status, earnings, success states)
-- **Color Psychology**: Red conveys urgency and action, white suggests cleanliness and professionalism, green indicates success and "go"
+**Color Scheme Type**: Professional analogous with accent colors
+**Primary Color**: Deep Blue (#1e40af) - trust and professionalism
+**Secondary Colors**: Slate Gray (#64748b) - stability and neutrality
+**Accent Color**: Emerald Green (#10b981) - success and earnings
+**Color Psychology**: Blue conveys trust essential for security services, green reinforces positive financial outcomes
+**Color Accessibility**: WCAG AA compliant with high contrast ratios
+
+**Foreground/Background Pairings**:
+- White background (#ffffff) with dark gray text (#1a1a1a) - 21:1 ratio ✓
+- Blue primary (#1e40af) with white text (#ffffff) - 8.6:1 ratio ✓  
+- Gray secondary (#64748b) with white text (#ffffff) - 4.7:1 ratio ✓
+- Green accent (#10b981) with white text (#ffffff) - 4.8:1 ratio ✓
 
 ### Typography System
-- **Font Pairing Strategy**: Single modern sans-serif family (Inter) with multiple weights
-- **Typographic Hierarchy**: Bold for earnings/important numbers, medium for headings, regular for body text
-- **Font Personality**: Clean, technical, highly legible
-- **Readability Focus**: Large touch targets, high contrast, mobile-optimized sizing
-- **Which fonts**: Inter (already implemented) - excellent for professional apps
-- **Legibility Check**: Inter provides excellent legibility at all sizes and weights
+**Font Pairing Strategy**: Single professional sans-serif for consistency
+**Typographic Hierarchy**: Clear distinction between critical info (large, bold) and supporting details (medium, regular)
+**Font Personality**: Clean, readable, professional
+**Readability Focus**: Large touch targets, adequate line spacing, high contrast
+**Typography Consistency**: Consistent sizing scale based on importance hierarchy
+**Which fonts**: Inter - excellent readability and professional appearance
+**Legibility Check**: Inter tested across various screen sizes and lighting conditions
 
 ### Visual Hierarchy & Layout
-- **Attention Direction**: Large earnings displays draw eye first, then navigation, then supporting details
-- **White Space Philosophy**: Generous spacing creates calm, professional feel - less cluttered than consumer apps
-- **Grid System**: Card-based layout with consistent padding and spacing
-- **Responsive Approach**: Mobile-first with touch-optimized components
-- **Content Density**: Lower density than consumer apps - easier scanning while driving
+**Attention Direction**: Most critical information (earnings, safety) prominently displayed
+**White Space Philosophy**: Generous spacing prevents information overload during time-sensitive decisions
+**Grid System**: Consistent 16px base spacing unit for alignment
+**Responsive Approach**: Mobile-first design adapting to various screen sizes
+**Content Density**: Balanced - essential information visible without scrolling
 
 ### Animations
-- **Purposeful Meaning**: Subtle transitions that provide feedback without distraction
-- **Hierarchy of Movement**: Status changes get animation priority, then navigation feedback, swipe gestures get immediate visual response
-- **Contextual Appropriateness**: Minimal motion suitable for professional context and driving safety
-- **Swipe Feedback**: Progressive color changes and scale transforms during gesture interaction
+**Purposeful Meaning**: Subtle animations guide attention to new requests and status changes
+**Hierarchy of Movement**: Request notifications animate prominently, status updates subtly
+**Contextual Appropriateness**: Professional, minimal animations appropriate for work environment
 
 ### UI Elements & Component Selection
-- **Component Usage**: Cards for information grouping, Tabs for section switching, prominent Buttons for actions
-- **Component Customization**: Larger touch targets, rounded corners, professional color scheme
-- **Component States**: Clear hover/pressed states, loading indicators, success feedback
-- **Icon Selection**: Simple, universal icons (house, money, calendar, trophy, menu)
-- **Component Hierarchy**: Primary red buttons, secondary gray buttons, tertiary text links
-- **Spacing System**: Consistent 8px grid system for predictable spacing
-- **Mobile Adaptation**: Bottom navigation, one-handed operation focus
+**Component Usage**: 
+- Cards for request summaries and earnings displays
+- Bottom navigation for main app sections
+- Full-screen modals for critical request decisions
+- Progress indicators for ongoing trips
+
+**Component Customization**: Blue/gray color scheme replacing default reds
+**Component States**: Clear visual feedback for all interactive elements
+**Icon Selection**: Professional icons emphasizing navigation, money, and security
+**Component Hierarchy**: Critical actions (accept/decline) most prominent
+**Spacing System**: 16px base unit with 4px, 8px, 12px, 16px, 24px, 32px scale
+**Mobile Adaptation**: Touch-friendly sizing, thumb-accessible navigation
+
+### Visual Consistency Framework
+**Design System Approach**: Component-based design ensuring consistency across all features
+**Style Guide Elements**: Color usage, typography scale, spacing rules, icon style
+**Visual Rhythm**: Consistent card layouts and information hierarchy
+**Brand Alignment**: Professional appearance building trust with security-conscious clients
 
 ### Accessibility & Readability
-- **Contrast Goal**: WCAG AA compliance minimum
-- **Foreground/Background Pairings**: 
-  - White text on red buttons (high contrast)
-  - Dark gray text on white backgrounds
-  - White text on dark gray cards
-  - Green text on light backgrounds for success states
+**Contrast Goal**: WCAG AA compliance minimum, AAA where possible for critical elements
 
 ## Edge Cases & Problem Scenarios
-- **Network connectivity issues**: Offline capability for core features
-- **Driver distraction**: Large touch targets, minimal interaction required
-- **Various lighting conditions**: High contrast design works in sunlight and darkness
-- **One-handed operation**: Bottom navigation, reachable primary actions
+
+**Potential Obstacles**: 
+- Network connectivity issues during active escort services
+- Driver qualification verification delays
+- Conflicting request types (ride and escort simultaneously)
+
+**Edge Case Handling**: 
+- Offline mode for essential functions
+- Manual verification fallback procedures
+- Clear priority system for request handling
+
+**Technical Constraints**: 
+- Battery optimization for continuous GPS tracking
+- Real-time coordination between multiple vehicles
+- Integration with various payment systems
 
 ## Implementation Considerations
-- **Scalability Needs**: Component-based architecture for easy feature additions
-- **Testing Focus**: Mobile usability, touch interaction, performance
-- **Critical Questions**: How to maintain professional feel while being user-friendly for varying technical skills
+
+**Scalability Needs**: Support for multiple vehicle fleets, various service regions
+**Testing Focus**: Multi-device compatibility, real-world driving conditions
+**Critical Questions**: How to handle emergency situations during escort services? Integration requirements with existing security systems?
 
 ## Reflection
-This approach balances professional requirements with user-friendly design, taking inspiration from successful apps like Freenow while meeting specific needs of professional drivers. The focus on clarity and minimal distraction makes it suitable for use while driving, while the professional aesthetic builds trust with business users.
+
+This approach uniquely serves the dual-service model by maintaining clear separation between ride and escort functionalities while providing a unified driver experience. The professional design language builds trust essential for security services, while the simplified interface supports quick decision-making in operational environments.
+
+**Key Assumptions to Challenge**: 
+- Are separate interfaces needed for ride vs escort modes?
+- Can one app effectively serve both casual and security-qualified drivers?
+- What level of real-time coordination is actually needed for escort services?
+
+**Exceptional Solution Elements**:
+- Unified qualification system reducing driver confusion
+- Context-aware interface adapting to service type
+- Professional design appropriate for security industry standards
+- Scalable architecture supporting future service types

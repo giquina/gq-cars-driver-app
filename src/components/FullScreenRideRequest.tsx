@@ -50,11 +50,11 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
     <div className="fixed inset-0 bg-gray-900/95 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-auto overflow-hidden animate-fade-in-scale">
         
-        {/* Header with timer */}
-        <div className="bg-gradient-to-r from-red-500 to-red-600 text-white p-4 text-center relative">
+        {/* Header with timer - more attractive blue gradient */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4 text-center relative">
           <div className="text-sm font-medium mb-1">New Ride Request</div>
           <div className="text-2xl font-bold">{timeLeft}s</div>
-          <div className="absolute bottom-0 left-0 h-1 bg-red-300 transition-all duration-1000 ease-linear" 
+          <div className="absolute bottom-0 left-0 h-1 bg-blue-300 transition-all duration-1000 ease-linear" 
                style={{ width: `${(timeLeft / 25) * 100}%` }} />
         </div>
 

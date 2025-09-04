@@ -30,7 +30,8 @@ import {
   List,
   Gear,
   Robot,
-  Star
+  Star,
+  Circle
 } from "@phosphor-icons/react";
 
 function App() {

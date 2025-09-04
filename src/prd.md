@@ -19,6 +19,9 @@
 - **Professional Visual Design**: Clean, modern interface following professional driver app standards
 - **Improved Button Visibility**: Large, clearly labeled buttons with proper contrast and hover states
 - **Enhanced Color Scheme**: Professional blue and green palette with proper accessibility standards
+- **Dark Mode for Night Driving**: Specialized dark theme optimized for night visibility with reduced blue light emission
+- **Auto Dark Mode**: Intelligent theme switching based on time of day (6 PM - 6 AM automatically enables night mode)
+- **Quick Theme Toggle**: Easy theme switching accessible from header for instant mode changes
 - **Streamlined Navigation**: Intuitive navigation bar with clear icons and labels
 - **Responsive Card Design**: Clean cards with proper spacing and visual hierarchy
 - **Currency Display**: All monetary values displayed in British Pounds (£) with proper formatting
@@ -243,6 +246,16 @@
 ### UI Elements & Component Selection
 - **Component Usage**: Cards for requests, buttons for actions, badges for status
 - **Mobile Adaptation**: Large touch targets, thumb-friendly navigation
+
+### Dark Mode & Night Driving Optimization ⭐ NEW
+- **Night Mode Theme**: Specialized dark color scheme designed specifically for night driving safety
+- **Reduced Blue Light**: Optimized color palette that minimizes blue light emission to preserve night vision
+- **Enhanced Emergency Visibility**: Emergency button gains subtle glow effect in dark mode for instant identification
+- **Auto Mode Intelligence**: Automatic theme switching based on time of day (6 PM - 6 AM)
+- **Manual Override**: Quick toggle button in header allows instant theme switching for changing conditions
+- **Map Optimization**: Darker map backgrounds with enhanced contrast for better night visibility
+- **Accessibility**: Maintains WCAG AA contrast ratios in both light and dark modes
+- **Battery Optimization**: Dark mode reduces screen power consumption during long night shifts
 
 ### Accessibility & Readability
 - **Contrast Goal**: WCAG AA compliance, high contrast for automotive use

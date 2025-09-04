@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useKV } from '@github/spark/hooks';
+import { useTheme } from '@/hooks/useTheme';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { DriverStatus } from "@/components/DriverStatus";
 import { RideRequestCard } from "@/components/RideRequestCard";
 import { ActiveTripCard } from "@/components/ActiveTripCard";
@@ -31,10 +33,13 @@ import {
   Gear,
   Robot,
   Star,
-  Circle
+  Circle,
+  Moon,
+  Sun
 } from "@phosphor-icons/react";
 
-function App() {
+function AppContent() {
+  const { theme, autoMode, toggleTheme } = useTheme();
   // Driver data persisted across sessions
   const [driver, setDriver] = useKV<Driver>("driver-profile", {
     id: "driver-001",
@@ -280,13 +285,40 @@ function App() {
         </div>
       </div>
       
-      {/* Quick Stats */}
-      <div className="text-right">
-        <div className="text-lg font-bold text-success flex items-center gap-1">
-          <CurrencyGbp size={16} weight="bold" />
-          {driver.earnings.today.toFixed(2)}
+      <div className="flex items-center gap-2">
+        {/* Theme Toggle Button */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            toggleTheme();
+            const newMode = theme === 'light' ? 'night' : 'day';
+            toast.success(
+              autoMode 
+                ? `Manual ${newMode} mode enabled` 
+                : `${newMode === 'night' ? 'Night' : 'Day'} mode enabled`
+            );
+          }}
+          className="h-8 w-8 p-0 rounded-full border-border/60 hover:border-primary/50 transition-all duration-200 relative"
+        >
+          {theme === 'dark' ? (
+            <Sun size={14} className="text-amber-500" weight="bold" />
+          ) : (
+            <Moon size={14} className="text-blue-500" weight="bold" />
+          )}
+          {autoMode && (
+            <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-accent rounded-full border border-white" />
+          )}
+        </Button>
+        
+        {/* Quick Stats */}
+        <div className="text-right">
+          <div className="text-lg font-bold text-success flex items-center gap-1">
+            <CurrencyGbp size={16} weight="bold" />
+            {driver.earnings.today.toFixed(2)}
+          </div>
+          <p className="text-[10px] text-muted-foreground">Today's earnings</p>
         </div>
-        <p className="text-[10px] text-muted-foreground">Today's earnings</p>
       </div>
     </div>
   );
@@ -328,7 +360,7 @@ function App() {
           {/* Emergency - Center position with special styling */}
           <button
             onClick={() => setCurrentView(currentView === 'emergency' ? 'main' : 'emergency')}
-            className={`relative flex flex-col items-center justify-center p-2.5 rounded-full transition-all duration-200 min-w-[52px] min-h-[52px] ${
+            className={`emergency-button relative flex flex-col items-center justify-center p-2.5 rounded-full transition-all duration-200 min-w-[52px] min-h-[52px] ${
               currentView === 'emergency'
                 ? 'bg-destructive text-destructive-foreground shadow-lg scale-105'
                 : 'bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground border border-destructive/30 hover:border-destructive shadow-md'
@@ -542,6 +574,15 @@ function App() {
         }}
       />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  );
   );
 }
 

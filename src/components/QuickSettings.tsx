@@ -2,9 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useKV } from '@github/spark/hooks';
+import { useTheme } from '@/hooks/useTheme';
 import { 
   Settings, 
   Moon, 
+  Sun,
+  Clock,
   MapPin,
   VolumeHigh,
   Bluetooth,
@@ -14,7 +17,6 @@ import {
 } from "@phosphor-icons/react";
 
 interface AppSettings {
-  darkMode: boolean;
   autoAcceptGoodRides: boolean;
   locationSharing: boolean;
   soundAlerts: boolean;
@@ -29,8 +31,8 @@ interface QuickSettingsProps {
 }
 
 export function QuickSettings({ onClose }: QuickSettingsProps) {
+  const { theme, autoMode, toggleTheme, setAutoMode } = useTheme();
   const [settings, setSettings] = useKV<AppSettings>("app-settings", {
-    darkMode: false,
     autoAcceptGoodRides: false,
     locationSharing: true,
     soundAlerts: true,
@@ -104,26 +106,85 @@ export function QuickSettings({ onClose }: QuickSettingsProps) {
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Settings List */}
-        <div className="space-y-4">
-          {settingsItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div key={item.key} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                <div className="flex items-center gap-3 flex-1">
-                  <Icon size={20} className={item.iconColor} />
-                  <div className="flex-1">
-                    <div className="font-medium">{item.title}</div>
-                    <div className="text-sm text-muted-foreground">{item.description}</div>
-                  </div>
+        {/* Dark Mode Toggle */}
+        <div className="space-y-3">
+          <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">
+            Display & Night Mode
+          </h4>
+          
+          {/* Current theme display */}
+          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-muted/40 to-muted/20 rounded-xl border border-border/50">
+            <div className="flex items-center gap-3 flex-1">
+              {theme === 'dark' ? (
+                <Moon size={22} className="text-blue-400" weight="fill" />
+              ) : (
+                <Sun size={22} className="text-amber-500" weight="fill" />
+              )}
+              <div className="flex-1">
+                <div className="font-semibold text-base">
+                  {theme === 'dark' ? 'Night Mode' : 'Day Mode'}
                 </div>
-                <Switch 
-                  checked={item.enabled}
-                  onCheckedChange={() => handleToggle(item.key)}
-                />
+                <div className="text-sm text-muted-foreground">
+                  {autoMode 
+                    ? 'Automatic based on time of day' 
+                    : theme === 'dark' 
+                      ? 'Optimized for night driving visibility' 
+                      : 'Bright interface for daytime use'
+                  }
+                </div>
               </div>
-            );
-          })}
+            </div>
+            <Switch 
+              checked={theme === 'dark'}
+              onCheckedChange={toggleTheme}
+              className="scale-110"
+              disabled={autoMode}
+            />
+          </div>
+
+          {/* Auto dark mode toggle */}
+          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg hover:bg-muted/40 transition-colors">
+            <div className="flex items-center gap-3 flex-1">
+              <Clock size={20} className="text-purple-500" />
+              <div className="flex-1">
+                <div className="font-medium">Auto Night Mode</div>
+                <div className="text-sm text-muted-foreground">
+                  Automatically switch to dark mode from 6 PM to 6 AM
+                </div>
+              </div>
+            </div>
+            <Switch 
+              checked={autoMode}
+              onCheckedChange={setAutoMode}
+            />
+          </div>
+        </div>
+
+        {/* App Settings */}
+        <div className="space-y-3">
+          <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">
+            App Preferences
+          </h4>
+          <div className="space-y-3">
+            {settingsItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.key} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg hover:bg-muted/40 transition-colors">
+                  <div className="flex items-center gap-3 flex-1">
+                    <Icon size={20} className={item.iconColor} />
+                    <div className="flex-1">
+                      <div className="font-medium">{item.title}</div>
+                      <div className="text-sm text-muted-foreground">{item.description}</div>
+                    </div>
+                  </div>
+                  <Switch 
+                    checked={item.enabled}
+                    onCheckedChange={() => handleToggle(item.key)}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Minimum Fare Setting */}

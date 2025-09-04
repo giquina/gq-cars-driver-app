@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Driver } from "@/types";
-import { Circle, Car, CurrencyGbp, Star, TrendUp, Power } from "@phosphor-icons/react";
+import { Circle, Car, CurrencyGbp, Star, TrendUp, Power, MapPin } from "@phosphor-icons/react";
 
 interface DriverStatusProps {
   driver: Driver;
@@ -11,74 +11,64 @@ interface DriverStatusProps {
 
 export function DriverStatus({ driver, onToggleOnline }: DriverStatusProps) {
   return (
-    <Card className="mb-1.5 bg-card border">
-      <CardContent className="p-2">
-        <div className="flex items-center justify-between mb-1.5">
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-                <Car size={14} className="text-primary-foreground" />
-              </div>
-              <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-white ${
-                driver.isOnline ? 'bg-success' : 'bg-muted-foreground'
-              }`}>
-                {driver.isOnline && (
-                  <div className="absolute inset-0 bg-success rounded-full animate-ping opacity-75" />
-                )}
-              </div>
-            </div>
-            <div>
-              <h2 className="font-bold text-xs text-foreground">{driver.name}</h2>
-              <p className="text-[9px] text-muted-foreground">{driver.vehicleModel}</p>
-              <p className="text-[8px] text-muted-foreground bg-muted px-1 py-0.5 rounded inline-block">{driver.vehiclePlate}</p>
-            </div>
-          </div>
-          <Badge 
-            variant={driver.isOnline ? "default" : "secondary"} 
-            className={`flex items-center gap-1 px-1.5 py-0.5 text-[8px] font-bold rounded-full ${
-              driver.isOnline 
-                ? 'bg-success text-success-foreground' 
-                : 'bg-muted text-muted-foreground'
-            }`}
-          >
-            <Circle size={3} weight="fill" />
-            {driver.isOnline ? 'ONLINE' : 'OFFLINE'}
-          </Badge>
-        </div>
-
-        <div className="grid grid-cols-3 gap-1 mb-1.5">
-          <div className="flex items-center justify-center p-1.5 bg-success/10 rounded border border-success/20">
-            <CurrencyGbp size={8} className="text-success mr-1" />
-            <span className="text-[9px] font-bold text-success">£{driver.earnings.today.toFixed(2)}</span>
-            <span className="text-[8px] text-muted-foreground ml-1">today</span>
-          </div>
-          <div className="flex items-center justify-center p-1.5 bg-primary/10 rounded border border-primary/20">
-            <TrendUp size={8} className="text-primary mr-1" />
-            <span className="text-[9px] font-bold text-primary">{driver.trips.completed}</span>
-            <span className="text-[8px] text-muted-foreground ml-1">trips</span>
-          </div>
-          <div className="flex items-center justify-center p-1.5 bg-yellow-500/10 rounded border border-yellow-400/20">
-            <Star size={8} className="text-yellow-600 mr-1" weight="fill" />
-            <span className="text-[9px] font-bold text-yellow-600">{driver.rating.toFixed(1)}</span>
-            <span className="text-[8px] text-muted-foreground ml-1">rating</span>
-          </div>
-        </div>
-
+    <div className="space-y-4">
+      {/* Online/Offline Toggle - prominent */}
+      <div className="text-center">
         <Button 
           onClick={onToggleOnline}
-          className={`w-full h-7 text-[10px] font-bold rounded transition-all ${
+          className={`w-full h-16 text-lg font-bold rounded-2xl transition-all shadow-lg ${
             driver.isOnline 
-              ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground' 
-              : 'bg-success hover:bg-success/90 text-success-foreground'
+              ? 'bg-red-500 hover:bg-red-600 text-white' 
+              : 'bg-green-500 hover:bg-green-600 text-white'
           }`}
-          size="sm"
         >
-          <div className="flex items-center justify-center gap-1.5">
-            <Power size={10} />
+          <div className="flex items-center justify-center gap-3">
+            <div className={`w-4 h-4 rounded-full ${driver.isOnline ? 'bg-white' : 'bg-white'}`}>
+              {driver.isOnline && (
+                <div className="w-4 h-4 bg-white rounded-full animate-pulse" />
+              )}
+            </div>
             {driver.isOnline ? 'Go Offline' : 'Go Online'}
           </div>
         </Button>
-      </CardContent>
-    </Card>
+        
+        <div className="mt-2 text-center">
+          <span className={`text-sm font-medium ${
+            driver.isOnline ? 'text-green-600' : 'text-gray-500'
+          }`}>
+            {driver.isOnline ? 'You are online and ready for requests' : 'You are offline'}
+          </span>
+        </div>
+      </div>
+
+      {/* Vehicle Info Card */}
+      <Card className="bg-card border">
+        <CardContent className="p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+              <Car size={24} className="text-gray-600 dark:text-gray-400" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-foreground">{driver.vehicleModel}</h3>
+              <p className="text-sm text-muted-foreground">{driver.vehiclePlate}</p>
+              <div className="flex items-center gap-1 mt-1">
+                <MapPin size={12} className="text-gray-500" />
+                <span className="text-xs text-gray-500">Central London</span>
+              </div>
+            </div>
+            <Badge 
+              variant={driver.isOnline ? "default" : "secondary"} 
+              className={`${
+                driver.isOnline 
+                  ? 'bg-green-100 text-green-700 border-green-200' 
+                  : 'bg-gray-100 text-gray-600 border-gray-200'
+              }`}
+            >
+              {driver.isOnline ? 'ONLINE' : 'OFFLINE'}
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

@@ -20,6 +20,11 @@ import { PassengerRating } from "@/components/PassengerRating";
 import { GPSTracking } from "@/components/GPSTracking";
 import { Driver, RideRequest, ActiveTrip, TripHistory } from "@/types";
 import { 
+  House, 
+  Buildings, 
+  Calendar, 
+  Trophy, 
+  List,
   Car, 
   Clock, 
   CurrencyGbp, 
@@ -27,12 +32,12 @@ import {
   User, 
   Bell, 
   Map,
-  List,
   Gear,
   Star,
   Circle,
   Moon,
-  Sun
+  Sun,
+  Eye
 } from "@phosphor-icons/react";
 
 function AppContent() {
@@ -72,7 +77,7 @@ function AppContent() {
   // Current session state (doesn't persist)
   const [currentRequest, setCurrentRequest] = useState<RideRequest | null>(null);
   const [activeTrip, setActiveTrip] = useState<ActiveTrip | null>(null);
-  const [currentView, setCurrentView] = useState<'main' | 'profile' | 'notifications' | 'settings' | 'passenger-rating'>('main');
+  const [currentView, setCurrentView] = useState<'home' | 'earnings' | 'schedule' | 'achievements' | 'menu' | 'passenger-rating'>('home');
   const [completedTripForRating, setCompletedTripForRating] = useState<ActiveTrip | null>(null);
 
   // Generate mock ride requests when driver is online
@@ -133,7 +138,7 @@ function AppContent() {
     }));
     setCurrentRequest(null);
     setActiveTrip(null);
-    setCurrentView('main');
+    setCurrentView('home');
     toast.success("Signed out successfully");
   };
 
@@ -279,117 +284,110 @@ function AppContent() {
     }
     
     setCompletedTripForRating(null);
-    setCurrentView('main');
+    setCurrentView('home');
   };
-  const MainHeader = () => (
-    <div className="flex items-center justify-between p-2 bg-card rounded-lg border border-border shadow-sm mb-2">
-      <div className="flex items-center gap-2">
-        <div className="relative">
-          <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-            <Car size={16} className="text-primary-foreground" weight="bold" />
+  // Professional header component
+  const ProfessionalHeader = () => (
+    <div className="bg-card border-b border-border px-4 py-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center">
+            <Car size={20} className="text-white" weight="bold" />
           </div>
-          <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-white ${
-            driver.isOnline ? 'bg-success' : 'bg-muted-foreground'
-          }`}>
+          <div>
+            <h1 className="text-lg font-bold text-foreground">GQ Cars</h1>
+            <p className="text-xs text-muted-foreground">Professional Driver</p>
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          {/* Earnings indicator */}
+          <div className="flex items-center gap-1 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
+            <Eye size={12} className="text-green-600 dark:text-green-400" />
+            <span className="text-sm font-semibold text-green-700 dark:text-green-300">
+              £{driver.earnings.today.toFixed(2)}
+            </span>
+          </div>
+          
+          {/* Online status */}
+          <div className={`w-3 h-3 rounded-full ${driver.isOnline ? 'bg-green-500' : 'bg-gray-400'}`}>
             {driver.isOnline && (
-              <div className="absolute inset-0 bg-success rounded-full animate-ping opacity-75" />
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-ping" />
             )}
           </div>
-        </div>
-        <div>
-          <h1 className="text-sm font-bold text-foreground">
-            GQ Cars
-          </h1>
-          <p className="text-[10px] text-muted-foreground">Driver</p>
-        </div>
-      </div>
-      
-      <div className="flex items-center gap-2">
-        {/* Theme Toggle Button */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            toggleTheme();
-            const newMode = theme === 'light' ? 'night' : 'day';
-            toast.success(`${newMode === 'night' ? 'Night' : 'Day'} mode`);
-          }}
-          className="h-7 w-7 p-0 rounded-full"
-        >
-          {theme === 'dark' ? (
-            <Sun size={12} className="text-amber-500" />
-          ) : (
-            <Moon size={12} className="text-blue-500" />
-          )}
-        </Button>
-        
-        {/* Daily Earnings */}
-        <div className="flex items-center gap-1">
-          <CurrencyGbp size={12} className="text-success" />
-          <span className="text-sm font-bold text-success">£{driver.earnings.today.toFixed(2)}</span>
-          <span className="text-[9px] text-muted-foreground">today</span>
         </div>
       </div>
     </div>
   );
 
-  // Bottom navigation component (smaller and cleaner)
-  const BottomNavigation = () => (
-    <div className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border shadow-lg z-50">
-      <div className="container mx-auto px-2 max-w-md">
-        <div className="flex items-center justify-around py-1.5">
-          {/* Home */}
-          <button
-            onClick={() => setCurrentView('main')}
-            className={`relative flex flex-col items-center justify-center p-1.5 rounded-lg transition-all min-w-[48px] ${
-              currentView === 'main'
-                ? 'bg-primary text-primary-foreground shadow-md'
-                : 'text-muted-foreground hover:text-primary'
-            }`}
-          >
-            <Car size={16} weight="bold" className="mb-0.5" />
-            <span className="text-[9px] font-medium">Home</span>
-          </button>
+  // Professional bottom navigation (Freenow style)
+  const ProfessionalNavigation = () => (
+    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg z-50">
+      <div className="flex items-center justify-around py-2 px-4 max-w-md mx-auto">
+        {/* Home */}
+        <button
+          onClick={() => setCurrentView('home')}
+          className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
+            currentView === 'home'
+              ? 'text-red-500'
+              : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+          }`}
+        >
+          <House size={20} weight="bold" />
+          <span className="text-xs font-medium mt-1">Home</span>
+        </button>
 
-          {/* Notifications */}
-          <button
-            onClick={() => setCurrentView(currentView === 'notifications' ? 'main' : 'notifications')}
-            className={`relative flex flex-col items-center justify-center p-1.5 rounded-lg transition-all min-w-[48px] ${
-              currentView === 'notifications'
-                ? 'bg-primary text-primary-foreground shadow-md'
-                : 'text-muted-foreground hover:text-primary'
-            }`}
-          >
-            <Bell size={16} weight="bold" className="mb-0.5" />
-            <span className="text-[9px] font-medium">Alerts</span>
-          </button>
+        {/* Earnings */}
+        <button
+          onClick={() => setCurrentView('earnings')}
+          className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
+            currentView === 'earnings'
+              ? 'text-red-500'
+              : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+          }`}
+        >
+          <Buildings size={20} weight="bold" />
+          <span className="text-xs font-medium mt-1">Earnings</span>
+        </button>
 
-          {/* Settings */}
-          <button
-            onClick={() => setCurrentView(currentView === 'settings' ? 'main' : 'settings')}
-            className={`relative flex flex-col items-center justify-center p-1.5 rounded-lg transition-all min-w-[48px] ${
-              currentView === 'settings'
-                ? 'bg-primary text-primary-foreground shadow-md'
-                : 'text-muted-foreground hover:text-primary'
-            }`}
-          >
-            <Gear size={16} weight="bold" className="mb-0.5" />
-            <span className="text-[9px] font-medium">Settings</span>
-          </button>
+        {/* Schedule */}
+        <button
+          onClick={() => setCurrentView('schedule')}
+          className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
+            currentView === 'schedule'
+              ? 'text-red-500'
+              : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+          }`}
+        >
+          <Calendar size={20} weight="bold" />
+          <span className="text-xs font-medium mt-1">Schedule</span>
+        </button>
 
-          {/* Profile */}
-          <button
-            onClick={() => setCurrentView(currentView === 'profile' ? 'main' : 'profile')}
-            className={`relative flex flex-col items-center justify-center p-1.5 rounded-lg transition-all min-w-[48px] ${
-              currentView === 'profile'
-                ? 'bg-primary text-primary-foreground shadow-md'
-                : 'text-muted-foreground hover:text-primary'
-            }`}
-          >
-            <User size={16} weight="bold" className="mb-0.5" />
-            <span className="text-[9px] font-medium">Profile</span>
-          </button>
-        </div>
+        {/* Achievements */}
+        <button
+          onClick={() => setCurrentView('achievements')}
+          className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
+            currentView === 'achievements'
+              ? 'text-red-500'
+              : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+          }`}
+        >
+          <Trophy size={20} weight="bold" />
+          <span className="text-xs font-medium mt-1">Trophy</span>
+        </button>
+
+        {/* Menu */}
+        <button
+          onClick={() => setCurrentView('menu')}
+          className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all ${
+            currentView === 'menu'
+              ? 'text-red-500'
+              : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+          }`}
+        >
+          <List size={20} weight="bold" />
+          <span className="text-xs font-medium mt-1">Menu</span>
+        </button>
       </div>
     </div>
   );
@@ -397,27 +395,150 @@ function AppContent() {
   // Render different views based on currentView state
   const renderCurrentView = () => {
     switch (currentView) {
-      case 'profile':
+      case 'earnings':
         return (
-          <DriverProfile 
-            driver={driver} 
-            onEditProfile={handleEditProfile}
-            onSignOut={handleSignOut}
-          />
+          <div className="p-4 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-foreground">Earnings</h2>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  toggleTheme();
+                  const newMode = theme === 'light' ? 'night' : 'day';
+                  toast.success(`${newMode === 'night' ? 'Night' : 'Day'} mode`);
+                }}
+                className="h-8 w-8 p-0 rounded-full"
+              >
+                {theme === 'dark' ? (
+                  <Sun size={14} className="text-amber-500" />
+                ) : (
+                  <Moon size={14} className="text-blue-500" />
+                )}
+              </Button>
+            </div>
+            
+            <Tabs defaultValue="performance" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 bg-gray-100 dark:bg-gray-800">
+                <TabsTrigger value="performance" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">
+                  Performance
+                </TabsTrigger>
+                <TabsTrigger value="balance" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">
+                  Balance
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="performance" className="space-y-4">
+                <EarningsSummary driver={driver} />
+              </TabsContent>
+              
+              <TabsContent value="balance" className="space-y-4">
+                <div className="bg-card rounded-lg p-4 border">
+                  <h3 className="font-semibold mb-2">Account Balance</h3>
+                  <div className="text-2xl font-bold text-green-600">£{driver.earnings.thisWeek.toFixed(2)}</div>
+                  <p className="text-sm text-muted-foreground">Available for withdrawal</p>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
         );
       
-      case 'notifications':
+      case 'schedule':
         return (
-          <NotificationManager 
-            onClose={() => setCurrentView('main')}
-          />
+          <div className="p-4 space-y-4">
+            <h2 className="text-xl font-bold text-foreground">Schedule</h2>
+            <div className="bg-card rounded-lg p-4 border">
+              <h3 className="font-semibold mb-2">Today's Schedule</h3>
+              <p className="text-muted-foreground">No scheduled rides</p>
+            </div>
+          </div>
         );
       
-      case 'settings':
+      case 'achievements':
         return (
-          <QuickSettings 
-            onClose={() => setCurrentView('main')}
-          />
+          <div className="p-4 space-y-4">
+            <h2 className="text-xl font-bold text-foreground">Achievements</h2>
+            <div className="bg-card rounded-lg p-4 border">
+              <h3 className="font-semibold mb-2">Your Progress</h3>
+              <div className="flex items-center gap-2">
+                <Trophy size={20} className="text-yellow-500" />
+                <span>Driver Rating: {driver.rating}/5.0</span>
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'menu':
+        return (
+          <div className="p-4 space-y-4">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                <User size={32} className="text-gray-500" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">{driver.name}</h3>
+                <button className="text-red-500 text-sm font-medium">View profile</button>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <button 
+                onClick={() => setCurrentView('earnings')}
+                className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800"
+              >
+                <div className="flex items-center gap-3">
+                  <Buildings size={20} className="text-gray-500" />
+                  <span>Earnings</span>
+                </div>
+                <span className="text-gray-400">›</span>
+              </button>
+              
+              <button 
+                onClick={() => setCurrentView('achievements')}
+                className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800"
+              >
+                <div className="flex items-center gap-3">
+                  <Trophy size={20} className="text-gray-500" />
+                  <span>Quests</span>
+                </div>
+                <span className="text-gray-400">›</span>
+              </button>
+              
+              <button className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800">
+                <div className="flex items-center gap-3">
+                  <User size={20} className="text-gray-500" />
+                  <span>Account</span>
+                </div>
+                <span className="text-gray-400">›</span>
+              </button>
+              
+              <button className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800">
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">❓</span>
+                  <span>Help</span>
+                </div>
+                <span className="text-gray-400">›</span>
+              </button>
+              
+              <button className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800">
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">🎓</span>
+                  <span>Learning Centre</span>
+                </div>
+                <span className="text-gray-400">›</span>
+              </button>
+            </div>
+            
+            <div className="pt-4 border-t">
+              <button className="text-gray-500 font-medium">Settings</button>
+              <button 
+                onClick={handleSignOut}
+                className="block text-red-500 font-medium mt-2"
+              >
+                Sign out
+              </button>
+            </div>
+          </div>
         );
       
       case 'passenger-rating':
@@ -432,14 +553,30 @@ function AppContent() {
             onSubmitRating={handleSubmitPassengerRating}
             onClose={() => {
               setCompletedTripForRating(null);
-              setCurrentView('main');
+              setCurrentView('home');
             }}
           />
         ) : null;
       
-      default:
+      default: // home
         return (
-          <div className="space-y-1.5">
+          <div className="p-4 space-y-4">
+            {/* Quick stats row */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-card rounded-lg p-3 border text-center">
+                <div className="text-lg font-bold text-green-600">£{driver.earnings.today.toFixed(2)}</div>
+                <div className="text-xs text-muted-foreground">Today</div>
+              </div>
+              <div className="bg-card rounded-lg p-3 border text-center">
+                <div className="text-lg font-bold text-foreground">{driver.trips.completed}</div>
+                <div className="text-xs text-muted-foreground">Trips</div>
+              </div>
+              <div className="bg-card rounded-lg p-3 border text-center">
+                <div className="text-lg font-bold text-yellow-600">{driver.rating}</div>
+                <div className="text-xs text-muted-foreground">Rating</div>
+              </div>
+            </div>
+
             <DriverStatus driver={driver} onToggleOnline={handleToggleOnline} />
 
             {/* Map View for Active Trips */}
@@ -468,59 +605,40 @@ function AppContent() {
                 onDecline={handleDeclineRequest}
               />
             ) : driver.isOnline ? (
-              <div className="text-center py-4 bg-gradient-to-br from-success/10 to-primary/5 rounded-lg border border-dashed border-primary/20 mb-2">
-                <div className="relative mb-1.5">
-                  <Clock size={24} className="mx-auto text-primary animate-pulse" />
-                  <div className="absolute top-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-success rounded-full animate-ping" />
+              <div className="text-center py-8 bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg border border-dashed border-green-200 dark:border-green-800">
+                <div className="relative mb-3">
+                  <Clock size={32} className="mx-auto text-green-600 animate-pulse" />
+                  <div className="absolute top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-green-500 rounded-full animate-ping" />
                 </div>
-                <h3 className="font-bold text-sm mb-1 text-foreground">
+                <h3 className="font-bold text-lg mb-2 text-foreground">
                   Looking for rides...
                 </h3>
-                <p className="text-xs text-muted-foreground mb-2">
+                <p className="text-sm text-muted-foreground mb-3">
                   You're online and ready to drive
                 </p>
                 <div className="flex justify-center">
-                  <div className="flex items-center gap-1 px-2 py-0.5 bg-success/20 rounded-full border border-success/30">
-                    <div className="w-1 h-1 bg-success rounded-full animate-pulse" />
-                    <span className="text-[9px] text-success font-semibold">AVAILABLE</span>
+                  <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/30 rounded-full border border-green-200 dark:border-green-800">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    <span className="text-xs text-green-700 dark:text-green-300 font-semibold">AVAILABLE</span>
                   </div>
                 </div>
               </div>
             ) : null}
 
-            <Tabs defaultValue="earnings" className="space-y-1.5">
-              <TabsList className="grid w-full grid-cols-2 h-7 bg-muted/50 rounded-lg p-0.5">
-                <TabsTrigger 
-                  value="earnings" 
-                  className="flex items-center gap-1 h-5 rounded-md text-xs data-[state=active]:bg-success data-[state=active]:text-success-foreground"
-                >
-                  <CurrencyGbp size={10} />
-                  Money
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="history" 
-                  className="flex items-center gap-1 h-5 rounded-md text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                >
-                  <History size={10} />
-                  Trips
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="earnings">
-                <EarningsSummary driver={driver} />
-              </TabsContent>
-
-              <TabsContent value="history">
-                <TripHistoryList trips={tripHistory} />
-              </TabsContent>
-            </Tabs>
+            {/* Recent trips */}
+            {tripHistory.length > 0 && (
+              <div className="space-y-3">
+                <h3 className="font-semibold text-foreground">Recent Trips</h3>
+                <TripHistoryList trips={tripHistory.slice(0, 3)} />
+              </div>
+            )}
           </div>
         );
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 relative pb-10">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative pb-20">
       {!isSignedIn ? (
         <WelcomeScreen 
           driver={driver}
@@ -529,12 +647,12 @@ function AppContent() {
         />
       ) : (
         <>      
-          <div className="container mx-auto px-2 py-2 max-w-md relative z-10">
-            <MainHeader />
+          <ProfessionalHeader />
+          <div className="max-w-md mx-auto relative z-10">
             {renderCurrentView()}
           </div>
           
-          <BottomNavigation />
+          <ProfessionalNavigation />
         </>
       )}
       
@@ -546,9 +664,9 @@ function AppContent() {
             color: 'hsl(var(--card-foreground))',
             border: '1px solid hsl(var(--border))',
             borderRadius: '8px',
-            fontSize: '12px',
+            fontSize: '14px',
             fontWeight: '500',
-            padding: '8px',
+            padding: '12px',
             boxShadow: '0 4px 12px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05)',
           },
         }}

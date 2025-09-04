@@ -1,144 +1,132 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Driver } from "@/types";
-import { CurrencyGbp, TrendingUp, Clock, Calendar, Target, Star, Trophy } from "@phosphor-icons/react";
+import { CurrencyGbp, TrendingUp, Clock, Calendar, Target, Star, Trophy, CaretLeft, CaretRight } from "@phosphor-icons/react";
 
 interface EarningsSummaryProps {
   driver: Driver;
 }
 
 export function EarningsSummary({ driver }: EarningsSummaryProps) {
-  // Calculate some additional metrics (converted to GBP)
+  const [currentWeek, setCurrentWeek] = useState(0); // 0 = current week, -1 = previous week, etc.
+  
+  // Get current date and week
+  const today = new Date();
+  const currentWeekStart = new Date(today);
+  currentWeekStart.setDate(today.getDate() - today.getDay() + 1); // Monday
+  
+  const weekStart = new Date(currentWeekStart);
+  weekStart.setDate(currentWeekStart.getDate() + (currentWeek * 7));
+  
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6);
+  
+  const formatDateRange = (start: Date, end: Date) => {
+    const options: Intl.DateTimeFormatOptions = { month: 'short', day: '2-digit' };
+    return `${start.toLocaleDateString('en-GB', options)} - ${end.toLocaleDateString('en-GB', options)}`;
+  };
+  
+  // Generate week days for calendar view
+  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const weekNumbers = Array.from({ length: 7 }, (_, i) => {
+    const day = new Date(weekStart);
+    day.setDate(weekStart.getDate() + i);
+    return day.getDate();
+  });
+
   const weeklyGoal = 400; // £400 weekly goal
   const monthlyGoal = 1600; // £1600 monthly goal
   const weeklyProgress = Math.min((driver.earnings.thisWeek / weeklyGoal) * 100, 100);
   const monthlyProgress = Math.min((driver.earnings.thisMonth / monthlyGoal) * 100, 100);
-  const avgPerTrip = driver.trips.completed > 0 ? driver.earnings.today / Math.max(driver.trips.completed, 1) : 0;
 
   return (
-    <Card className="animate-fade-in-scale border">
-      <CardHeader className="bg-success/10 border-b p-1.5">
-        <CardTitle className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <div className="p-1 bg-gradient-to-br from-success to-primary rounded-lg">
-              <CurrencyGbp size={10} className="text-white" />
-            </div>
-            <span className="text-xs font-bold">Your Money</span>
-          </div>
-          <Badge variant="secondary" className="flex items-center gap-0.5 px-1.5 py-0.5 bg-yellow-400/20">
-            <Star size={8} weight="fill" className="text-yellow-600" />
-            <span className="font-bold text-yellow-700 text-[8px]">{driver.rating.toFixed(1)}</span>
-          </Badge>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-2 p-2">
-        {/* Today's Earnings Highlight - simplified */}
-        <div className="p-2 bg-success/10 rounded border border-success/20">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <div className="p-1 bg-gradient-to-br from-success to-accent rounded">
-                <Clock size={12} className="text-white" />
-              </div>
-              <div className="flex items-center gap-1">
-                <CurrencyGbp size={14} className="text-success" />
-                <span className="text-lg font-bold text-success">{driver.earnings.today.toFixed(2)}</span>
-                <span className="text-xs text-muted-foreground">today</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-1 bg-white/50 rounded p-1.5 border border-white/60">
-              <span className="text-sm font-bold text-foreground">{driver.trips.completed}</span>
-              <span className="text-xs text-muted-foreground">trips</span>
-            </div>
-          </div>
-          
-          {avgPerTrip > 0 && (
-            <div className="flex items-center justify-between text-[9px] bg-white/30 rounded p-1 mt-1">
-              <span className="text-muted-foreground">Per trip</span>
-              <span className="font-bold text-success flex items-center gap-0.5">
-                <CurrencyGbp size={8} />
-                {avgPerTrip.toFixed(2)}
-              </span>
-            </div>
-          )}
+    <div className="space-y-4">
+      {/* Date Range Selector */}
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => setCurrentWeek(currentWeek - 1)}
+          className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        >
+          <CaretLeft size={16} />
+        </button>
+        
+        <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2">
+          <Calendar size={16} className="text-gray-600 dark:text-gray-400" />
+          <span className="font-semibold text-sm">{formatDateRange(weekStart, weekEnd)}</span>
         </div>
         
-        {/* Weekly & Monthly Progress - more compact */}
-        <div className="grid grid-cols-2 gap-1.5">
-          <div className="p-1.5 bg-primary/10 rounded border border-primary/20">
-            <div className="flex items-center justify-between mb-1">
-              <div className="flex items-center gap-1">
-                <Calendar size={8} className="text-primary" />
-                <span className="font-bold text-[8px]">Week</span>
-              </div>
-              <div className="flex items-center gap-0.5">
-                <CurrencyGbp size={8} className="text-primary" />
-                <span className="text-[9px] font-bold text-primary">{driver.earnings.thisWeek.toFixed(0)}</span>
-              </div>
-            </div>
-            <Progress value={weeklyProgress} className="h-1 bg-muted/50" />
-            <div className="text-[7px] text-muted-foreground mt-0.5 text-center">
-              {weeklyProgress.toFixed(0)}% of £{weeklyGoal}
-            </div>
-          </div>
-          
-          <div className="p-1.5 bg-accent/10 rounded border border-accent/20">
-            <div className="flex items-center justify-between mb-1">
-              <div className="flex items-center gap-1">
-                <Trophy size={8} className="text-accent" />
-                <span className="font-bold text-[8px]">Month</span>
-              </div>
-              <div className="flex items-center gap-0.5">
-                <CurrencyGbp size={8} className="text-accent" />
-                <span className="text-[9px] font-bold text-accent">{driver.earnings.thisMonth.toFixed(0)}</span>
-              </div>
-            </div>
-            <Progress value={monthlyProgress} className="h-1 bg-muted/50" />
-            <div className="text-[7px] text-muted-foreground mt-0.5 text-center">
-              {monthlyProgress.toFixed(0)}% of £{monthlyGoal}
-            </div>
-          </div>
-        </div>
+        <button
+          onClick={() => setCurrentWeek(currentWeek + 1)}
+          disabled={currentWeek >= 0}
+          className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:hover:bg-gray-100 dark:disabled:hover:bg-gray-800"
+        >
+          <CaretRight size={16} />
+        </button>
+      </div>
 
-        {/* Trip Statistics - simplified to one line */}
-        <div className="pt-1.5 border-t border-muted/50">
-          <h4 className="font-bold text-[9px] mb-1 flex items-center gap-1">
-            <TrendingUp size={10} />
-            Your Stats
-          </h4>
-          <div className="grid grid-cols-3 gap-1">
-            <div className="flex items-center justify-center p-1.5 bg-success/10 rounded border border-success/20">
-              <span className="text-[9px] font-bold text-success">{driver.trips.completed}</span>
-              <span className="text-[8px] text-muted-foreground ml-1">done</span>
-            </div>
-            <div className="flex items-center justify-center p-1.5 bg-destructive/10 rounded border border-destructive/20">
-              <span className="text-[9px] font-bold text-destructive">{driver.trips.cancelled}</span>
-              <span className="text-[8px] text-muted-foreground ml-1">missed</span>
-            </div>
-            <div className="flex items-center justify-center p-1.5 bg-yellow-500/10 rounded border border-yellow-400/20">
-              <span className="text-[9px] font-bold text-yellow-600">{driver.rating.toFixed(1)}</span>
-              <span className="text-[8px] text-muted-foreground ml-1">rating</span>
-            </div>
-          </div>
+      {/* Large Earnings Display */}
+      <div className="text-center py-8">
+        <div className="text-5xl font-bold text-gray-900 dark:text-white mb-2">
+          {currentWeek === 0 ? driver.earnings.thisWeek.toFixed(2) : '0.00'}
         </div>
+        <div className="text-lg text-gray-600 dark:text-gray-400">
+          Total earnings this week
+        </div>
+      </div>
 
-        {/* Performance Insights */}
-        <div className="p-1.5 bg-accent/10 rounded border border-accent/20">
-          <div className="flex items-center gap-1 mb-0.5">
-            <Target size={10} className="text-accent" />
-            <span className="font-bold text-[9px]">Tip</span>
+      {/* Weekly Calendar View */}
+      <div className="grid grid-cols-7 gap-2 mb-6">
+        {weekDays.map((day, index) => (
+          <div key={day} className="text-center">
+            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{day}</div>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              currentWeek === 0 && index < today.getDay() 
+                ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300' 
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+            }`}>
+              {weekNumbers[index]}
+            </div>
           </div>
-          <div className="text-[8px] text-muted-foreground">
-            {weeklyProgress >= 80 ? (
-              <>🎉 Great week! Keep going!</>
-            ) : weeklyProgress >= 50 ? (
-              <>📈 Good work! Almost there!</>
-            ) : (
-              <>💪 Drive more for better earnings!</>
-            )}
+        ))}
+      </div>
+
+      {/* Action Button */}
+      <Button 
+        variant="outline" 
+        className="w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+      >
+        View breakdown
+      </Button>
+
+      {/* Status Message for No Trips */}
+      {currentWeek === 0 && driver.trips.completed === 0 && (
+        <div className="text-center py-6 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <div className="text-2xl mb-2">🚗</div>
+          <div className="font-semibold text-gray-900 dark:text-white mb-1">
+            No trips completed yet
+          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            Go online to start earning
           </div>
         </div>
-      </CardContent>
-    </Card>
+      )}
+
+      {/* Quick Stats */}
+      {currentWeek === 0 && driver.trips.completed > 0 && (
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-card rounded-lg p-3 border text-center">
+            <div className="text-lg font-bold text-foreground">{driver.trips.completed}</div>
+            <div className="text-xs text-muted-foreground">Total trips</div>
+          </div>
+          <div className="bg-card rounded-lg p-3 border text-center">
+            <div className="text-lg font-bold text-yellow-600">{driver.rating.toFixed(1)}</div>
+            <div className="text-xs text-muted-foreground">Rating</div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

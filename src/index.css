@@ -112,17 +112,18 @@
 }
 
 :root {
-  /* Light mode - default */
-  --background: oklch(0.98 0.005 245);
-  --foreground: oklch(0.12 0.05 245);
+  /* Light mode - Freenow-inspired professional design */
+  --background: oklch(0.99 0.005 245);
+  --foreground: oklch(0.15 0.05 245);
 
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.15 0.04 245);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0.04 245);
 
-  --primary: oklch(0.42 0.25 260);
-  --primary-foreground: oklch(0.99 0.005 260);
+  /* Freenow-style red as primary */
+  --primary: oklch(0.55 0.22 25); /* Bright red/pink similar to Freenow */
+  --primary-foreground: oklch(0.99 0.005 25);
   --secondary: oklch(0.96 0.012 245);
   --secondary-foreground: oklch(0.18 0.04 245);
   --accent: oklch(0.55 0.22 170);
@@ -134,7 +135,7 @@
   --muted-foreground: oklch(0.45 0.04 245);
   --border: oklch(0.91 0.015 245);
   --input: oklch(0.91 0.015 245);
-  --ring: oklch(0.42 0.25 260);
+  --ring: oklch(0.55 0.22 25);
 
   --success: oklch(0.58 0.2 155);
   --success-foreground: oklch(0.99 0.005 155);
@@ -144,7 +145,7 @@
   --radius: 0.75rem;
 }
 
-/* Dark mode - optimized for night driving */
+/* Dark mode - optimized for night driving with Freenow colors */
 [data-theme="dark"] {
   --background: oklch(0.08 0.02 245);
   --foreground: oklch(0.90 0.02 245);
@@ -154,8 +155,9 @@
   --popover: oklch(0.11 0.03 245);
   --popover-foreground: oklch(0.88 0.02 245);
 
-  --primary: oklch(0.58 0.20 260);
-  --primary-foreground: oklch(0.08 0.02 260);
+  /* Brighter red for dark mode visibility */
+  --primary: oklch(0.65 0.25 25);
+  --primary-foreground: oklch(0.08 0.02 25);
   --secondary: oklch(0.15 0.02 245);
   --secondary-foreground: oklch(0.82 0.02 245);
   --accent: oklch(0.65 0.16 170);
@@ -167,7 +169,7 @@
   --muted-foreground: oklch(0.60 0.02 245);
   --border: oklch(0.20 0.02 245);
   --input: oklch(0.20 0.02 245);
-  --ring: oklch(0.58 0.20 260);
+  --ring: oklch(0.65 0.25 25);
 
   --success: oklch(0.65 0.16 155);
   --success-foreground: oklch(0.08 0.02 155);

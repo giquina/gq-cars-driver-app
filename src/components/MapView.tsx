@@ -181,16 +181,16 @@ export function MapView({
           <Button 
             onClick={handleToggleNavigation}
             size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg mb-2"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md mb-3 h-12 px-6 rounded-xl font-semibold"
           >
-            <Navigation size={20} className="mr-2" />
+            <Navigation size={18} className="mr-2" weight="bold" />
             {isNavigating ? 'Stop Navigation' : 'Start Navigation'}
           </Button>
           
           {/* GPS Status Badge */}
           <div className="flex justify-center">
-            <Badge variant="outline" className="text-xs">
-              <div className={`w-2 h-2 rounded-full ${gpsStatus.color} mr-1`} />
+            <Badge variant="outline" className="text-xs font-medium border">
+              <div className={`w-2 h-2 rounded-full ${gpsStatus.color} mr-1.5`} />
               {gpsStatus.text}
             </Badge>
           </div>
@@ -201,37 +201,37 @@ export function MapView({
 
   // View selector buttons
   const ViewSelector = () => (
-    <div className="flex gap-1 mb-3">
+    <div className="flex gap-1 mb-3 p-1 bg-muted/50 rounded-lg">
       <Button
-        variant={view === 'map' ? 'default' : 'outline'}
+        variant={view === 'map' ? 'default' : 'ghost'}
         size="sm"
         onClick={() => setView('map')}
-        className="flex-1"
+        className="flex-1 h-8 text-xs font-medium"
       >
-        <Map size={16} className="mr-1" />
+        <Map size={14} className="mr-1" weight="bold" />
         Map
       </Button>
       
       {showGPSTracking && (
         <Button
-          variant={view === 'gps' ? 'default' : 'outline'}
+          variant={view === 'gps' ? 'default' : 'ghost'}
           size="sm"
           onClick={() => setView('gps')}
-          className="flex-1"
+          className="flex-1 h-8 text-xs font-medium"
         >
-          <Crosshair size={16} className="mr-1" />
+          <Crosshair size={14} className="mr-1" weight="bold" />
           GPS
         </Button>
       )}
       
       {showRealTimeNavigation && (
         <Button
-          variant={view === 'navigation' ? 'default' : 'outline'}
+          variant={view === 'navigation' ? 'default' : 'ghost'}
           size="sm"
           onClick={() => setView('navigation')}
-          className="flex-1"
+          className="flex-1 h-8 text-xs font-medium"
         >
-          <Route size={16} className="mr-1" />
+          <Route size={14} className="mr-1" weight="bold" />
           Navigation
         </Button>
       )}
@@ -243,12 +243,12 @@ export function MapView({
       <Card>
         <CardContent className="p-4">
           <div className="flex items-center gap-2 mb-3">
-            <Map size={20} className="text-primary" />
-            <h3 className="font-semibold">Route & Navigation</h3>
+            <Map size={20} className="text-primary" weight="bold" />
+            <h3 className="font-semibold text-base">Route & Navigation</h3>
             
             {/* Distance to target */}
             {currentGPSPosition && (
-              <Badge variant="secondary" className="ml-auto text-xs">
+              <Badge variant="secondary" className="ml-auto text-xs font-medium">
                 {getDistanceToTarget()}
               </Badge>
             )}
@@ -262,19 +262,19 @@ export function MapView({
               {renderRoute()}
               
               {/* Location details */}
-              <div className="mt-4 space-y-2 text-sm">
-                <div className="flex items-start gap-2">
-                  <div className="w-2 h-2 rounded-full bg-accent mt-1.5"></div>
+              <div className="mt-4 space-y-3 text-sm">
+                <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                  <div className="w-3 h-3 rounded-full bg-success mt-1.5 shadow-sm"></div>
                   <div className="flex-1">
-                    <div className="text-muted-foreground">Pickup</div>
-                    <div className="font-medium">{pickup.address}</div>
+                    <div className="text-muted-foreground font-medium">Pickup</div>
+                    <div className="font-semibold">{pickup.address}</div>
                   </div>
                 </div>
-                <div className="flex items-start gap-2">
-                  <MapPin size={12} className="text-destructive mt-1" />
+                <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                  <MapPin size={14} className="text-destructive mt-1" weight="fill" />
                   <div className="flex-1">
-                    <div className="text-muted-foreground">Destination</div>
-                    <div className="font-medium">{destination.address}</div>
+                    <div className="text-muted-foreground font-medium">Destination</div>
+                    <div className="font-semibold">{destination.address}</div>
                   </div>
                 </div>
               </div>
@@ -285,9 +285,9 @@ export function MapView({
                   onClick={onNavigate}
                   variant="outline"
                   size="sm"
-                  className="flex-1"
+                  className="flex-1 h-10"
                 >
-                  <Navigation size={16} className="mr-2" />
+                  <Navigation size={16} className="mr-2" weight="bold" />
                   External Maps
                 </Button>
               </div>

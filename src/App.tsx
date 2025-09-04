@@ -256,38 +256,57 @@ function App() {
 
   // Navigation header component
   const NavigationHeader = () => (
-    <div className="flex items-center justify-between mb-8 p-6 bg-gradient-to-br from-card via-muted/5 to-accent/5 rounded-3xl border-2 border-primary/10 shadow-2xl backdrop-blur-sm">
-      <div className="flex items-center gap-4">
-        <div className="relative">
-          <div className="w-16 h-16 bg-gradient-to-br from-primary via-accent to-primary rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 transition-all duration-300">
-            <Car size={32} className="text-primary-foreground" weight="bold" />
+    <div className="mb-6">
+      {/* Main Header */}
+      <div className="flex items-center justify-between p-6 bg-gradient-to-br from-card via-card/98 to-primary/5 rounded-3xl border border-border shadow-lg backdrop-blur-sm mb-4">
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center shadow-lg">
+              <Car size={28} className="text-primary-foreground" weight="bold" />
+            </div>
+            <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-3 border-white shadow-lg flex items-center justify-center ${
+              driver.isOnline ? 'bg-success' : 'bg-muted-foreground'
+            }`}>
+              {driver.isOnline && (
+                <div className="absolute inset-0 bg-success rounded-full animate-ping opacity-75" />
+              )}
+              <Circle size={8} weight="fill" className="text-white z-10" />
+            </div>
           </div>
-          <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-br from-success to-accent rounded-full border-2 border-white shadow-lg flex items-center justify-center">
-            <div className="w-2 h-2 bg-white rounded-full animate-ping" />
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">
+              GQ Cars Driver
+            </h1>
+            <p className="text-sm text-muted-foreground font-medium">Professional Driver Portal</p>
           </div>
         </div>
-        <div>
-          <h1 className="text-3xl font-black bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-            GQ Cars Driver
-          </h1>
-          <p className="text-base text-muted-foreground font-semibold">Drive with confidence & intelligence</p>
+        
+        {/* Quick Stats */}
+        <div className="text-right">
+          <div className="text-2xl font-bold text-success flex items-center gap-1">
+            <CurrencyGbp size={20} weight="bold" />
+            {driver.earnings.today.toFixed(2)}
+          </div>
+          <p className="text-xs text-muted-foreground">Today's earnings</p>
         </div>
       </div>
-      
-      <div className="flex items-center gap-2">
+
+      {/* Navigation Buttons */}
+      <div className="grid grid-cols-5 gap-3">
         <Button
           variant={currentView === 'ai-assistant' ? 'default' : 'outline'}
           size="lg"
           onClick={() => setCurrentView(currentView === 'ai-assistant' ? 'main' : 'ai-assistant')}
-          className={`relative h-12 w-12 rounded-2xl border-2 transition-all duration-300 transform hover:scale-110 ${
+          className={`relative h-16 rounded-xl border-2 transition-all duration-300 ${
             currentView === 'ai-assistant' 
-              ? 'bg-gradient-to-br from-primary to-accent text-white border-primary/30 shadow-xl' 
-              : 'border-primary/20 hover:border-primary/40 hover:bg-primary/5'
-          }`}
+              ? 'bg-primary text-primary-foreground border-primary/30 shadow-lg' 
+              : 'border-border hover:border-primary/40 hover:bg-primary/5'
+          } flex flex-col items-center justify-center gap-1`}
         >
-          <Robot size={20} weight="bold" />
+          <Robot size={24} weight="bold" />
+          <span className="text-xs font-semibold">AI Help</span>
           {currentView === 'ai-assistant' && (
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-success to-green-400 rounded-full border-2 border-white shadow-lg">
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-white">
               <div className="absolute inset-0 bg-success rounded-full animate-ping opacity-75" />
             </div>
           )}
@@ -297,52 +316,56 @@ function App() {
           variant={currentView === 'settings' ? 'default' : 'outline'}
           size="lg"
           onClick={() => setCurrentView(currentView === 'settings' ? 'main' : 'settings')}
-          className={`relative h-12 w-12 rounded-2xl border-2 transition-all duration-300 transform hover:scale-110 ${
+          className={`relative h-16 rounded-xl border-2 transition-all duration-300 ${
             currentView === 'settings' 
-              ? 'bg-gradient-to-br from-primary to-accent text-white border-primary/30 shadow-xl' 
-              : 'border-primary/20 hover:border-primary/40 hover:bg-primary/5'
-          }`}
+              ? 'bg-primary text-primary-foreground border-primary/30 shadow-lg' 
+              : 'border-border hover:border-primary/40 hover:bg-primary/5'
+          } flex flex-col items-center justify-center gap-1`}
         >
-          <Gear size={20} weight="bold" />
+          <Gear size={24} weight="bold" />
+          <span className="text-xs font-semibold">Settings</span>
         </Button>
         
         <Button
           variant={currentView === 'notifications' ? 'default' : 'outline'}
           size="lg"
           onClick={() => setCurrentView(currentView === 'notifications' ? 'main' : 'notifications')}
-          className={`relative h-12 w-12 rounded-2xl border-2 transition-all duration-300 transform hover:scale-110 ${
+          className={`relative h-16 rounded-xl border-2 transition-all duration-300 ${
             currentView === 'notifications' 
-              ? 'bg-gradient-to-br from-primary to-accent text-white border-primary/30 shadow-xl' 
-              : 'border-primary/20 hover:border-primary/40 hover:bg-primary/5'
-          }`}
+              ? 'bg-primary text-primary-foreground border-primary/30 shadow-lg' 
+              : 'border-border hover:border-primary/40 hover:bg-primary/5'
+          } flex flex-col items-center justify-center gap-1`}
         >
-          <Bell size={20} weight="bold" />
+          <Bell size={24} weight="bold" />
+          <span className="text-xs font-semibold">Alerts</span>
         </Button>
         
         <Button
           variant={currentView === 'emergency' ? 'destructive' : 'outline'}
           size="lg"
           onClick={() => setCurrentView(currentView === 'emergency' ? 'main' : 'emergency')}
-          className={`relative h-12 w-12 rounded-2xl border-2 transition-all duration-300 transform hover:scale-110 ${
+          className={`relative h-16 rounded-xl border-2 transition-all duration-300 ${
             currentView === 'emergency' 
-              ? 'bg-gradient-to-br from-destructive to-red-600 text-white border-destructive/30 shadow-xl' 
+              ? 'bg-destructive text-destructive-foreground border-destructive/30 shadow-lg' 
               : 'border-destructive/30 hover:border-destructive/50 hover:bg-destructive/5 text-destructive'
-          }`}
+          } flex flex-col items-center justify-center gap-1`}
         >
-          <ShieldWarning size={20} weight="bold" />
+          <ShieldWarning size={24} weight="bold" />
+          <span className="text-xs font-semibold">Emergency</span>
         </Button>
         
         <Button
           variant={currentView === 'profile' ? 'default' : 'outline'}
           size="lg"
           onClick={() => setCurrentView(currentView === 'profile' ? 'main' : 'profile')}
-          className={`relative h-12 w-12 rounded-2xl border-2 transition-all duration-300 transform hover:scale-110 ${
+          className={`relative h-16 rounded-xl border-2 transition-all duration-300 ${
             currentView === 'profile' 
-              ? 'bg-gradient-to-br from-primary to-accent text-white border-primary/30 shadow-xl' 
-              : 'border-primary/20 hover:border-primary/40 hover:bg-primary/5'
-          }`}
+              ? 'bg-primary text-primary-foreground border-primary/30 shadow-lg' 
+              : 'border-border hover:border-primary/40 hover:bg-primary/5'
+          } flex flex-col items-center justify-center gap-1`}
         >
-          <User size={20} weight="bold" />
+          <User size={24} weight="bold" />
+          <span className="text-xs font-semibold">Profile</span>
         </Button>
       </div>
     </div>
@@ -438,42 +461,42 @@ function App() {
                 onDecline={handleDeclineRequest}
               />
             ) : driver.isOnline ? (
-              <div className="text-center py-20 bg-gradient-to-br from-success/10 via-accent/5 to-primary/10 rounded-3xl border-2 border-dashed border-primary/20 mb-8 shadow-xl backdrop-blur-sm">
+              <div className="text-center py-16 bg-gradient-to-br from-success/10 via-accent/5 to-primary/5 rounded-2xl border border-dashed border-primary/20 mb-6 shadow-md">
                 <div className="relative mb-6">
-                  <Clock size={80} className="mx-auto text-primary animate-pulse drop-shadow-lg" weight="bold" />
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-success to-accent rounded-full animate-ping" />
-                  <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white rounded-full" />
+                  <Clock size={64} className="mx-auto text-primary animate-pulse drop-shadow-sm" weight="bold" />
+                  <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-success rounded-full animate-ping" />
+                  <div className="absolute top-3 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white rounded-full" />
                 </div>
-                <h3 className="font-black text-2xl mb-3 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                <h3 className="font-bold text-xl mb-2 text-foreground">
                   Searching for rides...
                 </h3>
-                <p className="text-base text-muted-foreground mb-6 font-semibold">
+                <p className="text-sm text-muted-foreground mb-6 font-medium">
                   You're online and ready to receive requests
                 </p>
                 <div className="flex justify-center">
-                  <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-success/20 via-accent/10 to-success/20 rounded-full border-2 border-success/30 shadow-lg backdrop-blur-sm">
-                    <div className="w-3 h-3 bg-gradient-to-r from-success to-accent rounded-full animate-pulse" />
-                    <span className="text-base text-success font-black">LIVE & ACTIVE</span>
-                    <div className="w-3 h-3 bg-gradient-to-r from-accent to-success rounded-full animate-pulse" />
+                  <div className="flex items-center gap-2 px-4 py-2 bg-success/20 rounded-full border border-success/30 shadow-sm">
+                    <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
+                    <span className="text-sm text-success font-semibold">LIVE & ACTIVE</span>
+                    <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
                   </div>
                 </div>
               </div>
             ) : null}
 
             <Tabs defaultValue="earnings" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-2 h-14 bg-gradient-to-r from-muted/30 via-muted/20 to-muted/30 rounded-2xl p-2 border-2 border-muted/40">
+              <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/50 rounded-xl p-1 border">
                 <TabsTrigger 
                   value="earnings" 
-                  className="flex items-center gap-3 h-10 rounded-xl font-bold text-base transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-success data-[state=active]:to-accent data-[state=active]:text-white data-[state=active]:shadow-xl data-[state=active]:scale-105"
+                  className="flex items-center gap-2 h-10 rounded-lg font-semibold text-sm transition-all duration-300 data-[state=active]:bg-success data-[state=active]:text-success-foreground data-[state=active]:shadow-md"
                 >
-                  <CurrencyGbp size={20} weight="bold" />
+                  <CurrencyGbp size={18} weight="bold" />
                   Earnings
                 </TabsTrigger>
                 <TabsTrigger 
                   value="history" 
-                  className="flex items-center gap-3 h-10 rounded-xl font-bold text-base transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white data-[state=active]:shadow-xl data-[state=active]:scale-105"
+                  className="flex items-center gap-2 h-10 rounded-lg font-semibold text-sm transition-all duration-300 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
                 >
-                  <History size={20} weight="bold" />
+                  <History size={18} weight="bold" />
                   History
                 </TabsTrigger>
               </TabsList>
@@ -492,11 +515,11 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/5 to-background relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,_theme(colors.primary/10),_transparent_50%),radial-gradient(circle_at_80%_20%,_theme(colors.accent/10),_transparent_50%),radial-gradient(circle_at_40%_40%,_theme(colors.muted/20),_transparent_50%)]" />
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 relative">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_75%,_theme(colors.primary/5),_transparent_50%),radial-gradient(circle_at_75%_25%,_theme(colors.accent/5),_transparent_50%)]" />
       
-      <div className="container mx-auto px-6 py-8 max-w-md relative z-10">
+      <div className="container mx-auto px-4 py-6 max-w-md relative z-10">
         <NavigationHeader />
         {renderCurrentView()}
       </div>
@@ -506,12 +529,12 @@ function App() {
           style: {
             background: 'hsl(var(--card))',
             color: 'hsl(var(--card-foreground))',
-            border: '2px solid hsl(var(--border))',
-            borderRadius: '16px',
-            fontSize: '16px',
-            fontWeight: '600',
-            padding: '16px',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            border: '1px solid hsl(var(--border))',
+            borderRadius: '12px',
+            fontSize: '14px',
+            fontWeight: '500',
+            padding: '12px',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
           },
         }}
       />

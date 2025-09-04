@@ -33,16 +33,16 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
   const progressPercentage = (timeLeft / 30) * 100;
 
   return (
-    <Card className="border-2 border-primary shadow-2xl animate-pulse-once mb-6 bg-gradient-to-br from-card via-card/95 to-primary/5">
+    <Card className="border shadow-lg mb-6 bg-gradient-to-br from-card to-primary/5 animate-fade-in-scale">
       <CardHeader className="pb-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-t-lg">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-bold flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
+          <CardTitle className="text-lg font-bold flex items-center gap-2">
+            <div className="w-2 h-2 bg-success rounded-full animate-ping" />
             New Ride Request
           </CardTitle>
           <div className="flex items-center gap-2 px-3 py-1 bg-warning/10 rounded-full border border-warning/20">
             <Timer size={16} className="text-warning" />
-            <span className="text-warning font-bold text-lg">{timeLeft}s</span>
+            <span className="text-warning font-bold text-base">{timeLeft}s</span>
           </div>
         </div>
         <Progress value={progressPercentage} className="h-2 mt-2" />
@@ -137,13 +137,13 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
           <Button 
             variant="outline" 
             onClick={() => onDecline(request.id)}
-            className="h-14 border-3 border-destructive/60 text-destructive hover:bg-destructive hover:text-destructive-foreground font-bold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg"
+            className="h-12 border-2 border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground font-semibold text-base transition-all duration-300 shadow-md hover:shadow-lg"
           >
             Decline
           </Button>
           <Button 
             onClick={() => onAccept(request.id)}
-            className="h-14 bg-gradient-to-r from-success via-accent to-success hover:from-success/90 hover:via-accent/90 hover:to-success/90 text-white font-bold text-lg shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-success/30"
+            className="h-12 bg-success hover:bg-success/90 text-success-foreground font-semibold text-base shadow-md hover:shadow-lg transition-all duration-300 border-2 border-success/30"
           >
             Accept Ride
           </Button>

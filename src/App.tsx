@@ -397,9 +397,9 @@ function AppContent() {
     switch (currentView) {
       case 'earnings':
         return (
-          <div className="p-4 space-y-4">
+          <div className="p-3 space-y-3 h-full flex flex-col">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-foreground">Earnings</h2>
+              <h2 className="text-lg font-bold text-foreground">Earnings</h2>
               <Button
                 variant="outline"
                 size="sm"
@@ -418,7 +418,7 @@ function AppContent() {
               </Button>
             </div>
             
-            <Tabs defaultValue="performance" className="w-full">
+            <Tabs defaultValue="performance" className="flex-1 flex flex-col">
               <TabsList className="grid w-full grid-cols-2 bg-gray-100 dark:bg-gray-800">
                 <TabsTrigger value="performance" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">
                   Performance
@@ -428,11 +428,11 @@ function AppContent() {
                 </TabsTrigger>
               </TabsList>
               
-              <TabsContent value="performance" className="space-y-4">
+              <TabsContent value="performance" className="flex-1 mt-3">
                 <EarningsSummary driver={driver} />
               </TabsContent>
               
-              <TabsContent value="balance" className="space-y-4">
+              <TabsContent value="balance" className="flex-1 mt-3">
                 <div className="bg-card rounded-lg p-4 border">
                   <h3 className="font-semibold mb-2">Account Balance</h3>
                   <div className="text-2xl font-bold text-green-600">£{driver.earnings.thisWeek.toFixed(2)}</div>
@@ -445,8 +445,8 @@ function AppContent() {
       
       case 'schedule':
         return (
-          <div className="p-4 space-y-4">
-            <h2 className="text-xl font-bold text-foreground">Schedule</h2>
+          <div className="p-3 space-y-3 h-full">
+            <h2 className="text-lg font-bold text-foreground">Schedule</h2>
             <div className="bg-card rounded-lg p-4 border">
               <h3 className="font-semibold mb-2">Today's Schedule</h3>
               <p className="text-muted-foreground">No scheduled rides</p>
@@ -456,8 +456,8 @@ function AppContent() {
       
       case 'achievements':
         return (
-          <div className="p-4 space-y-4">
-            <h2 className="text-xl font-bold text-foreground">Achievements</h2>
+          <div className="p-3 space-y-3 h-full">
+            <h2 className="text-lg font-bold text-foreground">Achievements</h2>
             <div className="bg-card rounded-lg p-4 border">
               <h3 className="font-semibold mb-2">Your Progress</h3>
               <div className="flex items-center gap-2">
@@ -470,25 +470,25 @@ function AppContent() {
       
       case 'menu':
         return (
-          <div className="p-4 space-y-4">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                <User size={32} className="text-gray-500" />
+          <div className="p-3 space-y-3 h-full overflow-hidden">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                <User size={24} className="text-gray-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg">{driver.name}</h3>
+                <h3 className="font-semibold text-base">{driver.name}</h3>
                 <button className="text-red-500 text-sm font-medium">View profile</button>
               </div>
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-2 flex-1 overflow-y-auto">
               <button 
                 onClick={() => setCurrentView('earnings')}
                 className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 <div className="flex items-center gap-3">
-                  <Buildings size={20} className="text-gray-500" />
-                  <span>Earnings</span>
+                  <Buildings size={18} className="text-gray-500" />
+                  <span className="text-sm">Earnings</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>
@@ -498,42 +498,42 @@ function AppContent() {
                 className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 <div className="flex items-center gap-3">
-                  <Trophy size={20} className="text-gray-500" />
-                  <span>Quests</span>
+                  <Trophy size={18} className="text-gray-500" />
+                  <span className="text-sm">Quests</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>
               
               <button className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800">
                 <div className="flex items-center gap-3">
-                  <User size={20} className="text-gray-500" />
-                  <span>Account</span>
+                  <User size={18} className="text-gray-500" />
+                  <span className="text-sm">Account</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>
               
               <button className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800">
                 <div className="flex items-center gap-3">
-                  <span className="text-lg">❓</span>
-                  <span>Help</span>
+                  <span className="text-base">❓</span>
+                  <span className="text-sm">Help</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>
               
               <button className="flex items-center justify-between w-full p-3 bg-card rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800">
                 <div className="flex items-center gap-3">
-                  <span className="text-lg">🎓</span>
-                  <span>Learning Centre</span>
+                  <span className="text-base">🎓</span>
+                  <span className="text-sm">Learning Centre</span>
                 </div>
                 <span className="text-gray-400">›</span>
               </button>
             </div>
             
-            <div className="pt-4 border-t">
-              <button className="text-gray-500 font-medium">Settings</button>
+            <div className="pt-3 border-t">
+              <button className="text-gray-500 font-medium text-sm">Settings</button>
               <button 
                 onClick={handleSignOut}
-                className="block text-red-500 font-medium mt-2"
+                className="block text-red-500 font-medium mt-2 text-sm"
               >
                 Sign out
               </button>
@@ -560,76 +560,103 @@ function AppContent() {
       
       default: // home
         return (
-          <div className="p-4 space-y-4">
-            {/* Quick stats row */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="bg-card rounded-lg p-3 border text-center">
-                <div className="text-lg font-bold text-green-600">£{driver.earnings.today.toFixed(2)}</div>
+          <div className="p-3 space-y-3 h-full">
+            {/* Compact stats row */}
+            <div className="grid grid-cols-3 gap-2">
+              <div className="bg-card rounded-lg p-2 border text-center">
+                <div className="text-base font-bold text-green-600">£{driver.earnings.today.toFixed(2)}</div>
                 <div className="text-xs text-muted-foreground">Today</div>
               </div>
-              <div className="bg-card rounded-lg p-3 border text-center">
-                <div className="text-lg font-bold text-foreground">{driver.trips.completed}</div>
+              <div className="bg-card rounded-lg p-2 border text-center">
+                <div className="text-base font-bold text-foreground">{driver.trips.completed}</div>
                 <div className="text-xs text-muted-foreground">Trips</div>
               </div>
-              <div className="bg-card rounded-lg p-3 border text-center">
-                <div className="text-lg font-bold text-yellow-600">{driver.rating}</div>
+              <div className="bg-card rounded-lg p-2 border text-center">
+                <div className="text-base font-bold text-yellow-600">{driver.rating}</div>
                 <div className="text-xs text-muted-foreground">Rating</div>
               </div>
             </div>
 
             <DriverStatus driver={driver} onToggleOnline={handleToggleOnline} />
 
-            {/* Map View for Active Trips */}
+            {/* Map View for Active Trips - Compact */}
             {activeTrip && (
-              <MapView
-                pickup={activeTrip.request.pickup}
-                destination={activeTrip.request.destination}
-                currentStatus={activeTrip.status}
-                onNavigate={handleNavigate}
-                showGPSTracking={true}
-                showRealTimeNavigation={true}
-              />
+              <div className="h-40">
+                <MapView
+                  pickup={activeTrip.request.pickup}
+                  destination={activeTrip.request.destination}
+                  currentStatus={activeTrip.status}
+                  onNavigate={handleNavigate}
+                  showGPSTracking={true}
+                  showRealTimeNavigation={true}
+                />
+              </div>
             )}
 
-            {/* Active Trip or Request */}
-            {activeTrip ? (
-              <ActiveTripCard
-                trip={activeTrip}
-                onUpdateStatus={handleUpdateTripStatus}
-                onCompleteTrip={handleCompleteTrip}
-              />
-            ) : currentRequest ? (
-              <RideRequestCard
-                request={currentRequest}
-                onAccept={handleAcceptRequest}
-                onDecline={handleDeclineRequest}
-              />
-            ) : driver.isOnline ? (
-              <div className="text-center py-8 bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg border border-dashed border-green-200 dark:border-green-800">
-                <div className="relative mb-3">
-                  <Clock size={32} className="mx-auto text-green-600 animate-pulse" />
-                  <div className="absolute top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-green-500 rounded-full animate-ping" />
-                </div>
-                <h3 className="font-bold text-lg mb-2 text-foreground">
-                  Looking for rides...
-                </h3>
-                <p className="text-sm text-muted-foreground mb-3">
-                  You're online and ready to drive
-                </p>
-                <div className="flex justify-center">
-                  <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/30 rounded-full border border-green-200 dark:border-green-800">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-xs text-green-700 dark:text-green-300 font-semibold">AVAILABLE</span>
+            {/* Active Trip or Request - Main content area */}
+            <div className="flex-1 min-h-0">
+              {activeTrip ? (
+                <ActiveTripCard
+                  trip={activeTrip}
+                  onUpdateStatus={handleUpdateTripStatus}
+                  onCompleteTrip={handleCompleteTrip}
+                />
+              ) : currentRequest ? (
+                <RideRequestCard
+                  request={currentRequest}
+                  onAccept={handleAcceptRequest}
+                  onDecline={handleDeclineRequest}
+                />
+              ) : driver.isOnline ? (
+                <div className="text-center py-6 bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg border border-dashed border-green-200 dark:border-green-800">
+                  <div className="relative mb-2">
+                    <Clock size={28} className="mx-auto text-green-600 animate-pulse" />
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-green-500 rounded-full animate-ping" />
+                  </div>
+                  <h3 className="font-bold text-base mb-1 text-foreground">
+                    Looking for rides...
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    You're online and ready to drive
+                  </p>
+                  <div className="flex justify-center">
+                    <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/30 rounded-full border border-green-200 dark:border-green-800">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                      <span className="text-xs text-green-700 dark:text-green-300 font-semibold">AVAILABLE</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : null}
+              ) : (
+                <div className="text-center py-6 bg-card rounded-lg border">
+                  <Car size={28} className="mx-auto text-muted-foreground mb-2" />
+                  <h3 className="font-semibold text-base mb-1 text-foreground">
+                    Ready to Start?
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Go online to start receiving ride requests
+                  </p>
+                </div>
+              )}
+            </div>
 
-            {/* Recent trips */}
-            {tripHistory.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="font-semibold text-foreground">Recent Trips</h3>
-                <TripHistoryList trips={tripHistory.slice(0, 3)} />
+            {/* Recent trips - Only show if offline and space available */}
+            {!driver.isOnline && !activeTrip && !currentRequest && tripHistory.length > 0 && (
+              <div className="space-y-2">
+                <h3 className="font-semibold text-sm text-foreground">Recent Trips</h3>
+                <div className="space-y-1">
+                  {tripHistory.slice(0, 2).map((trip) => (
+                    <div key={trip.id} className="bg-card rounded-lg p-2 border flex justify-between items-center">
+                      <div>
+                        <div className="text-sm font-medium text-foreground">{trip.passenger.name}</div>
+                        <div className="text-xs text-muted-foreground">{trip.destination}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm font-semibold text-green-600">£{trip.fare.toFixed(2)}</div>
+                        <div className="text-xs text-muted-foreground">{trip.distance.toFixed(1)}mi</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -638,7 +665,7 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative pb-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative flex flex-col">
       {!isSignedIn ? (
         <WelcomeScreen 
           driver={driver}
@@ -648,7 +675,7 @@ function AppContent() {
       ) : (
         <>      
           <ProfessionalHeader />
-          <div className="max-w-md mx-auto relative z-10">
+          <div className="flex-1 max-w-md mx-auto relative z-10 flex flex-col pb-20 overflow-hidden">
             {renderCurrentView()}
           </div>
           

@@ -189,7 +189,7 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
 
   const progressPercentage = (timeLeft / 26) * 100;
 
-  // Extract simple area names from full addresses
+  // Extract simple area names from full addresses with better fallback
   const getAreaName = (address: string) => {
     // Simple logic to extract area - in real app would use proper geocoding
     if (address.includes('Chelsea')) return 'Chelsea';
@@ -199,8 +199,9 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
     if (address.includes('Heathrow')) return 'Heathrow';
     if (address.includes('Westminster')) return 'Westminster';
     if (address.includes('Greenwich')) return 'Greenwich';
-    // Fallback: take first part before comma
-    return address.split(',')[0];
+    // Fallback: take first part before comma and limit length
+    const fallback = address.split(',')[0];
+    return fallback.length > 15 ? fallback.substring(0, 15) + '...' : fallback;
   };
 
   // Calculate pickup distance (mock - in real app would use GPS)
@@ -271,7 +272,7 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
   };
 
   return (
-    <div className="relative w-full max-w-sm mx-auto">
+    <div className="relative w-full max-w-sm mx-auto px-2">
       {/* Swipe instruction overlay - compact */}
       <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-10">
         <div className="flex items-center gap-3 bg-black/70 text-white px-3 py-1 rounded-full text-xs font-medium">
@@ -305,77 +306,78 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
       >
         {/* Swipe indicator */}
         {getSwipeIndicator()}
-      {/* Minimal Header with Timer */}
-      <CardHeader className="pb-1 pt-3 px-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-gray-900">New Ride Request</h3>
-          <div className="flex items-center gap-1 bg-orange-100 px-2 py-1 rounded-full">
-            <Timer size={12} className="text-orange-600" />
-            <span className="text-orange-700 font-bold text-xs">{timeLeft}s</span>
+        
+        {/* Minimal Header with Timer */}
+        <CardHeader className="pb-2 pt-4 px-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-gray-900">New Ride Request</h3>
+            <div className="flex items-center gap-1 bg-orange-100 px-2 py-1 rounded-full">
+              <Timer size={12} className="text-orange-600" />
+              <span className="text-orange-700 font-bold text-xs">{timeLeft}s</span>
+            </div>
           </div>
-        </div>
-        <Progress value={progressPercentage} className="h-1 mt-1" />
-      </CardHeader>
-      
-      <CardContent className="px-4 pb-4 space-y-4">
-        {/* BIG EARNINGS DISPLAY - Most Important */}
-        <div className="text-center py-2">
-          <div className="text-4xl font-bold text-green-600 mb-1">
-            £{request.estimatedFare.toFixed(2)}
+          <Progress value={progressPercentage} className="h-1 mt-2" />
+        </CardHeader>
+        
+        <CardContent className="px-4 pb-4 space-y-4">
+          {/* BIG EARNINGS DISPLAY - Most Important */}
+          <div className="text-center py-2">
+            <div className="text-3xl font-bold text-green-600 mb-1">
+              £{request.estimatedFare.toFixed(2)}
+            </div>
+            <div className="text-sm text-gray-600 font-medium">You earn</div>
           </div>
-          <div className="text-sm text-gray-600 font-medium">You earn</div>
-        </div>
 
-        {/* SINGLE CONSOLIDATED INFO LINE - All Key Metrics Together */}
-        <div className="flex items-center justify-center gap-3 py-3 bg-white rounded-lg border border-gray-200 shadow-sm">
-          <div className="flex items-center gap-1">
-            <span className="text-base">👤</span>
-            <span className="text-base font-bold text-gray-900">{request.passenger.rating.toFixed(1)}★</span>
+          {/* SINGLE CONSOLIDATED INFO LINE - All Key Metrics Together */}
+          <div className="flex items-center justify-between px-3 py-2.5 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="flex items-center gap-1 min-w-0 flex-1">
+              <span className="text-sm">👤</span>
+              <span className="text-sm font-bold text-gray-900">{request.passenger.rating.toFixed(1)}★</span>
+            </div>
+            
+            <div className="flex items-center gap-1 min-w-0 flex-1 justify-center">
+              <span className="text-sm">📍</span>
+              <span className="text-sm font-bold text-gray-900">{pickupDistance}mi</span>
+            </div>
+            
+            <div className="flex items-center gap-1 min-w-0 flex-1 justify-center">
+              <span className="text-sm">🚗</span>
+              <span className="text-sm font-bold text-gray-900">{request.estimatedDistance.toFixed(1)}mi</span>
+            </div>
+            
+            <div className="flex items-center gap-1 min-w-0 flex-1 justify-end">
+              <span className="text-sm">⏱️</span>
+              <span className="text-sm font-bold text-gray-900">{request.estimatedDuration}min</span>
+            </div>
           </div>
-          
-          <div className="flex items-center gap-1">
-            <span className="text-base">📍</span>
-            <span className="text-base font-bold text-gray-900">{pickupDistance}mi</span>
-          </div>
-          
-          <div className="flex items-center gap-1">
-            <span className="text-base">🚗</span>
-            <span className="text-base font-bold text-gray-900">{request.estimatedDistance.toFixed(1)}mi</span>
-          </div>
-          
-          <div className="flex items-center gap-1">
-            <span className="text-base">⏱️</span>
-            <span className="text-base font-bold text-gray-900">{request.estimatedDuration}min</span>
-          </div>
-        </div>
 
-        {/* Simple Area Route - Right Below Info Line */}
-        <div className="text-center">
-          <div className="text-base font-semibold text-gray-900">
-            {getAreaName(request.pickup.address)} → {getAreaName(request.destination.address)}
+          {/* Simple Area Route - Right Below Info Line */}
+          <div className="text-center px-4">
+            <div className="text-base font-semibold text-gray-900 truncate max-w-full">
+              {getAreaName(request.pickup.address)} → {getAreaName(request.destination.address)}
+            </div>
           </div>
-        </div>
 
-        {/* Large Action Buttons - Clean Design */}
-        <div className="grid grid-cols-2 gap-4 pt-2">
-          <Button 
-            variant="outline" 
-            onClick={() => onDecline(request.id)}
-            className="h-12 border-2 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 font-bold text-base"
-            disabled={isDragging}
-          >
-            Decline
-          </Button>
-          <Button 
-            onClick={() => onAccept(request.id)}
-            className="h-12 bg-green-600 hover:bg-green-700 text-white font-bold text-base shadow-md"
-            disabled={isDragging}
-          >
-            Accept ✅
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+          {/* Large Action Buttons - Clean Design */}
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            <Button 
+              variant="outline" 
+              onClick={() => onDecline(request.id)}
+              className="h-12 border-2 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 font-bold text-base"
+              disabled={isDragging}
+            >
+              Decline
+            </Button>
+            <Button 
+              onClick={() => onAccept(request.id)}
+              className="h-12 bg-green-600 hover:bg-green-700 text-white font-bold text-base shadow-md"
+              disabled={isDragging}
+            >
+              Accept ✅
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

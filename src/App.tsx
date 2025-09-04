@@ -108,7 +108,7 @@ function AppContent() {
           specialRequests: Math.random() < 0.3 ? "Please call when you arrive" : undefined,
         };
         setCurrentRequest(mockRequest);
-        toast("New ride request!", { duration: 2000 });
+        // Don't show toast - the popup itself is the notification
       }
     };
 
@@ -730,8 +730,8 @@ function AppContent() {
           
           {/* Ride Request Modal - positioned absolutely on top */}
           {currentRequest && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-              <div className="w-full max-w-sm">
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-6 animate-fade-in-scale">
+              <div className="w-full max-w-sm mx-auto">
                 <RideRequestCard
                   request={currentRequest}
                   onAccept={handleAcceptRequest}

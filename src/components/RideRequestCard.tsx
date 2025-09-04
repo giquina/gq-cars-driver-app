@@ -33,89 +33,89 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
   const progressPercentage = (timeLeft / 30) * 100;
 
   return (
-    <Card className="border shadow-md mb-3 bg-gradient-to-br from-card to-primary/5 animate-fade-in-scale">
-      <CardHeader className="pb-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-t-lg p-3">
+    <Card className="border mb-1.5 bg-card animate-fade-in-scale">
+      <CardHeader className="pb-1.5 bg-primary/10 rounded-t-lg p-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-bold flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-success rounded-full animate-ping" />
-            New Ride Available
+          <CardTitle className="text-xs font-bold flex items-center gap-1.5">
+            <div className="w-1 h-1 bg-success rounded-full animate-ping" />
+            New Ride Request
           </CardTitle>
-          <div className="flex items-center gap-1 px-2 py-0.5 bg-warning/10 rounded-full border border-warning/20">
-            <Timer size={12} className="text-warning" />
-            <span className="text-warning font-bold text-xs">{timeLeft}s</span>
+          <div className="flex items-center gap-1 px-1.5 py-0.5 bg-warning/10 rounded-full">
+            <Timer size={10} className="text-warning" />
+            <span className="text-warning font-bold text-[9px]">{timeLeft}s</span>
           </div>
         </div>
-        <Progress value={progressPercentage} className="h-1.5 mt-1" />
+        <Progress value={progressPercentage} className="h-1 mt-1" />
       </CardHeader>
       
-      <CardContent className="space-y-3 p-3">
+      <CardContent className="space-y-2 p-2">
         {/* Passenger Info */}
-        <div className="flex items-center gap-3 p-2.5 bg-gradient-to-r from-muted/30 to-accent/5 rounded-lg border">
-          <Avatar className="w-8 h-8">
-            <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-bold text-xs">
+        <div className="flex items-center gap-2 p-1.5 bg-muted/30 rounded border">
+          <Avatar className="w-6 h-6">
+            <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-bold text-[8px]">
               {request.passenger.name.split(' ').map(n => n[0]).join('')}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1">
-            <div className="font-bold text-sm">{request.passenger.name}</div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="font-bold text-[10px]">{request.passenger.name}</div>
+            <div className="flex items-center gap-1.5 text-[8px] text-muted-foreground">
               <div className="flex items-center gap-0.5">
-                <Star size={10} weight="fill" className="text-yellow-500" />
-                <span className="font-medium">{request.passenger.rating.toFixed(1)}</span>
+                <Star size={8} weight="fill" className="text-yellow-500" />
+                <span>{request.passenger.rating.toFixed(1)}</span>
               </div>
               <span>•</span>
               <span>{request.passenger.tripCount} trips</span>
             </div>
           </div>
-          <Button variant="outline" size="sm" className="shrink-0 h-6 w-6 p-0">
-            <Phone size={10} />
+          <Button variant="outline" size="sm" className="h-5 w-5 p-0">
+            <Phone size={8} />
           </Button>
         </div>
 
         {/* Trip Route */}
-        <div className="space-y-2 p-2.5 bg-gradient-to-br from-muted/20 to-muted/10 rounded-lg border">
-          <div className="flex items-start gap-2">
-            <div className="w-2 h-2 rounded-full bg-success mt-1 shadow-sm"></div>
+        <div className="space-y-1.5 p-1.5 bg-muted/20 rounded border">
+          <div className="flex items-start gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-success mt-0.5"></div>
             <div className="flex-1">
-              <div className="text-[8px] text-muted-foreground font-medium mb-0.5">Pick up from</div>
-              <div className="font-semibold text-xs">{request.pickup.address}</div>
+              <div className="text-[7px] text-muted-foreground mb-0.5">Pickup</div>
+              <div className="font-semibold text-[9px]">{request.pickup.address}</div>
             </div>
           </div>
           
-          <div className="ml-1 border-l border-dashed border-muted-foreground/40 h-3"></div>
+          <div className="ml-0.5 border-l border-dashed border-muted-foreground/40 h-2"></div>
           
-          <div className="flex items-start gap-2">
-            <MapPin size={10} className="text-destructive mt-1" weight="fill" />
+          <div className="flex items-start gap-1.5">
+            <MapPin size={8} className="text-destructive mt-0.5" weight="fill" />
             <div className="flex-1">
-              <div className="text-[8px] text-muted-foreground font-medium mb-0.5">Drop off at</div>
-              <div className="font-semibold text-xs">{request.destination.address}</div>
+              <div className="text-[7px] text-muted-foreground mb-0.5">Destination</div>
+              <div className="font-semibold text-[9px]">{request.destination.address}</div>
             </div>
           </div>
         </div>
 
         {/* Trip Metrics */}
-        <div className="grid grid-cols-3 gap-2">
-          <div className="text-center p-2 bg-gradient-to-br from-success/10 to-success/5 rounded border">
-            <CurrencyGbp size={12} className="text-success mx-auto mb-0.5" weight="bold" />
-            <div className="text-sm font-bold text-success">£{request.estimatedFare.toFixed(2)}</div>
-            <div className="text-[8px] text-muted-foreground font-medium">You'll earn</div>
+        <div className="grid grid-cols-3 gap-1">
+          <div className="text-center p-1 bg-success/10 rounded border">
+            <CurrencyGbp size={10} className="text-success mx-auto mb-0.5" />
+            <div className="text-[10px] font-bold text-success">£{request.estimatedFare.toFixed(2)}</div>
+            <div className="text-[7px] text-muted-foreground">You earn</div>
           </div>
-          <div className="text-center p-2 bg-gradient-to-br from-primary/10 to-primary/5 rounded border">
-            <Navigation size={12} className="text-primary mx-auto mb-0.5" weight="bold" />
-            <div className="text-sm font-bold text-primary">{request.estimatedDistance.toFixed(1)}</div>
-            <div className="text-[8px] text-muted-foreground font-medium">Miles</div>
+          <div className="text-center p-1 bg-primary/10 rounded border">
+            <Navigation size={10} className="text-primary mx-auto mb-0.5" />
+            <div className="text-[10px] font-bold text-primary">{request.estimatedDistance.toFixed(1)}</div>
+            <div className="text-[7px] text-muted-foreground">Miles</div>
           </div>
-          <div className="text-center p-2 bg-gradient-to-br from-accent/10 to-accent/5 rounded border">
-            <Clock size={12} className="text-accent mx-auto mb-0.5" weight="bold" />
-            <div className="text-sm font-bold text-accent">{request.estimatedDuration}</div>
-            <div className="text-[8px] text-muted-foreground font-medium">Minutes</div>
+          <div className="text-center p-1 bg-accent/10 rounded border">
+            <Clock size={10} className="text-accent mx-auto mb-0.5" />
+            <div className="text-[10px] font-bold text-accent">{request.estimatedDuration}</div>
+            <div className="text-[7px] text-muted-foreground">Minutes</div>
           </div>
         </div>
 
         {/* Payment Method */}
-        <div className="flex items-center justify-between p-2 bg-muted/30 rounded">
-          <span className="text-xs font-medium text-muted-foreground">Payment</span>
-          <Badge variant="outline" className="font-semibold text-[8px]">
+        <div className="flex items-center justify-between p-1.5 bg-muted/30 rounded">
+          <span className="text-[9px] text-muted-foreground">Payment</span>
+          <Badge variant="outline" className="text-[7px]">
             {request.paymentMethod === 'cash' ? '💵 Cash' : 
              request.paymentMethod === 'card' ? '💳 Card' : '📱 Digital'}
           </Badge>
@@ -123,29 +123,29 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
 
         {/* Special Requests */}
         {request.specialRequests && (
-          <div className="p-2 bg-gradient-to-r from-accent/10 to-accent/5 rounded border border-accent/20">
-            <div className="text-xs font-bold text-accent mb-1 flex items-center gap-1">
-              <Star size={10} weight="fill" />
-              Special Note
+          <div className="p-1.5 bg-accent/10 rounded border border-accent/20">
+            <div className="text-[9px] font-bold text-accent mb-0.5 flex items-center gap-1">
+              <Star size={8} weight="fill" />
+              Note
             </div>
-            <div className="text-xs font-medium">{request.specialRequests}</div>
+            <div className="text-[8px]">{request.specialRequests}</div>
           </div>
         )}
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-2 pt-2">
+        <div className="grid grid-cols-2 gap-1.5 pt-1">
           <Button 
             variant="outline" 
             onClick={() => onDecline(request.id)}
-            className="h-8 border border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground font-semibold text-xs transition-all duration-300 shadow-sm hover:shadow-md"
+            className="h-6 border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground text-[9px]"
           >
             Decline
           </Button>
           <Button 
             onClick={() => onAccept(request.id)}
-            className="h-8 bg-success hover:bg-success/90 text-success-foreground font-semibold text-xs shadow-sm hover:shadow-md transition-all duration-300 border border-success/30"
+            className="h-6 bg-success hover:bg-success/90 text-success-foreground text-[9px]"
           >
-            Accept Ride
+            Accept
           </Button>
         </div>
       </CardContent>

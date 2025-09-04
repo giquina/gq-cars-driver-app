@@ -136,6 +136,8 @@ function AppContent() {
     setCurrentView('main');
     toast.success("Signed out successfully");
   };
+
+  const handleToggleOnline = () => {
     setDriver(currentDriver => ({
       ...currentDriver,
       isOnline: !currentDriver.isOnline
@@ -247,11 +249,11 @@ function AppContent() {
     }
   };
 
-  const handleToggleOnline = () => {
+  const handleEditProfile = () => {
     toast.info("Profile editing would open here");
   };
 
-  const handleEditProfile = () => {
+  const handleSubmitPassengerRating = (rating: number, feedback?: string, tip?: number) => {
     if (!completedTripForRating) return;
     
     // Update trip history with rating
@@ -279,8 +281,6 @@ function AppContent() {
     setCompletedTripForRating(null);
     setCurrentView('main');
   };
-
-  const handleSubmitPassengerRating = (rating: number, feedback?: string, tip?: number) => {
   const MainHeader = () => (
     <div className="flex items-center justify-between p-2 bg-card rounded-lg border border-border shadow-sm mb-2">
       <div className="flex items-center gap-2">

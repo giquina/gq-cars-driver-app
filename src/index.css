@@ -91,6 +91,25 @@
     animation: float 3s ease-in-out infinite;
   }
 
+  /* Swipe gesture feedback */
+  .swipe-accept {
+    background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.2));
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+
+  .swipe-decline {
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1), transparent);
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+
+  /* Prevent text selection during swipe */
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
   /* Custom scrollbar */
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;

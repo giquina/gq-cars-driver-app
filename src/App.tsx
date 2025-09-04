@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useKV } from '@github/spark/hooks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { DriverStatus } from "@/components/DriverStatus";
@@ -8,8 +9,24 @@ import { RideRequestCard } from "@/components/RideRequestCard";
 import { ActiveTripCard } from "@/components/ActiveTripCard";
 import { TripHistoryList } from "@/components/TripHistoryList";
 import { EarningsSummary } from "@/components/EarningsSummary";
+import { MapView } from "@/components/MapView";
+import { DriverProfile } from "@/components/DriverProfile";
+import { NotificationManager } from "@/components/NotificationManager";
+import { EmergencyAssistance } from "@/components/EmergencyAssistance";
+import { QuickSettings } from "@/components/QuickSettings";
 import { Driver, RideRequest, ActiveTrip, TripHistory } from "@/types";
-import { Car, Clock, DollarSign, History } from "@phosphor-icons/react";
+import { 
+  Car, 
+  Clock, 
+  DollarSign, 
+  History, 
+  User, 
+  Bell, 
+  ShieldWarning,
+  Map,
+  List,
+  Gear
+} from "@phosphor-icons/react";
 
 function App() {
   // Driver data persisted across sessions
@@ -22,6 +39,10 @@ function App() {
     vehicleModel: "Toyota Camry 2022",
     vehiclePlate: "ABC-1234",
     isOnline: false,
+    location: {
+      lat: 40.7128,
+      lng: -74.0060,
+    },
     earnings: {
       today: 0,
       thisWeek: 0,
@@ -39,6 +60,7 @@ function App() {
   // Current session state (doesn't persist)
   const [currentRequest, setCurrentRequest] = useState<RideRequest | null>(null);
   const [activeTrip, setActiveTrip] = useState<ActiveTrip | null>(null);
+  const [currentView, setCurrentView] = useState<'main' | 'profile' | 'notifications' | 'emergency' | 'settings'>('main');
 
   // Generate mock ride requests when driver is online
   useEffect(() => {
@@ -170,64 +192,168 @@ function App() {
     toast.success(`Trip completed! Earned $${(completedTrip.fare + (completedTrip.tip || 0)).toFixed(2)}`);
   };
 
+  const handleNavigate = () => {
+    if (activeTrip) {
+      const destination = activeTrip.status === 'going_to_pickup' || activeTrip.status === 'arrived_at_pickup' 
+        ? activeTrip.request.pickup 
+        : activeTrip.request.destination;
+      
+      // Simulate opening navigation app
+      toast.info(`Opening navigation to ${destination.address}`);
+    }
+  };
+
+  const handleEditProfile = () => {
+    toast.info("Profile editing would open here");
+  };
+
+  // Navigation header component
+  const NavigationHeader = () => (
+    <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center gap-3">
+        <div className="p-2 bg-primary rounded-lg">
+          <Car size={24} className="text-primary-foreground" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">GQ Cars Driver</h1>
+          <p className="text-sm text-muted-foreground">Drive with confidence</p>
+        </div>
+      </div>
+      
+      <div className="flex items-center gap-2">
+        <Button
+          variant={currentView === 'settings' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setCurrentView(currentView === 'settings' ? 'main' : 'settings')}
+        >
+          <Gear size={16} />
+        </Button>
+        <Button
+          variant={currentView === 'notifications' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setCurrentView(currentView === 'notifications' ? 'main' : 'notifications')}
+        >
+          <Bell size={16} />
+        </Button>
+        <Button
+          variant={currentView === 'emergency' ? 'destructive' : 'outline'}
+          size="sm"
+          onClick={() => setCurrentView(currentView === 'emergency' ? 'main' : 'emergency')}
+        >
+          <ShieldWarning size={16} />
+        </Button>
+        <Button
+          variant={currentView === 'profile' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setCurrentView(currentView === 'profile' ? 'main' : 'profile')}
+        >
+          <User size={16} />
+        </Button>
+      </div>
+    </div>
+  );
+
+  // Render different views based on currentView state
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case 'profile':
+        return (
+          <DriverProfile 
+            driver={driver} 
+            onEditProfile={handleEditProfile}
+          />
+        );
+      
+      case 'notifications':
+        return (
+          <NotificationManager 
+            onClose={() => setCurrentView('main')}
+          />
+        );
+      
+      case 'emergency':
+        return (
+          <EmergencyAssistance 
+            driverLocation={driver.location}
+            onClose={() => setCurrentView('main')}
+          />
+        );
+      
+      case 'settings':
+        return (
+          <QuickSettings 
+            onClose={() => setCurrentView('main')}
+          />
+        );
+      
+      default:
+        return (
+          <>
+            <DriverStatus driver={driver} onToggleOnline={handleToggleOnline} />
+
+            {/* Map View for Active Trips */}
+            {activeTrip && (
+              <MapView
+                pickup={activeTrip.request.pickup}
+                destination={activeTrip.request.destination}
+                currentStatus={activeTrip.status}
+                onNavigate={handleNavigate}
+              />
+            )}
+
+            {/* Active Trip or Request */}
+            {activeTrip ? (
+              <ActiveTripCard
+                trip={activeTrip}
+                onUpdateStatus={handleUpdateTripStatus}
+                onCompleteTrip={handleCompleteTrip}
+              />
+            ) : currentRequest ? (
+              <RideRequestCard
+                request={currentRequest}
+                onAccept={handleAcceptRequest}
+                onDecline={handleDeclineRequest}
+              />
+            ) : driver.isOnline ? (
+              <div className="text-center py-12 bg-muted/30 rounded-lg mb-6">
+                <Clock size={48} className="mx-auto text-muted-foreground mb-3" />
+                <h3 className="font-semibold mb-2">Looking for rides...</h3>
+                <p className="text-sm text-muted-foreground">
+                  You're online and ready to receive requests
+                </p>
+              </div>
+            ) : null}
+
+            <Tabs defaultValue="earnings" className="space-y-4">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="earnings" className="flex items-center gap-2">
+                  <DollarSign size={16} />
+                  Earnings
+                </TabsTrigger>
+                <TabsTrigger value="history" className="flex items-center gap-2">
+                  <History size={16} />
+                  History
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="earnings">
+                <EarningsSummary driver={driver} />
+              </TabsContent>
+
+              <TabsContent value="history">
+                <TripHistoryList trips={tripHistory} />
+              </TabsContent>
+            </Tabs>
+          </>
+        );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-6 max-w-md">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-primary rounded-lg">
-            <Car size={24} className="text-primary-foreground" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">GQ Cars Driver</h1>
-            <p className="text-sm text-muted-foreground">Drive with confidence</p>
-          </div>
-        </div>
-
-        <DriverStatus driver={driver} onToggleOnline={handleToggleOnline} />
-
-        {/* Active Trip or Request */}
-        {activeTrip ? (
-          <ActiveTripCard
-            trip={activeTrip}
-            onUpdateStatus={handleUpdateTripStatus}
-            onCompleteTrip={handleCompleteTrip}
-          />
-        ) : currentRequest ? (
-          <RideRequestCard
-            request={currentRequest}
-            onAccept={handleAcceptRequest}
-            onDecline={handleDeclineRequest}
-          />
-        ) : driver.isOnline ? (
-          <div className="text-center py-12 bg-muted/30 rounded-lg mb-6">
-            <Clock size={48} className="mx-auto text-muted-foreground mb-3" />
-            <h3 className="font-semibold mb-2">Looking for rides...</h3>
-            <p className="text-sm text-muted-foreground">
-              You're online and ready to receive requests
-            </p>
-          </div>
-        ) : null}
-
-        <Tabs defaultValue="earnings" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="earnings" className="flex items-center gap-2">
-              <DollarSign size={16} />
-              Earnings
-            </TabsTrigger>
-            <TabsTrigger value="history" className="flex items-center gap-2">
-              <History size={16} />
-              History
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="earnings">
-            <EarningsSummary driver={driver} />
-          </TabsContent>
-
-          <TabsContent value="history">
-            <TripHistoryList trips={tripHistory} />
-          </TabsContent>
-        </Tabs>
+        <NavigationHeader />
+        {renderCurrentView()}
       </div>
       <Toaster />
     </div>

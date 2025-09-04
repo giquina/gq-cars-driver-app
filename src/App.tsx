@@ -118,27 +118,30 @@ function AppContent() {
   // Prevent body scrolling when ride request is open
   useEffect(() => {
     if (currentRequest) {
-      document.body.classList.add('no-scroll');
-      // Also prevent touch scrolling on mobile
+      // Store original values
+      const originalOverflow = document.body.style.overflow;
+      const originalPosition = document.body.style.position;
+      const originalWidth = document.body.style.width;
+      const originalHeight = document.body.style.height;
+      
+      // Prevent scrolling
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
       document.body.style.height = '100%';
-    } else {
-      document.body.classList.remove('no-scroll');
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.height = '';
+      document.body.style.top = '0';
+      document.body.style.left = '0';
+      
+      // Cleanup function
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        document.body.style.position = originalPosition;
+        document.body.style.width = originalWidth;
+        document.body.style.height = originalHeight;
+        document.body.style.top = '';
+        document.body.style.left = '';
+      };
     }
-
-    return () => {
-      document.body.classList.remove('no-scroll');
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.height = '';
-    };
   }, [currentRequest]);
 
   const handleSignIn = () => {

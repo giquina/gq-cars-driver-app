@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { RideRequest } from "@/types/index";
 import { 
   Clock, 
-  Star, 
   Phone, 
+  Star, 
   X,
   CurrencyGbp,
   MapPin,
@@ -20,7 +20,6 @@ interface FullScreenRideRequestProps {
 export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScreenRideRequestProps) {
   const [timeLeft, setTimeLeft] = useState(15);
 
-  // Countdown timer
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(prev => {
@@ -44,43 +43,25 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-gray-100 flex items-center justify-center p-4 modal-no-scroll">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm max-h-[95vh] overflow-hidden animate-fade-in-scale">
-        {/* Header */}
-        <div className="bg-red-500 px-4 py-3 text-white">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Clock size={18} className="text-white" />
-              <span className="font-bold">New Ride Request</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="bg-white/20 px-3 py-1 rounded-full">
-                <span className="font-bold text-sm">{timeLeft}s</span>
-              </div>
-              <button 
-                onClick={handleDecline}
-                className="p-1 hover:bg-white/20 rounded-full transition-colors"
-              >
-                <X size={16} className="text-white" />
-              </button>
-            </div>
-          </div>
+    <div className="fixed inset-0 bg-gray-100 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full max-h-[95vh] overflow-hidden animate-fade-in-scale">
+        {/* Header with timer */}
+        <div className="bg-red-500 text-white p-4 text-center relative">
+          <div className="text-3xl font-bold mb-1">{timeLeft}s</div>
+          <div className="text-sm opacity-90">New ride request</div>
+          <div className={`absolute inset-x-0 bottom-0 h-1 bg-red-300 transition-all duration-1000 ease-linear`} 
+               style={{ width: `${(timeLeft / 15) * 100}%` }} />
         </div>
 
         {/* Passenger Info */}
-        <div className="p-4 border-b border-gray-100">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-              <span className="text-lg font-bold text-gray-700">
-                {request.passenger.name.charAt(0)}
-              </span>
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-gray-900">{request.passenger.name}</h3>
-              <div className="flex items-center gap-2">
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-bold text-lg text-gray-900">{request.passenger.name}</h3>
+              <div className="flex items-center gap-2 mt-1">
                 <div className="flex items-center gap-1">
-                  <Star size={14} className="text-yellow-500 fill-current" />
-                  <span className="text-sm text-gray-600 font-medium">
+                  <Star size={14} className="text-yellow-500" weight="fill" />
+                  <span className="text-sm font-medium text-gray-700">
                     {request.passenger.rating.toFixed(1)}
                   </span>
                 </div>
@@ -91,25 +72,25 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
               </div>
             </div>
             <Button 
-              variant="outline"
+              variant="outline" 
               size="sm"
-              className="h-10 w-10 p-0 border-gray-300"
+              className="h-8 w-8 p-0 rounded-full"
             >
-              <Phone size={16} className="text-gray-600" />
+              <Phone size={16} />
             </Button>
           </div>
         </div>
 
         {/* Route Info */}
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-3">
           {/* Pickup */}
           <div className="flex items-start gap-3">
             <div className="flex flex-col items-center mt-1">
-              <div className="w-4 h-4 bg-green-500 rounded-full" />
-              <div className="w-0.5 h-6 bg-gray-300 mt-1" />
+              <div className="w-3 h-3 bg-green-500 rounded-full" />
+              <div className="w-0.5 h-8 bg-gray-300 my-1" />
             </div>
             <div className="flex-1">
-              <p className="text-xs font-bold text-green-600 uppercase tracking-wide mb-1">
+              <p className="text-xs font-bold text-green-700 uppercase tracking-wide mb-1">
                 Pickup
               </p>
               <p className="font-medium text-gray-900 text-sm leading-tight">
@@ -121,10 +102,10 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
           {/* Destination */}
           <div className="flex items-start gap-3">
             <div className="flex flex-col items-center mt-1">
-              <div className="w-4 h-4 bg-red-500 rounded-full" />
+              <div className="w-3 h-3 bg-red-500 rounded-full" />
             </div>
             <div className="flex-1">
-              <p className="text-xs font-bold text-red-600 uppercase tracking-wide mb-1">
+              <p className="text-xs font-bold text-red-700 uppercase tracking-wide mb-1">
                 Destination
               </p>
               <p className="font-medium text-gray-900 text-sm leading-tight">
@@ -135,33 +116,39 @@ export function FullScreenRideRequest({ request, onAccept, onDecline }: FullScre
         </div>
 
         {/* Trip Details */}
-        <div className="px-4 pb-4">
-          <div className="bg-gray-50 rounded-xl p-4">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <CurrencyGbp size={20} className="text-green-600" />
-                <span className="text-2xl font-bold text-gray-900">
-                  £{request.estimatedFare.toFixed(2)}
+        <div className="p-4 bg-gray-50 border-t border-gray-200">
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <div className="flex items-center justify-center gap-1 mb-1">
+                <CurrencyGbp size={16} className="text-green-600" />
+                <span className="text-lg font-bold text-green-600">
+                  {request.estimatedFare.toFixed(2)}
                 </span>
               </div>
-              <div className="text-right">
-                <div className="flex items-center gap-1 text-gray-600">
-                  <Navigation size={14} />
-                  <span className="text-sm font-medium">
-                    {request.estimatedDistance.toFixed(1)} mi
-                  </span>
-                </div>
-                <div className="flex items-center gap-1 text-gray-600">
-                  <Clock size={14} />
-                  <span className="text-sm font-medium">
-                    {request.estimatedDuration} min
-                  </span>
-                </div>
-              </div>
+              <div className="text-xs text-gray-600">Fare</div>
             </div>
-            
+            <div>
+              <div className="flex items-center justify-center gap-1 mb-1">
+                <Navigation size={16} className="text-blue-600" />
+                <span className="text-lg font-bold text-gray-900">
+                  {request.estimatedDistance.toFixed(1)}mi
+                </span>
+              </div>
+              <div className="text-xs text-gray-600">Distance</div>
+            </div>
+            <div>
+              <div className="flex items-center justify-center gap-1 mb-1">
+                <Clock size={16} className="text-orange-600" />
+                <span className="text-lg font-bold text-gray-900">
+                  {request.estimatedDuration} min
+                </span>
+              </div>
+              <div className="text-xs text-gray-600">Duration</div>
+            </div>
+          </div>
+          
+          <div className="mt-3 pt-3 border-t border-gray-200">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Payment method</span>
               <span className="text-sm font-medium text-gray-900 capitalize">
                 {request.paymentMethod.replace('_', ' ')}
               </span>

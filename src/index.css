@@ -141,7 +141,7 @@
   --warning: oklch(0.75 0.2 65);
   --warning-foreground: oklch(0.15 0.05 65);
 
-  --radius: 1rem;
+  --radius: 0.75rem;
 }
 
 /* Dark mode - optimized for night driving */

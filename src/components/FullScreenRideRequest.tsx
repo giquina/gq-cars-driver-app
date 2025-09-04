@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { Progress } from "@/components/ui/progre
 import { Progress } from "@/components/ui/progress";
 import { Timer, HandSwipeLeft, HandSwipeRight } from "@phosphor-icons/react";
 interface FullScreenRideRequestProps {

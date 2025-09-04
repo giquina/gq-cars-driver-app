@@ -158,6 +158,22 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary));
   }
+
+  /* Full screen ride request specific styles */
+  .ride-request-overlay {
+    backdrop-filter: blur(4px);
+  }
+
+  .ride-request-container {
+    max-height: 95vh;
+    max-width: min(95vw, 400px);
+  }
+
+  /* Ensure no overflow scrolling needed */
+  .no-scroll {
+    overflow: hidden;
+    height: 100vh;
+  }
 }
 
 :root {

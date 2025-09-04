@@ -115,6 +115,19 @@ function AppContent() {
     return () => clearInterval(interval);
   }, [driver.isOnline, currentRequest, activeTrip]);
 
+  // Prevent body scrolling when ride request is open
+  useEffect(() => {
+    if (currentRequest) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, [currentRequest]);
+
   const handleSignIn = () => {
     setIsSignedIn(true);
     toast.success(`Welcome back, ${driver.name}!`);

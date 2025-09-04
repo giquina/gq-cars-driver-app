@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useKV } from '@github/spark/hooks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { DriverStatus } from "@/components/DriverStatus";
 import { RideRequestCard } from "@/components/RideRequestCard";
@@ -228,6 +229,7 @@ function App() {
           </TabsContent>
         </Tabs>
       </div>
+      <Toaster />
     </div>
   );
 }

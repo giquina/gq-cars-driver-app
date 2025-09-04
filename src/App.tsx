@@ -560,112 +560,147 @@ function AppContent() {
       
       default: // home
         return (
-          <div className="p-3 space-y-3 h-full">
-            {/* Compact stats row */}
-            <div className="grid grid-cols-3 gap-2">
-              <div className="bg-card rounded-lg p-2 border text-center">
-                <div className="text-base font-bold text-green-600">£{driver.earnings.today.toFixed(2)}</div>
-                <div className="text-xs text-muted-foreground">Today</div>
+          <div className="h-full flex flex-col p-3 max-h-full overflow-hidden">
+            {/* Top row: Stats + Driver Status combined */}
+            <div className="flex-shrink-0 space-y-2 mb-3">
+              {/* Stats row - more compact */}
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-card rounded-lg p-2 border text-center">
+                  <div className="text-sm font-bold text-green-600">£{driver.earnings.today.toFixed(2)}</div>
+                  <div className="text-xs text-muted-foreground">Today</div>
+                </div>
+                <div className="bg-card rounded-lg p-2 border text-center">
+                  <div className="text-sm font-bold text-foreground">{driver.trips.completed}</div>
+                  <div className="text-xs text-muted-foreground">Trips</div>
+                </div>
+                <div className="bg-card rounded-lg p-2 border text-center">
+                  <div className="text-sm font-bold text-yellow-600">{driver.rating}</div>
+                  <div className="text-xs text-muted-foreground">Rating</div>
+                </div>
               </div>
-              <div className="bg-card rounded-lg p-2 border text-center">
-                <div className="text-base font-bold text-foreground">{driver.trips.completed}</div>
-                <div className="text-xs text-muted-foreground">Trips</div>
-              </div>
-              <div className="bg-card rounded-lg p-2 border text-center">
-                <div className="text-base font-bold text-yellow-600">{driver.rating}</div>
-                <div className="text-xs text-muted-foreground">Rating</div>
+
+              {/* Inline status toggle */}
+              <div className="flex items-center justify-between bg-card rounded-lg p-3 border">
+                <div className="flex items-center gap-3">
+                  <div className={`w-3 h-3 rounded-full ${driver.isOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
+                  <span className="font-medium text-sm">
+                    {driver.isOnline ? 'Online' : 'Offline'}
+                  </span>
+                </div>
+                <Button
+                  onClick={handleToggleOnline}
+                  size="sm"
+                  variant={driver.isOnline ? "destructive" : "default"}
+                  className="h-8 px-4 text-xs font-semibold"
+                >
+                  {driver.isOnline ? 'Go Offline' : 'Go Online'}
+                </Button>
               </div>
             </div>
 
-            <DriverStatus driver={driver} onToggleOnline={handleToggleOnline} />
-
-            {/* Map View for Active Trips - Compact */}
-            {activeTrip && (
-              <div className="h-40">
-                <MapView
-                  pickup={activeTrip.request.pickup}
-                  destination={activeTrip.request.destination}
-                  currentStatus={activeTrip.status}
-                  onNavigate={handleNavigate}
-                  showGPSTracking={true}
-                  showRealTimeNavigation={true}
-                />
-              </div>
-            )}
-
-            {/* Active Trip or Request - Main content area */}
-            <div className="flex-1 min-h-0">
+            {/* Main content area - takes remaining space */}
+            <div className="flex-1 min-h-0 flex flex-col">
               {activeTrip ? (
-                <ActiveTripCard
-                  trip={activeTrip}
-                  onUpdateStatus={handleUpdateTripStatus}
-                  onCompleteTrip={handleCompleteTrip}
-                />
-              ) : currentRequest ? (
-                <RideRequestCard
-                  request={currentRequest}
-                  onAccept={handleAcceptRequest}
-                  onDecline={handleDeclineRequest}
-                />
-              ) : driver.isOnline ? (
-                <div className="text-center py-6 bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg border border-dashed border-green-200 dark:border-green-800">
-                  <div className="relative mb-2">
-                    <Clock size={28} className="mx-auto text-green-600 animate-pulse" />
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-green-500 rounded-full animate-ping" />
+                <div className="h-full flex flex-col space-y-2">
+                  {/* Compact map for active trip */}
+                  <div className="h-32 flex-shrink-0">
+                    <MapView
+                      pickup={activeTrip.request.pickup}
+                      destination={activeTrip.request.destination}
+                      currentStatus={activeTrip.status}
+                      onNavigate={handleNavigate}
+                      showGPSTracking={true}
+                      showRealTimeNavigation={true}
+                    />
                   </div>
-                  <h3 className="font-bold text-base mb-1 text-foreground">
-                    Looking for rides...
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    You're online and ready to drive
-                  </p>
-                  <div className="flex justify-center">
-                    <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/30 rounded-full border border-green-200 dark:border-green-800">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      <span className="text-xs text-green-700 dark:text-green-300 font-semibold">AVAILABLE</span>
+                  {/* Trip card takes remaining space */}
+                  <div className="flex-1 min-h-0">
+                    <ActiveTripCard
+                      trip={activeTrip}
+                      onUpdateStatus={handleUpdateTripStatus}
+                      onCompleteTrip={handleCompleteTrip}
+                    />
+                  </div>
+                </div>
+              ) : currentRequest ? (
+                <div className="h-full">
+                  <RideRequestCard
+                    request={currentRequest}
+                    onAccept={handleAcceptRequest}
+                    onDecline={handleDeclineRequest}
+                  />
+                </div>
+              ) : driver.isOnline ? (
+                <div className="h-full flex items-center justify-center">
+                  <div className="text-center py-8 bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg border border-dashed border-green-200 dark:border-green-800 w-full">
+                    <div className="relative mb-3">
+                      <Clock size={32} className="mx-auto text-green-600 animate-pulse" />
+                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-green-500 rounded-full animate-ping" />
+                    </div>
+                    <h3 className="font-bold text-lg mb-2 text-foreground">
+                      Looking for rides...
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      You're online and ready to drive
+                    </p>
+                    <div className="flex justify-center">
+                      <div className="flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 rounded-full border border-green-200 dark:border-green-800">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                        <span className="text-sm text-green-700 dark:text-green-300 font-semibold">AVAILABLE</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-6 bg-card rounded-lg border">
-                  <Car size={28} className="mx-auto text-muted-foreground mb-2" />
-                  <h3 className="font-semibold text-base mb-1 text-foreground">
-                    Ready to Start?
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Go online to start receiving ride requests
-                  </p>
+                <div className="h-full flex flex-col">
+                  {/* Offline status - centered */}
+                  <div className="flex-1 flex items-center justify-center">
+                    <div className="text-center py-8 bg-card rounded-lg border w-full">
+                      <Car size={32} className="mx-auto text-muted-foreground mb-3" />
+                      <h3 className="font-semibold text-lg mb-2 text-foreground">
+                        Ready to Start?
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Go online to start receiving ride requests
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Recent trips - compact at bottom if available */}
+                  {tripHistory.length > 0 && (
+                    <div className="flex-shrink-0 mt-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-semibold text-sm text-foreground">Recent Trips</h3>
+                        <span className="text-xs text-muted-foreground">
+                          {tripHistory.length} total
+                        </span>
+                      </div>
+                      <div className="bg-card rounded-lg p-2 border">
+                        {tripHistory.slice(0, 1).map((trip) => (
+                          <div key={trip.id} className="flex justify-between items-center">
+                            <div>
+                              <div className="text-sm font-medium text-foreground">{trip.passenger.name}</div>
+                              <div className="text-xs text-muted-foreground">{trip.destination}</div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-sm font-semibold text-green-600">£{trip.fare.toFixed(2)}</div>
+                              <div className="text-xs text-muted-foreground">{trip.distance.toFixed(1)}mi</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-
-            {/* Recent trips - Only show if offline and space available */}
-            {!driver.isOnline && !activeTrip && !currentRequest && tripHistory.length > 0 && (
-              <div className="space-y-2">
-                <h3 className="font-semibold text-sm text-foreground">Recent Trips</h3>
-                <div className="space-y-1">
-                  {tripHistory.slice(0, 2).map((trip) => (
-                    <div key={trip.id} className="bg-card rounded-lg p-2 border flex justify-between items-center">
-                      <div>
-                        <div className="text-sm font-medium text-foreground">{trip.passenger.name}</div>
-                        <div className="text-xs text-muted-foreground">{trip.destination}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-sm font-semibold text-green-600">£{trip.fare.toFixed(2)}</div>
-                        <div className="text-xs text-muted-foreground">{trip.distance.toFixed(1)}mi</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         );
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative flex flex-col">
+    <div className="h-screen bg-gray-50 dark:bg-gray-900 relative flex flex-col overflow-hidden">
       {!isSignedIn ? (
         <WelcomeScreen 
           driver={driver}
@@ -675,8 +710,10 @@ function AppContent() {
       ) : (
         <>      
           <ProfessionalHeader />
-          <div className="flex-1 max-w-md mx-auto relative z-10 flex flex-col pb-20 overflow-hidden">
-            {renderCurrentView()}
+          <div className="flex-1 max-w-md mx-auto relative z-10 flex flex-col overflow-hidden">
+            <div className="flex-1 pb-20 overflow-hidden">
+              {renderCurrentView()}
+            </div>
           </div>
           
           <ProfessionalNavigation />

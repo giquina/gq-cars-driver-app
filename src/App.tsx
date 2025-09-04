@@ -583,7 +583,6 @@ function App() {
       <AppContent />
     </ThemeProvider>
   );
-  );
 }
 
 export default App;

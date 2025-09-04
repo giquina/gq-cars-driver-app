@@ -37,6 +37,7 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
   const handleTouchStart = (e: React.TouchEvent) => {
     startX.current = e.touches[0].clientX;
     setIsDragging(true);
+    e.preventDefault(); // Prevent scrolling while swiping
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -45,27 +46,53 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
     currentX.current = e.touches[0].clientX;
     const diffX = currentX.current - startX.current;
     
-    // Limit swipe distance
+    // Limit swipe distance with slight resistance beyond max
     const maxSwipe = 150;
-    const clampedDiff = Math.max(-maxSwipe, Math.min(maxSwipe, diffX));
+    const resistance = 0.3; // Resistance factor beyond max swipe
+    let clampedDiff;
+    
+    if (Math.abs(diffX) > maxSwipe) {
+      const extraDistance = Math.abs(diffX) - maxSwipe;
+      const resistedExtra = extraDistance * resistance;
+      clampedDiff = diffX > 0 ? maxSwipe + resistedExtra : -(maxSwipe + resistedExtra);
+    } else {
+      clampedDiff = diffX;
+    }
+    
     setSwipeOffset(clampedDiff);
 
-    // Haptic feedback simulation when threshold is reached
+    // Enhanced haptic feedback with different intensities
     const threshold = 80;
-    if ((Math.abs(diffX) > threshold && Math.abs(clampedDiff) <= threshold + 5) ||
-        (Math.abs(diffX) <= threshold && Math.abs(clampedDiff) > threshold - 5)) {
-      // Simulate haptic feedback with a subtle vibration
+    const strongThreshold = 120;
+    
+    if (Math.abs(diffX) > strongThreshold && Math.abs(diffX) <= strongThreshold + 5) {
+      // Strong feedback for commit threshold
       if (navigator.vibrate) {
-        navigator.vibrate(50);
+        navigator.vibrate([30, 20, 30]);
+      }
+    } else if (Math.abs(diffX) > threshold && Math.abs(diffX) <= threshold + 5) {
+      // Light feedback for activation threshold
+      if (navigator.vibrate) {
+        navigator.vibrate(40);
       }
     }
+    
+    e.preventDefault(); // Prevent scrolling
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e?: React.TouchEvent) => {
     if (!isDragging) return;
     
     const diffX = currentX.current - startX.current;
     const threshold = 80; // Minimum swipe distance
+    const commitThreshold = 120; // Strong commit threshold
+    
+    // Success haptic feedback for commits
+    if (Math.abs(diffX) > commitThreshold) {
+      if (navigator.vibrate) {
+        navigator.vibrate([100, 50, 100]); // Success pattern
+      }
+    }
     
     if (diffX > threshold) {
       // Swipe right - Accept
@@ -73,11 +100,20 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
     } else if (diffX < -threshold) {
       // Swipe left - Decline  
       onDecline(request.id);
+    } else {
+      // Not enough swipe distance, spring back with light haptic
+      if (navigator.vibrate && Math.abs(diffX) > 20) {
+        navigator.vibrate(20); // Light bounce feedback
+      }
     }
     
-    // Reset
+    // Reset with smooth animation
     setSwipeOffset(0);
     setIsDragging(false);
+    
+    if (e) {
+      e.preventDefault();
+    }
   };
 
   // Mouse events for desktop testing
@@ -85,33 +121,43 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
     startX.current = e.clientX;
     setIsDragging(true);
     e.preventDefault();
+    
+    // Add global mouse event listeners for better desktop experience
+    const handleGlobalMouseMove = (globalE: MouseEvent) => {
+      if (!isDragging) return;
+      
+      currentX.current = globalE.clientX;
+      const diffX = currentX.current - startX.current;
+      
+      // Same logic as touch with resistance
+      const maxSwipe = 150;
+      const resistance = 0.3;
+      let clampedDiff;
+      
+      if (Math.abs(diffX) > maxSwipe) {
+        const extraDistance = Math.abs(diffX) - maxSwipe;
+        const resistedExtra = extraDistance * resistance;
+        clampedDiff = diffX > 0 ? maxSwipe + resistedExtra : -(maxSwipe + resistedExtra);
+      } else {
+        clampedDiff = diffX;
+      }
+      
+      setSwipeOffset(clampedDiff);
+    };
+    
+    const handleGlobalMouseUp = () => {
+      handleMouseUp();
+      document.removeEventListener('mousemove', handleGlobalMouseMove);
+      document.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+    
+    document.addEventListener('mousemove', handleGlobalMouseMove);
+    document.addEventListener('mouseup', handleGlobalMouseUp);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    
-    currentX.current = e.clientX;
-    const diffX = currentX.current - startX.current;
-    
-    // Limit swipe distance
-    const maxSwipe = 150;
-    const clampedDiff = Math.max(-maxSwipe, Math.min(maxSwipe, diffX));
-    setSwipeOffset(clampedDiff);
-
-    // Visual feedback for desktop users when threshold is reached
-    const threshold = 80;
-    if ((Math.abs(diffX) > threshold && Math.abs(clampedDiff) <= threshold + 5) ||
-        (Math.abs(diffX) <= threshold && Math.abs(clampedDiff) > threshold - 5)) {
-      // Could add a subtle visual pulse here for desktop feedback
-      if (cardRef.current) {
-        cardRef.current.style.filter = 'brightness(0.95)';
-        setTimeout(() => {
-          if (cardRef.current) {
-            cardRef.current.style.filter = 'brightness(1)';
-          }
-        }, 100);
-      }
-    }
+    // This is now handled by global listeners for better experience
+    return;
   };
 
   const handleMouseUp = () => {
@@ -128,7 +174,7 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
       onDecline(request.id);
     }
     
-    // Reset
+    // Reset with smooth spring-back animation
     setSwipeOffset(0);
     setIsDragging(false);
   };
@@ -160,29 +206,64 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
   // Calculate pickup distance (mock - in real app would use GPS)
   const pickupDistance = (Math.random() * 3 + 0.5).toFixed(1); // 0.5-3.5 miles
 
-  // Visual feedback for swipe direction
+  // Visual feedback for swipe direction with enhanced thresholds
   const getSwipeBackground = () => {
-    if (swipeOffset > 40) {
-      return 'bg-green-100 border-green-300';
-    } else if (swipeOffset < -40) {
-      return 'bg-red-100 border-red-300';
+    const lightThreshold = 40;
+    const mediumThreshold = 80;
+    const strongThreshold = 120;
+    
+    if (swipeOffset > strongThreshold) {
+      return 'bg-green-200 border-green-400 shadow-green-200 shadow-lg';
+    } else if (swipeOffset > mediumThreshold) {
+      return 'bg-green-150 border-green-350';
+    } else if (swipeOffset > lightThreshold) {
+      return 'bg-green-50 border-green-200';
+    } else if (swipeOffset < -strongThreshold) {
+      return 'bg-red-200 border-red-400 shadow-red-200 shadow-lg';
+    } else if (swipeOffset < -mediumThreshold) {
+      return 'bg-red-150 border-red-350';
+    } else if (swipeOffset < -lightThreshold) {
+      return 'bg-red-50 border-red-200';
     }
-    return 'bg-white';
+    return 'bg-white border-gray-200';
   };
 
   const getSwipeIndicator = () => {
-    if (swipeOffset > 40) {
+    const mediumThreshold = 80;
+    const strongThreshold = 120;
+    
+    if (swipeOffset > mediumThreshold) {
+      const opacity = Math.min(1, (Math.abs(swipeOffset) - mediumThreshold) / 40);
+      const isStrong = swipeOffset > strongThreshold;
+      
       return (
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-green-600">
-          <HandSwipeRight size={24} weight="bold" />
-          <span className="font-bold">Accept</span>
+        <div 
+          className={`absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 transition-all duration-100 ${
+            isStrong ? 'text-green-700' : 'text-green-600'
+          }`}
+          style={{ opacity }}
+        >
+          <HandSwipeRight size={isStrong ? 28 : 24} weight="bold" />
+          <span className={`font-bold ${isStrong ? 'text-lg' : 'text-base'}`}>
+            {isStrong ? 'ACCEPT!' : 'Accept'}
+          </span>
         </div>
       );
-    } else if (swipeOffset < -40) {
+    } else if (swipeOffset < -mediumThreshold) {
+      const opacity = Math.min(1, (Math.abs(swipeOffset) - mediumThreshold) / 40);
+      const isStrong = swipeOffset < -strongThreshold;
+      
       return (
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-red-600">
-          <HandSwipeLeft size={24} weight="bold" />
-          <span className="font-bold">Decline</span>
+        <div 
+          className={`absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2 transition-all duration-100 ${
+            isStrong ? 'text-red-700' : 'text-red-600'
+          }`}
+          style={{ opacity }}
+        >
+          <HandSwipeLeft size={isStrong ? 28 : 24} weight="bold" />
+          <span className={`font-bold ${isStrong ? 'text-lg' : 'text-base'}`}>
+            {isStrong ? 'DECLINE!' : 'Decline'}
+          </span>
         </div>
       );
     }
@@ -210,8 +291,9 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
         ref={cardRef}
         className={`w-full shadow-2xl border-2 animate-fade-in-scale transition-all duration-200 relative overflow-hidden no-select ${getSwipeBackground()}`}
         style={{
-          transform: `translateX(${swipeOffset}px)`,
-          cursor: isDragging ? 'grabbing' : 'grab'
+          transform: `translateX(${swipeOffset}px) ${isDragging ? 'scale(1.02)' : 'scale(1)'}`,
+          cursor: isDragging ? 'grabbing' : 'grab',
+          transition: isDragging ? 'transform 0.1s ease-out' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}

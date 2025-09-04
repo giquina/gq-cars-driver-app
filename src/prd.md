@@ -15,7 +15,7 @@
 - **Critical Path**: Sign in → Go online → Accept rides → Track earnings → Go offline
 - **Key Moments**: Welcome greeting, ride acceptance decision, earnings visibility, status changes
 
-## Essential Features
+### Essential Features
 
 ### Authentication & Welcome
 - Clean welcome screen with personalized greeting
@@ -26,6 +26,20 @@
 - Bottom tab navigation with 5 core sections
 - Home, Earnings, Schedule, Achievements, Menu
 - Red accent color for active states matching Freenow aesthetic
+
+### Ride Request Management with Swipe Gestures
+- **Optimized Ride Request Popup**: Streamlined design showing only essential decision-making information
+- **Large Earnings Display**: £XX.XX prominently displayed as the most important factor
+- **Quick Decision Info**: Customer rating, pickup distance, trip distance/duration on single scannable lines
+- **Smart Swipe Gestures**: 
+  - Swipe right to accept rides (natural positive motion)
+  - Swipe left to decline rides (natural dismissive motion)
+  - Progressive visual feedback with color changes during swipe
+  - Haptic feedback at decision thresholds (mobile devices)
+  - Resistance feedback when approaching commit zones
+- **Dual Input Support**: Touch gestures for mobile, mouse drag for desktop testing
+- **Safety Features**: 26-second auto-decline timer, prominent countdown display
+- **Professional Layout**: Area-to-area routing (avoiding full addresses), payment method only shown if non-standard
 
 ### Earnings Dashboard
 - Primary feature with Performance/Balance tabs
@@ -76,8 +90,9 @@
 
 ### Animations
 - **Purposeful Meaning**: Subtle transitions that provide feedback without distraction
-- **Hierarchy of Movement**: Status changes get animation priority, then navigation feedback
+- **Hierarchy of Movement**: Status changes get animation priority, then navigation feedback, swipe gestures get immediate visual response
 - **Contextual Appropriateness**: Minimal motion suitable for professional context and driving safety
+- **Swipe Feedback**: Progressive color changes and scale transforms during gesture interaction
 
 ### UI Elements & Component Selection
 - **Component Usage**: Cards for information grouping, Tabs for section switching, prominent Buttons for actions

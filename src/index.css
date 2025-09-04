@@ -102,6 +102,23 @@
     border-color: rgba(239, 68, 68, 0.3);
   }
 
+  /* Enhanced swipe colors for better feedback */
+  .bg-green-150 {
+    background-color: rgba(34, 197, 94, 0.15);
+  }
+  
+  .border-green-350 {
+    border-color: rgba(34, 197, 94, 0.35);
+  }
+  
+  .bg-red-150 {
+    background-color: rgba(239, 68, 68, 0.15);
+  }
+  
+  .border-red-350 {
+    border-color: rgba(239, 68, 68, 0.35);
+  }
+
   /* Prevent text selection during swipe */
   .no-select {
     -webkit-user-select: none;

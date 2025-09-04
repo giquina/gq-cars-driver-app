@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { RideRequest } from "@/types";
-import { MapPin, Clock, DollarSign, User, Phone, Star, Navigation, Timer } from "@phosphor-icons/react";
+import { MapPin, Clock, CurrencyGbp, User, Phone, Star, Navigation, Timer } from "@phosphor-icons/react";
 import { useState, useEffect } from "react";
 
 interface RideRequestCardProps {
@@ -96,8 +96,8 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
         {/* Trip Metrics */}
         <div className="grid grid-cols-3 gap-3">
           <div className="text-center p-4 bg-gradient-to-br from-success/10 to-success/5 rounded-xl border">
-            <DollarSign size={20} className="text-success mx-auto mb-2" weight="bold" />
-            <div className="text-xl font-bold text-success">${request.estimatedFare.toFixed(2)}</div>
+            <CurrencyGbp size={20} className="text-success mx-auto mb-2" weight="bold" />
+            <div className="text-xl font-bold text-success">£{request.estimatedFare.toFixed(2)}</div>
             <div className="text-xs text-muted-foreground font-medium">Estimated Fare</div>
           </div>
           <div className="text-center p-4 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl border">
@@ -133,17 +133,17 @@ export function RideRequestCard({ request, onAccept, onDecline }: RideRequestCar
         )}
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-4 pt-2">
+        <div className="grid grid-cols-2 gap-4 pt-4">
           <Button 
             variant="outline" 
             onClick={() => onDecline(request.id)}
-            className="h-12 border-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground font-semibold transition-all duration-200"
+            className="h-14 border-3 border-destructive/60 text-destructive hover:bg-destructive hover:text-destructive-foreground font-bold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg"
           >
             Decline
           </Button>
           <Button 
             onClick={() => onAccept(request.id)}
-            className="h-12 bg-gradient-to-r from-success to-accent hover:from-success/90 hover:to-accent/90 text-white font-semibold shadow-lg transition-all duration-200"
+            className="h-14 bg-gradient-to-r from-success via-accent to-success hover:from-success/90 hover:via-accent/90 hover:to-success/90 text-white font-bold text-lg shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-success/30"
           >
             Accept Ride
           </Button>

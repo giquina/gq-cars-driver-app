@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { TripHistory } from "@/types";
-import { MapPin, Clock, DollarSign, Star, User, Heart } from "@phosphor-icons/react";
+import { MapPin, Clock, CurrencyGbp, Star, User, Heart } from "@phosphor-icons/react";
 
 interface TripHistoryListProps {
   trips: TripHistory[];
@@ -63,11 +63,11 @@ export function TripHistoryList({ trips }: TripHistoryListProps) {
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-bold text-lg text-success">${trip.fare.toFixed(2)}</div>
+                <div className="font-bold text-lg text-success">£{trip.fare.toFixed(2)}</div>
                 {trip.tip && (
                   <div className="text-sm text-muted-foreground flex items-center gap-1 justify-end">
                     <Heart size={12} className="text-red-500" weight="fill" />
-                    +${trip.tip.toFixed(2)} tip
+                    +£{trip.tip.toFixed(2)} tip
                   </div>
                 )}
               </div>

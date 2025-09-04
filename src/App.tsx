@@ -21,7 +21,7 @@ import { Driver, RideRequest, ActiveTrip, TripHistory } from "@/types";
 import { 
   Car, 
   Clock, 
-  DollarSign, 
+  CurrencyGbp, 
   History, 
   User, 
   Bell, 
@@ -93,7 +93,7 @@ function App() {
             lat: 40.7128 + (Math.random() - 0.5) * 0.1,
             lng: -74.0060 + (Math.random() - 0.5) * 0.1,
           },
-          estimatedFare: 8.50 + Math.random() * 25,
+          estimatedFare: 6.80 + Math.random() * 20, // GBP prices
           estimatedDistance: 2.1 + Math.random() * 8,
           estimatedDuration: Math.floor(8 + Math.random() * 25),
           requestedAt: new Date().toISOString(),
@@ -199,7 +199,7 @@ function App() {
     setActiveTrip(null);
     setCurrentView('passenger-rating');
     
-    toast.success(`Trip completed! Earned $${(completedTrip.fare + (completedTrip.tip || 0)).toFixed(2)}`);
+    toast.success(`Trip completed! Earned £${(completedTrip.fare + (completedTrip.tip || 0)).toFixed(2)}`);
   };
 
   const handleNavigate = () => {
@@ -256,56 +256,93 @@ function App() {
 
   // Navigation header component
   const NavigationHeader = () => (
-    <div className="flex items-center justify-between mb-6 p-4 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-xl border">
-      <div className="flex items-center gap-3">
-        <div className="p-3 bg-gradient-to-br from-primary to-accent rounded-xl shadow-lg">
-          <Car size={28} className="text-primary-foreground" />
+    <div className="flex items-center justify-between mb-8 p-6 bg-gradient-to-br from-card via-muted/5 to-accent/5 rounded-3xl border-2 border-primary/10 shadow-2xl backdrop-blur-sm">
+      <div className="flex items-center gap-4">
+        <div className="relative">
+          <div className="w-16 h-16 bg-gradient-to-br from-primary via-accent to-primary rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 transition-all duration-300">
+            <Car size={32} className="text-primary-foreground" weight="bold" />
+          </div>
+          <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-br from-success to-accent rounded-full border-2 border-white shadow-lg flex items-center justify-center">
+            <div className="w-2 h-2 bg-white rounded-full animate-ping" />
+          </div>
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-foreground">GQ Cars Driver</h1>
-          <p className="text-sm text-muted-foreground">Drive with confidence & intelligence</p>
+          <h1 className="text-3xl font-black bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+            GQ Cars Driver
+          </h1>
+          <p className="text-base text-muted-foreground font-semibold">Drive with confidence & intelligence</p>
         </div>
       </div>
       
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
         <Button
           variant={currentView === 'ai-assistant' ? 'default' : 'outline'}
-          size="sm"
+          size="lg"
           onClick={() => setCurrentView(currentView === 'ai-assistant' ? 'main' : 'ai-assistant')}
-          className="relative"
+          className={`relative h-12 w-12 rounded-2xl border-2 transition-all duration-300 transform hover:scale-110 ${
+            currentView === 'ai-assistant' 
+              ? 'bg-gradient-to-br from-primary to-accent text-white border-primary/30 shadow-xl' 
+              : 'border-primary/20 hover:border-primary/40 hover:bg-primary/5'
+          }`}
         >
-          <Robot size={16} />
+          <Robot size={20} weight="bold" />
           {currentView === 'ai-assistant' && (
-            <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-success to-green-400 rounded-full border-2 border-white shadow-lg">
+              <div className="absolute inset-0 bg-success rounded-full animate-ping opacity-75" />
+            </div>
           )}
         </Button>
+        
         <Button
           variant={currentView === 'settings' ? 'default' : 'outline'}
-          size="sm"
+          size="lg"
           onClick={() => setCurrentView(currentView === 'settings' ? 'main' : 'settings')}
+          className={`relative h-12 w-12 rounded-2xl border-2 transition-all duration-300 transform hover:scale-110 ${
+            currentView === 'settings' 
+              ? 'bg-gradient-to-br from-primary to-accent text-white border-primary/30 shadow-xl' 
+              : 'border-primary/20 hover:border-primary/40 hover:bg-primary/5'
+          }`}
         >
-          <Gear size={16} />
+          <Gear size={20} weight="bold" />
         </Button>
+        
         <Button
           variant={currentView === 'notifications' ? 'default' : 'outline'}
-          size="sm"
+          size="lg"
           onClick={() => setCurrentView(currentView === 'notifications' ? 'main' : 'notifications')}
+          className={`relative h-12 w-12 rounded-2xl border-2 transition-all duration-300 transform hover:scale-110 ${
+            currentView === 'notifications' 
+              ? 'bg-gradient-to-br from-primary to-accent text-white border-primary/30 shadow-xl' 
+              : 'border-primary/20 hover:border-primary/40 hover:bg-primary/5'
+          }`}
         >
-          <Bell size={16} />
+          <Bell size={20} weight="bold" />
         </Button>
+        
         <Button
           variant={currentView === 'emergency' ? 'destructive' : 'outline'}
-          size="sm"
+          size="lg"
           onClick={() => setCurrentView(currentView === 'emergency' ? 'main' : 'emergency')}
+          className={`relative h-12 w-12 rounded-2xl border-2 transition-all duration-300 transform hover:scale-110 ${
+            currentView === 'emergency' 
+              ? 'bg-gradient-to-br from-destructive to-red-600 text-white border-destructive/30 shadow-xl' 
+              : 'border-destructive/30 hover:border-destructive/50 hover:bg-destructive/5 text-destructive'
+          }`}
         >
-          <ShieldWarning size={16} />
+          <ShieldWarning size={20} weight="bold" />
         </Button>
+        
         <Button
           variant={currentView === 'profile' ? 'default' : 'outline'}
-          size="sm"
+          size="lg"
           onClick={() => setCurrentView(currentView === 'profile' ? 'main' : 'profile')}
+          className={`relative h-12 w-12 rounded-2xl border-2 transition-all duration-300 transform hover:scale-110 ${
+            currentView === 'profile' 
+              ? 'bg-gradient-to-br from-primary to-accent text-white border-primary/30 shadow-xl' 
+              : 'border-primary/20 hover:border-primary/40 hover:bg-primary/5'
+          }`}
         >
-          <User size={16} />
+          <User size={20} weight="bold" />
         </Button>
       </div>
     </div>
@@ -401,32 +438,42 @@ function App() {
                 onDecline={handleDeclineRequest}
               />
             ) : driver.isOnline ? (
-              <div className="text-center py-16 bg-gradient-to-br from-muted/20 via-accent/5 to-muted/20 rounded-xl border-2 border-dashed border-muted-foreground/20 mb-6">
-                <div className="relative">
-                  <Clock size={64} className="mx-auto text-muted-foreground mb-4 animate-pulse" />
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-green-500 rounded-full animate-ping" />
+              <div className="text-center py-20 bg-gradient-to-br from-success/10 via-accent/5 to-primary/10 rounded-3xl border-2 border-dashed border-primary/20 mb-8 shadow-xl backdrop-blur-sm">
+                <div className="relative mb-6">
+                  <Clock size={80} className="mx-auto text-primary animate-pulse drop-shadow-lg" weight="bold" />
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-success to-accent rounded-full animate-ping" />
+                  <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white rounded-full" />
                 </div>
-                <h3 className="font-semibold text-lg mb-2">Searching for rides...</h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <h3 className="font-black text-2xl mb-3 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                  Searching for rides...
+                </h3>
+                <p className="text-base text-muted-foreground mb-6 font-semibold">
                   You're online and ready to receive requests
                 </p>
                 <div className="flex justify-center">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-sm text-green-700 font-medium">Live</span>
+                  <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-success/20 via-accent/10 to-success/20 rounded-full border-2 border-success/30 shadow-lg backdrop-blur-sm">
+                    <div className="w-3 h-3 bg-gradient-to-r from-success to-accent rounded-full animate-pulse" />
+                    <span className="text-base text-success font-black">LIVE & ACTIVE</span>
+                    <div className="w-3 h-3 bg-gradient-to-r from-accent to-success rounded-full animate-pulse" />
                   </div>
                 </div>
               </div>
             ) : null}
 
-            <Tabs defaultValue="earnings" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-2 bg-muted/50">
-                <TabsTrigger value="earnings" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  <DollarSign size={16} />
+            <Tabs defaultValue="earnings" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-2 h-14 bg-gradient-to-r from-muted/30 via-muted/20 to-muted/30 rounded-2xl p-2 border-2 border-muted/40">
+                <TabsTrigger 
+                  value="earnings" 
+                  className="flex items-center gap-3 h-10 rounded-xl font-bold text-base transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-success data-[state=active]:to-accent data-[state=active]:text-white data-[state=active]:shadow-xl data-[state=active]:scale-105"
+                >
+                  <CurrencyGbp size={20} weight="bold" />
                   Earnings
                 </TabsTrigger>
-                <TabsTrigger value="history" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  <History size={16} />
+                <TabsTrigger 
+                  value="history" 
+                  className="flex items-center gap-3 h-10 rounded-xl font-bold text-base transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white data-[state=active]:shadow-xl data-[state=active]:scale-105"
+                >
+                  <History size={20} weight="bold" />
                   History
                 </TabsTrigger>
               </TabsList>
@@ -445,8 +492,11 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/10 to-background">
-      <div className="container mx-auto px-4 py-6 max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/5 to-background relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,_theme(colors.primary/10),_transparent_50%),radial-gradient(circle_at_80%_20%,_theme(colors.accent/10),_transparent_50%),radial-gradient(circle_at_40%_40%,_theme(colors.muted/20),_transparent_50%)]" />
+      
+      <div className="container mx-auto px-6 py-8 max-w-md relative z-10">
         <NavigationHeader />
         {renderCurrentView()}
       </div>
@@ -456,7 +506,12 @@ function App() {
           style: {
             background: 'hsl(var(--card))',
             color: 'hsl(var(--card-foreground))',
-            border: '1px solid hsl(var(--border))',
+            border: '2px solid hsl(var(--border))',
+            borderRadius: '16px',
+            fontSize: '16px',
+            fontWeight: '600',
+            padding: '16px',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
           },
         }}
       />

@@ -55,16 +55,19 @@ export function ActiveTripCard({ trip, onUpdateStatus, onCompleteTrip }: ActiveT
   };
 
   return (
-    <Card className="border-2 border-accent">
-      <CardHeader className="pb-3">
+    <Card className="border-3 border-accent shadow-2xl bg-gradient-to-br from-card via-card/95 to-accent/5 animate-glow">
+      <CardHeader className="pb-4 bg-gradient-to-r from-accent/10 via-primary/5 to-accent/10 rounded-t-xl">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">{statusInfo.title}</CardTitle>
-          <Badge className={`${statusInfo.color} text-white`}>
-            Active
+          <CardTitle className="text-2xl font-bold flex items-center gap-2">
+            <div className="w-3 h-3 bg-accent rounded-full animate-pulse" />
+            {statusInfo.title}
+          </CardTitle>
+          <Badge className={`${statusInfo.color} text-white px-4 py-2 text-base font-bold rounded-full shadow-lg`}>
+            ACTIVE
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6 p-6">
         {/* Passenger Info */}
         <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
           <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
@@ -123,7 +126,7 @@ export function ActiveTripCard({ trip, onUpdateStatus, onCompleteTrip }: ActiveT
         {/* Trip Details */}
         <div className="grid grid-cols-2 gap-4 p-3 bg-muted/50 rounded-lg">
           <div className="text-center">
-            <div className="text-lg font-bold text-accent">${trip.request.estimatedFare.toFixed(2)}</div>
+            <div className="text-lg font-bold text-accent">£{trip.request.estimatedFare.toFixed(2)}</div>
             <div className="text-xs text-muted-foreground">Estimated Fare</div>
           </div>
           <div className="text-center">
@@ -143,10 +146,10 @@ export function ActiveTripCard({ trip, onUpdateStatus, onCompleteTrip }: ActiveT
         {/* Action Button */}
         <Button 
           onClick={handleStatusUpdate}
-          className={`w-full ${statusInfo.color} hover:opacity-90`}
+          className={`w-full h-16 text-xl font-bold rounded-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-2xl ${statusInfo.color} hover:opacity-90 border-2`}
           size="lg"
         >
-          {trip.status === 'passenger_on_board' && <CheckCircle size={20} className="mr-2" />}
+          {trip.status === 'passenger_on_board' && <CheckCircle size={24} className="mr-3" weight="bold" />}
           {statusInfo.action}
         </Button>
       </CardContent>

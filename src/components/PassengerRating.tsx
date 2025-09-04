@@ -54,9 +54,9 @@ export function PassengerRating({ passenger, tripDetails, onSubmitRating, onClos
 
   const tipOptions = [
     { label: "No tip", value: undefined },
-    { label: "$2", value: 2 },
-    { label: "$5", value: 5 },
-    { label: "$10", value: 10 },
+    { label: "£2", value: 2 },
+    { label: "£5", value: 5 },
+    { label: "£10", value: 10 },
     { label: "Custom", value: "custom" }
   ];
 
@@ -171,7 +171,7 @@ export function PassengerRating({ passenger, tripDetails, onSubmitRating, onClos
             <h4 className="font-medium mb-3">Trip Summary</h4>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <p className="text-2xl font-bold text-primary">${tripDetails.fare.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-primary">£{tripDetails.fare.toFixed(2)}</p>
                 <p className="text-xs text-muted-foreground">Fare</p>
               </div>
               <div>
@@ -244,7 +244,7 @@ export function PassengerRating({ passenger, tripDetails, onSubmitRating, onClos
               </div>
               {tip === "custom" && (
                 <div className="flex items-center gap-2">
-                  <span className="text-sm">$</span>
+                  <span className="text-sm">£</span>
                   <input
                     type="number"
                     placeholder="0.00"

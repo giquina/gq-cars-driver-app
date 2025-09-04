@@ -134,7 +134,7 @@ export function QuickSettings({ onClose }: QuickSettingsProps) {
           <div className="p-3 bg-muted/30 rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <span className="font-medium">Minimum Fare</span>
-              <span className="text-accent font-bold">${settings.minimumFareThreshold.toFixed(2)}</span>
+              <span className="text-accent font-bold">£{settings.minimumFareThreshold.toFixed(2)}</span>
             </div>
             <div className="text-sm text-muted-foreground mb-3">
               Decline rides below this fare amount
@@ -148,7 +148,7 @@ export function QuickSettings({ onClose }: QuickSettingsProps) {
                   minimumFareThreshold: Math.max(0, current.minimumFareThreshold - 1) 
                 }))}
               >
-                -$1
+                -£1
               </Button>
               <Button 
                 variant="outline" 
@@ -158,7 +158,7 @@ export function QuickSettings({ onClose }: QuickSettingsProps) {
                   minimumFareThreshold: current.minimumFareThreshold + 1 
                 }))}
               >
-                +$1
+                +£1
               </Button>
             </div>
           </div>
